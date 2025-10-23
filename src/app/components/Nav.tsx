@@ -3,11 +3,11 @@ import React from 'react'
 function Nav() {
     return (
         <nav className='fixed w-full z-20 top-0 start-0  shadow-xl bg-[#1561B7]'>
-            <div className=' flex items-center justify-between mx-auto p-4'>
+            <div className=' flex items-center justify-between mx-auto p-1'>
 
                 <a href="/" className='flex items-center space-x-3 rtl:space-x-reverse '>
 
-                    <img src="/img/Uni-FACEF.png" alt="Uni-FACEF" className="h-10 w-auto " />
+                    <img src="/img/Uni-FACEF.png" alt="Uni-FACEF" className="h-10 w-auto" />
 
                 </a>
 
@@ -19,7 +19,7 @@ function Nav() {
                         <li>
                             <a
                                 href="#"
-                                className='block py-2 px-3 text-white '
+                                className='block py-3  text-white '
                             >
                                 <img src="/img/notificacao.png" alt="notificação" className='h-8 w-auto' />
                             </a>
@@ -27,7 +27,7 @@ function Nav() {
                         <li>
                             <a
                                 href="#"
-                                className='block py-2 px-3 text-white '
+                                className='block py-3 text-white '
                             >
                                 <img src="/img/lua.png" alt="lua" className='h-8 w-auto' />
                             </a>
@@ -35,7 +35,7 @@ function Nav() {
                         <li>
                             <a
                                 href="#"
-                                className='flex py-2 px-3 text-white space-x-3'
+                                className='flex py-2  text-white space-x-3 mr-3'
                             >
 
 
