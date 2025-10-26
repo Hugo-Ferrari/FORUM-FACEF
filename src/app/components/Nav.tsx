@@ -1,21 +1,16 @@
 import React from 'react'
 
 function Nav() {
+
     return (
         <nav className='fixed w-full z-20 top-0 start-0  shadow-xl bg-[#1561B7]'>
             <div className=' flex items-center justify-between mx-auto p-1'>
 
                 <a href="/" className='flex items-center space-x-3 rtl:space-x-reverse '>
-
                     <img src="/img/Uni-FACEF.png" alt="Uni-FACEF" className="h-10 w-auto" />
-
                 </a>
-
-
                 <div className='flex items-center justify-end md:order-1'>
                     <ul className='flex p-0 font-medium space-x-10 rtl:space-x-reverse'>
-
-
                         <li>
                             <a
                                 href="#"
@@ -37,8 +32,6 @@ function Nav() {
                                 href="#"
                                 className='flex py-2  text-white space-x-3 mr-3'
                             >
-
-
                                 <img src="/img/usuario.png" alt="Perfil" className='h-10 w-auto' />
                                 <div className='flex flex-col leading-tight'>
                                     <p className=''>Nome do aluno</p>
@@ -46,7 +39,6 @@ function Nav() {
                                 </div>
                             </a>
                         </li>
-
                     </ul>
                 </div>
             </div>
