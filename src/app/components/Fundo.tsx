@@ -2,6 +2,7 @@
 
 import React, { JSX } from 'react';
 import Block from './Block';
+import DuvUsuario from './CaixaDuvida';
 
 interface FundoProps {
     indicadores: Record<string, number | string | undefined | null>;
@@ -25,11 +26,11 @@ function Fundo({ indicadores }: FundoProps): JSX.Element {
                     <Block tipo = "sequencia" valor = {7}/>
                     <Block tipo = "materias" valor = {27}/>
                 </div>
-                    
-                    <div>
-                    <h1>Duvidas Recentes</h1>
+                    <div className='mt-6 w-full'>
+                    <DuvUsuario/>
                     {/*função para ver todas as duvidas*/}
                     </div>
+                    
             </div>
         </div>
     );
