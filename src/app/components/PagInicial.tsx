@@ -10,7 +10,6 @@ function PagInicial() {
         <Nav/>
         <NavLateral/>
        <Fundo/>
-       
     </div>
   )
 }

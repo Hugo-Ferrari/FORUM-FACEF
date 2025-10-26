@@ -1,5 +1,4 @@
 import { BarChart3, Book, BookOpen, Trophy } from "lucide-react";
-import Duvidas from "./Duvidas";
 
 interface BlockProps {
     tipo: "duvidas" | "ranking" | "sequencia" | "materias";

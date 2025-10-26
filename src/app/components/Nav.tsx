@@ -1,3 +1,4 @@
+import { CircleUserRound } from 'lucide-react'
 import React from 'react'
 
 function Nav() {
@@ -32,10 +33,10 @@ function Nav() {
                                 href="#"
                                 className='flex py-2  text-white space-x-3 mr-3'
                             >
-                                <img src="/img/usuario.png" alt="Perfil" className='h-10 w-auto' />
+                                <CircleUserRound className='h-10 w-auto bg-[#818181] rounded-4xl' /> {/*corrigir a cor do icone do usuario*/}
                                 <div className='flex flex-col leading-tight'>
-                                    <p className=''>Nome do aluno</p>
-                                    <p className='text-sm opacity-80 -mt-1'>curso do aluno</p>
+                                    <p className=''>{/*Nome do aluno*/}</p>
+                                    <p className='text-sm opacity-80 -mt-1'>{/*curso do aluno*/}</p>
                                 </div>
                             </a>
                         </li>
