@@ -1,11 +1,9 @@
-
-import PagInicial from "./components/PagInicial";
-
+import Fundo from "@/app/components/Fundo";
 
 export default function Home() {
   return (
     <div>
-      <PagInicial/>
+        <Fundo />
     </div>
   );
 }

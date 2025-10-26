@@ -1,18 +1,12 @@
 
 
-import React, { JSX } from 'react';
+import React from 'react';
 import Block from './Block';
 import DuvUsuario from './CaixaDuvida';
 
-interface FundoProps {
-    indicadores: Record<string, number | string | undefined | null>;
-}
-
-
-function Fundo({ indicadores }: FundoProps): JSX.Element {
+function Fundo() {
 
     return (
-
         <div className='bg-[#EFF0F6] min-h-screen'>
 
             <div className='flex flex-col justify-center items-center p-8'>
@@ -28,7 +22,6 @@ function Fundo({ indicadores }: FundoProps): JSX.Element {
                 </div>
                     <div className='mt-6 w-full'>
                     <DuvUsuario/>
-                    {/*função para ver todas as duvidas*/}
                     </div>
                     
             </div>

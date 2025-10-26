@@ -1,4 +1,3 @@
-import { LucideIcon } from "lucide-react"
 import Usuario from "./Usuario";
 
 function DuvUsuario(){
