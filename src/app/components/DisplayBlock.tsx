@@ -28,12 +28,12 @@ function Block({ tipo, valor }: BlockProps) {
     }
 
     return (
-       <div className="bg-white p-6 shadow-sm grid lg:grid-cols-4 w-full max-w-5xl mx-auto h-32 ">
-            <div className=" flex justify-between items-start">
+       <div className="bg-white p-6 shadow-sm w-full h-28 rounded-lg ">
+            <div className=" flex items-center">
                 <div className={`p-3 rounded-lg ${bgClasses[tipo]}`}>
                     {icones[tipo]}
                 </div>
-                <div className="flex flex-col justify-center ml-8">
+                <div className="flex flex-col ml-4">
                     <span className="text-3xl font-bold text-black ">
                         {tipo === "sequencia" ? `${valor} Dias` : valor}
                     </span>
