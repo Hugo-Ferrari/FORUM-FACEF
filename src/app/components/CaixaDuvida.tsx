@@ -3,12 +3,12 @@ import Usuario from "./Usuario";
 function DuvUsuario(){
 
     return(
-       <div className="text-black">
+       <div className="text-black mt-4">
          <div className="flex w-full gap-100 ml-75">
-            <h1>
+            <h1 className="text-3xl">
                Duvidas Recentes
             </h1>
-            <button className="hover:hover:bg-[rgba(21,97,183,0.2)]">
+            <button className="hover:hover:bg-[rgba(21,97,183,0.2)] text-2xl ">
                Veja todas
             </button>
          </div>

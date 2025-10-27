@@ -21,7 +21,7 @@ function Fundo() {
                     <Block tipo = "materias" valor = {27}/>
                 </div>
                     <div className='mt-6 w-full'>
-                    <DuvUsuario/>
+                    {/*<DuvUsuario/>*/}
                     </div>
                     
             </div>
