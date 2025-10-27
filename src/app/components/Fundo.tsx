@@ -4,6 +4,7 @@ import React from 'react';
 import Block from './DisplayBlock';
 import DuvUsuario from './duvidas/CaixaDuvida';
 import Usuario from './user/Usuario';
+import Chat from './chat/Chat';
 
 
 function Fundo() {
@@ -22,9 +23,9 @@ function Fundo() {
                     <Block tipo = "materias" valor = {27}/>
                 </div>
                     <div className='mt-10 w-full'>
-                    {/*<DuvUsuario/>*/}
                     <DuvUsuario/>
                     <Usuario/>
+                    
                     
                     </div>
                     

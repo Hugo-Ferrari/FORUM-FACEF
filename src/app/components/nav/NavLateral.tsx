@@ -1,5 +1,6 @@
 "use client"
 import { Book, Calendar, CircleStar, House, Logs, Menu, MessageSquareText, Trophy } from 'lucide-react'
+import Link from 'next/link'
 import React, { useState } from 'react'
 function NavLateral() {
     const [open, setOpen] = useState(false)
@@ -18,12 +19,12 @@ function NavLateral() {
 
 
                     <div className="flex flex-col items-center space-y-4 gap-5">
-                        <a href="#"><span className="hover:text-blue-600 transition"><House size={20} /></span></a>
-                        <a href="#"><span className="hover:text-blue-600 transition"><Book size={20} /></span></a>
-                        <a href="#"><span className="hover:text-blue-600 transition"><MessageSquareText size={20} /></span></a>
-                        <a href="#"><span className="hover:text-blue-600 transition"><Trophy size={20} /></span></a>
-                        <a href="#"><span className="hover:text-blue-600 transition"><CircleStar size={20} /></span></a>
-                        <a href="#"><span className="hover:text-blue-600 transition"><Calendar size={20} /></span></a>
+                        <Link href="/"><span className="hover:text-blue-600 transition"><House size={20} /></span></Link>
+                        <Link href="/curso"><span className="hover:text-blue-600 transition"><Book size={20} /></span></Link>
+                        <Link href="/chat"><span className="hover:text-blue-600 transition"><MessageSquareText size={20} /></span></Link>
+                        <Link href="/ranking"><span className="hover:text-blue-600 transition"><Trophy size={20} /></span></Link>
+                        <Link href="/hall"><span className="hover:text-blue-600 transition"><CircleStar size={20} /></span></Link>
+                        <Link href="/calendario"><span className="hover:text-blue-600 transition"><Calendar size={20} /></span></Link>
                     </div>
                 </div>
             )}
@@ -34,42 +35,42 @@ function NavLateral() {
                     <Logs size={22} />
                 </button>
                  <ul className="space-y-4 ml-3 mt-12 gap-5 pt-20"> {/* Aumentei space-y-8 e gap-8 */}
-        <a href='#'>
+        <Link href='/'>
             <li className="hover:bg-[rgba(21,97,183,0.2)] transition-colors duration-200 p-4 rounded-lg cursor-pointer hover:text-blue-600 flex gap-3">
                 <House size={20} />
                 <span className="text-base">Início</span>
             </li>
-        </a>
-        <a href='#'>
+        </Link>
+        <Link href='/curso'>
             <li className="hover:bg-[rgba(21,97,183,0.2)] transition-colors duration-200 p-4 rounded-lg cursor-pointer hover:text-blue-600 flex gap-3">
                 <Book size={20} />
                 <span className="text-base">Curso</span>
             </li>
-        </a>
-        <a href='#'>
+        </Link>
+        <Link href='/chat'>
             <li className="hover:bg-[rgba(21,97,183,0.2)] transition-colors duration-200 p-4 rounded-lg cursor-pointer hover:text-blue-600 flex gap-3">
                 <MessageSquareText size={20} />
                 <span className="text-base">Chat Geral</span>
             </li>
-        </a>
-        <a href='#'>
+        </Link>
+        <Link href='/ranking'>
             <li className="hover:bg-[rgba(21,97,183,0.2)] transition-colors duration-200 p-4 rounded-lg cursor-pointer hover:text-blue-600 flex gap-3">
                 <Trophy size={20} />
                 <span className="text-base">Ranking</span>
             </li>
-        </a>
-        <a href='#'>
+        </Link>
+        <Link href='/hall'>
             <li className="hover:bg-[rgba(21,97,183,0.2)] transition-colors duration-200 p-4 rounded-lg cursor-pointer hover:text-blue-600 flex gap-3">
                 <CircleStar size={20} />
                 <span className="text-base">Hall da Fama</span>
             </li>
-        </a>
-        <a href='#'>
+        </Link>
+        <Link href='/calendario'>
             <li className="hover:bg-[rgba(21,97,183,0.2)] transition-colors duration-200 p-4 rounded-lg cursor-pointer hover:text-blue-600 flex gap-3">
                 <Calendar size={20} />
                 <span className="text-base">Calendário</span>
             </li>
-        </a>
+        </Link>
     </ul>
             </nav>
         </div>
