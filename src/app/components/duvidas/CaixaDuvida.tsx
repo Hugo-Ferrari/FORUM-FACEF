@@ -1,4 +1,4 @@
-import Usuario from "./Usuario";
+import Usuario from "../user/Usuario";
 
 function DuvUsuario(){
 
@@ -12,7 +12,7 @@ function DuvUsuario(){
                Veja todas
             </button>
          </div>
-         <Usuario/>
+         
        </div>
     )
 }

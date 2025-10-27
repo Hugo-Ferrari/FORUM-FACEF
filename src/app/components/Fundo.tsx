@@ -2,7 +2,9 @@
 
 import React from 'react';
 import Block from './DisplayBlock';
-import DuvUsuario from './CaixaDuvida';
+import DuvUsuario from './duvidas/CaixaDuvida';
+import Usuario from './user/Usuario';
+
 
 function Fundo() {
 
@@ -22,6 +24,8 @@ function Fundo() {
                     <div className='mt-10 w-full'>
                     {/*<DuvUsuario/>*/}
                     <DuvUsuario/>
+                    <Usuario/>
+                    
                     </div>
                     
             </div>

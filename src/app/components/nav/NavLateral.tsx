@@ -33,7 +33,7 @@ function NavLateral() {
                     className="absolute top-20 left-4 text-gray-600 hover:text-blue-600 transition p-2 rounded-md">
                     <Logs size={22} />
                 </button>
-                 <ul className="space-y-4 ml-3 mt-15 gap-5 pt-20"> {/* Aumentei space-y-8 e gap-8 */}
+                 <ul className="space-y-4 ml-3 mt-12 gap-5 pt-20"> {/* Aumentei space-y-8 e gap-8 */}
         <a href='#'>
             <li className="hover:bg-[rgba(21,97,183,0.2)] transition-colors duration-200 p-4 rounded-lg cursor-pointer hover:text-blue-600 flex gap-3">
                 <House size={20} />
