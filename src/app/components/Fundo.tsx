@@ -26,7 +26,7 @@ function Fundo() {
                     <div className='mt-10 w-full'>
                     <DuvUsuario/>
                     
-                    <Usuario/>
+                   
                     
                     
                     </div>
