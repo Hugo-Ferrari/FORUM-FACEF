@@ -1,10 +1,11 @@
-
+"use client"
 
 import React from 'react';
 import Block from './DisplayBlock';
 import DuvUsuario from './duvidas/CaixaDuvida';
 import Usuario from './user/Usuario';
 import Chat from './chat/Chat';
+import AddDuvidas from './duvidas/AddDuvidas';
 
 
 function Fundo() {
@@ -24,6 +25,7 @@ function Fundo() {
                 </div>
                     <div className='mt-10 w-full'>
                     <DuvUsuario/>
+                    
                     <Usuario/>
                     
                     

@@ -3,10 +3,10 @@ import UserCouse from "./UserCouse";
 
 function Usuario() {
     return (
-        <div className="flex items-center gap-3 p-4">
+        <div className="flex items-center gap-3 p-4 mt-10">
             <CircleUserRound className="w-10 h-10 text-gray-400" />
             <div >
-                <div className="flex items-center gap-2 text-black">
+                <div className="flex items-center gap-2 text-black ">
                     <p className="font-medium">Nome do aluno</p>
                     <UserCouse /> 
                 </div>

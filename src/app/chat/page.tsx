@@ -4,7 +4,6 @@ import Chat from "../components/chat/Chat";
 function page() {
   return (
     <>
-      <NavLateral />
 
       {/* conteúdo principal com padding para a sidebar */}
       <div className="min-h-screen bg-[#EFF0F6]">

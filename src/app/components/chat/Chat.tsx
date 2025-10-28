@@ -84,7 +84,7 @@ function Chat() {
 
             <div
                 ref={listRef}
-                className="mb-3 max-h-full overflow-auto space-y-3 px-2 py-1 border rounded bg-gray-50"
+                className="mb-3 h-170 overflow-auto space-y-3 px-2 py-1 border rounded bg-gray-50"
                 aria-live="polite"
             >
                 {messages.length === 0 && (
