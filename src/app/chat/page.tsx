@@ -1,4 +1,3 @@
-import NavLateral from "../components/nav/NavLateral";
 import Chat from "../components/chat/Chat";
 
 function page() {
@@ -6,9 +5,9 @@ function page() {
     <>
 
       {/* conteúdo principal com padding para a sidebar */}
-      <div className="min-h-screen bg-[#EFF0F6]">
-        <main className="p-6 pt-10 md:pl-64"> 
-          <div className=" mx-auto mt-10">
+      <div className="py-10 w-full overflow-x-hidden">
+        <main className="">
+          <div className=" mx-auto">
             <Chat />
           </div>
         </main>

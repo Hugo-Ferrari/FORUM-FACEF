@@ -18,7 +18,7 @@ function Block({ tipo, valor }: BlockProps) {
         duvidas: "Dúvidas Respondidas",
         ranking: "Posição Ranking",
         sequencia: "Sequência Diária",
-        materias: "Matérias Enviadas"
+        materias: "Materiais Enviados"
     };
     const bgClasses={
         duvidas: "bg-green-50",
