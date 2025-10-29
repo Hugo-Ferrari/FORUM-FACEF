@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useState, useEffect } from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import {
@@ -36,6 +36,16 @@ export default function NavLateral() {
   const pathname = usePathname() || "/"
 
   const toggle = () => setOpen((v) => !v)
+
+  // publish the sidebar width as a CSS variable so layout/content can adapt
+  useEffect(() => {
+    const width = open ? "18rem" : "5rem" // w-72 = 18rem, w-20 = 5rem
+    try {
+      document.documentElement.style.setProperty("--sidebar-width", width)
+    } catch {
+      // server-side or other environments may fail; ignore
+    }
+  }, [open])
 
   return (
     <aside

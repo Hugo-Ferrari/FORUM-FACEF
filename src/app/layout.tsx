@@ -33,9 +33,17 @@ export default function RootLayout({
       <NavLateral />
       <Nav/>
 
-
-      {children}
-      </body>
-    </html>
-  );
-}
+      {/* main wrapper: use CSS variable set by NavLateral to push content when sidebar expands */}
+      <div
+        style={{
+          paddingLeft: 'var(--sidebar-width, 5rem)',
+          transition: 'padding-left 300ms ease-in-out',
+        }}
+        className="pt-20 min-h-screen"
+      >
+        {children}
+      </div>
+       </body>
+     </html>
+   );
+ }
