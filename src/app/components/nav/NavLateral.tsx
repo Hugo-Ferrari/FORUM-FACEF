@@ -51,7 +51,7 @@ export default function NavLateral() {
     <aside
       aria-label="Navegação lateral"
       className={`fixed top-20 left-0 z-40 h-[calc(100vh-5rem)] bg-white text-black shadow-sm flex flex-col justify-between transition-all duration-300 ease-in-out overflow-hidden ${
-        open ? "w-72" : "w-20"
+        open ? "w-65" : "w-20"
       }`}
     >
       {/* top: logo + toggle (simplified, fewer divs) */}
