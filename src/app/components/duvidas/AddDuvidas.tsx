@@ -15,9 +15,7 @@ import Usuario from "../user/Usuario"
 
 function AddDuvidas() {
   
-  const [doubtsList, setDoubtsList] = useState<
-    { curso: string; texto: string }[]
-  >([])
+  const [doubtsList, setDoubtsList] = useState<{ curso: string; texto: string }[]>([])
   const [newDoubt, setNewDoubt] = useState("")
   const [selectedCourse, setSelectedCourse] = useState("")
 
@@ -105,7 +103,7 @@ function AddDuvidas() {
                 className="p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200"
               >
                 <Usuario/>
-                <div className="felx flex-col items-center  mt-4 mb-2 ">
+                <div className="flex flex-col items-center  mt-4 mb-2 ">
                   <Badge variant="secondary">
                 <strong className="text-blue-600">{item.curso}:</strong>{" "}
                 </Badge>
