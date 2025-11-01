@@ -13,13 +13,16 @@ import {
 import { Badge } from "@/components/ui/badge"
 import Usuario from "../user/Usuario"
 
-function AddDuvidas() {
-  
-  const [doubtsList, setDoubtsList] = useState<{ curso: string; texto: string }[]>([])
+
+interface AddDuvidasProps {
+  doubtsList: { curso: string; texto: string }[]
+  setDoubtsList: React.Dispatch<React.SetStateAction<{ curso: string; texto: string }[]>>
+}
+
+function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
   const [newDoubt, setNewDoubt] = useState("")
   const [selectedCourse, setSelectedCourse] = useState("")
 
- 
   const handleAddDoubt = () => {
     if (newDoubt.trim() === "" || selectedCourse === "") {
       alert("Selecione um curso e digite uma dúvida antes de enviar.")
@@ -42,11 +45,8 @@ function AddDuvidas() {
         </PopoverTrigger>
 
         <PopoverContent className="w-80 p-4">
-          <h2 className="text-lg font-semibold mb-2 text-gray-800">
-            Nova Dúvida
-          </h2>
+          <h2 className="text-lg font-semibold mb-2 text-gray-800">Nova Dúvida</h2>
 
-          
           <NativeSelect
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
@@ -68,7 +68,6 @@ function AddDuvidas() {
             <NativeSelectOption value="Sistemas de Informação">Sistemas de Informação</NativeSelectOption>
           </NativeSelect>
 
-          
           <input
             value={newDoubt}
             onChange={(e) => setNewDoubt(e.target.value)}
@@ -87,26 +86,20 @@ function AddDuvidas() {
         </PopoverContent>
       </Popover>
 
-      
       <div className="mt-4 w-full">
-        <h2 className="text-xl font-semibold mb-3 text-gray-800">
-          Minhas Dúvidas
-        </h2>
+        <h2 className="text-xl font-semibold mb-3 text-gray-800">Minhas Dúvidas</h2>
 
         {doubtsList.length === 0 ? (
           <p className="text-gray-500">Nenhuma dúvida adicionada ainda.</p>
         ) : (
           <ul className="space-y-2">
             {doubtsList.map((item, index) => (
-              <li
-                key={index}
-                className="p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200"
-              >
-                <Usuario/>
-                <div className="flex flex-col items-center  mt-4 mb-2 ">
+              <li key={index} className="p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200">
+                <Usuario />
+                <div className="flex flex-col items-center mt-4 mb-2">
                   <Badge variant="secondary">
-                <strong className="text-blue-600">{item.curso}:</strong>{" "}
-                </Badge>
+                    <strong className="text-blue-600">{item.curso}:</strong>
+                  </Badge>
                 </div>
                 {item.texto}
               </li>
