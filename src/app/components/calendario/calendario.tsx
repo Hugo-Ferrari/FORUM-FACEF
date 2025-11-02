@@ -1,10 +1,8 @@
 "use client"
 
 import * as React from "react"
-
 import { Calendar } from "@/components/ui/calendar"
 import { Button } from "@/components/ui/button"
-
 import {
   Dialog,
   DialogContent,
@@ -12,16 +10,27 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input" 
-
+import { Input } from "@/components/ui/input"
+import AllEvents from "./allEvents"
 
 export function Calendario() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
   const [events, setEvents] = React.useState<{ date: string; title: string }[]>([])
   const [newEvent, setNewEvent] = React.useState("")
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
-  const selectedDateStr = date ? date.toDateString() : ""
 
+  const selectedDateStr = date ? date.toISOString().split("T")[0] : ""
+
+  React.useEffect(() => {
+    const stored = localStorage.getItem("events")
+    if (stored) {
+      setEvents(JSON.parse(stored))
+    }
+  }, [])
+
+  React.useEffect(() => {
+    localStorage.setItem("events", JSON.stringify(events))
+  }, [events])
 
   const handleAddEvent = () => {
     if (!date || !newEvent.trim())
@@ -29,8 +38,7 @@ export function Calendario() {
     const newItem = { date: selectedDateStr, title: newEvent.trim() }
     setEvents([...events, newItem])
     setNewEvent("")
-  
-    setIsDialogOpen(false) 
+    setIsDialogOpen(false)
   }
 
   const dayEvents = events.filter((e) => e.date === selectedDateStr)
@@ -42,18 +50,17 @@ export function Calendario() {
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="rounded-lg border w-3xl [--cell-size:--spacing(11)] md:[--cell-size:--spacing(12)]"
+          className="rounded-lg border w-3xl"
         />
       </div>
 
-      <div className="bg-white border rounded-xl p-6 w-80 shadow-md">
+      <div className="bg-white border p-6 w-full sm:w-80 shadow-md">
         <h2 className="text-lg font-semibold mb-3">
           {date
             ? `Eventos em ${date.toLocaleDateString("pt-BR")}`
             : "Selecione uma data"}
         </h2>
 
-        
         {dayEvents.length === 0 ? (
           <p className="text-gray-500 mb-4">Nenhum evento nesta data.</p>
         ) : (
@@ -69,7 +76,7 @@ export function Calendario() {
           </ul>
         )}
 
-        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}> 
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
           <DialogTrigger asChild>
             <Button className="w-full bg-blue-600 hover:bg-blue-700">
               Adicionar Evento
@@ -94,8 +101,9 @@ export function Calendario() {
           </DialogContent>
         </Dialog>
       </div>
-      {/* preciso criar uma componente (allEvents) que leia o calendario inteiro e mostre todos os eventos já adicionados*/}
+      <AllEvents />
     </div>
   )
 }
+
 export default Calendario

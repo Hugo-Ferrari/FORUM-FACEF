@@ -1,6 +1,7 @@
 import Block from "@/app/components/DisplayBlock";
 import DuvUsuario from "@/app/components/duvidas/CaixaDuvida";
 import React from "react";
+import AllEvents from "../components/calendario/allEvents";
 
 export default function Home() {
   return (
@@ -16,8 +17,11 @@ export default function Home() {
                   <Block tipo = "sequencia" valor = {7}/>
                   <Block tipo = "materias" valor = {27}/>
               </div>
-              <div className='mt-10 w-full'>
+              <div className='mt-10 w-full flex'>
                   <DuvUsuario/>
+                  <div className="ml-15">
+                  <AllEvents />
+                  </div>
 
               </div>
 
