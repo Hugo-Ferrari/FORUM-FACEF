@@ -36,10 +36,10 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
   }
 
   return (
-    <div className="flex flex-col items-start w-full p-6 gap-4">
+    <div className="flex flex-col items-start w-full py-6 gap-4">
       <Popover>
         <PopoverTrigger asChild>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition">
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16">
             Adicionar Dúvida
           </button>
         </PopoverTrigger>
@@ -86,11 +86,11 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         </PopoverContent>
       </Popover>
 
-      <div className="mt-4 w-full">
-        <h2 className="text-xl font-semibold mb-3 text-gray-800">Dúvidas</h2>
+      <div className="mt-4 w-full ml-5 ">
+        <h2 className="text-xl font-semibold mb-3 text-gray-800 "> Dúvidas</h2>
 
         {doubtsList.length === 0 ? (
-          <p className="text-gray-500">Nenhuma dúvida adicionada ainda.</p>
+          <p className="text-gray-500 ml-3">Nenhuma dúvida adicionada ainda.</p>
         ) : (
           <ul className="space-y-2">
             {doubtsList.map((item, index) => (

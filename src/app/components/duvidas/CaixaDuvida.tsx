@@ -10,12 +10,12 @@ function DuvUsuario() {
   const handleClick = () => setClicked(!clicked);
 
   return (
-    <div className="text-black p-6">
+    <div className="text-black p-6  ">
       <div className="flex w-full gap-6 ml-4">
         <h1 className="text-2xl font-bold">Dúvidas Recentes</h1>
 
         {!clicked && (
-          <div className="text-black ml-30">
+          <div className="text-black ml-50">
             <button
               onClick={handleClick}
               className="bg-blue-600 text-white px-4 py-2 rounded-md shadow-md hover:bg-blue-700 transition"
