@@ -3,6 +3,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 import AddDuvidas from "./AddDuvidas";
 
+
 function DuvUsuario() {
   const [clicked, setClicked] = useState(false);
   const [doubtsList, setDoubtsList] = useState<{ curso: string; texto: string }[]>([]);

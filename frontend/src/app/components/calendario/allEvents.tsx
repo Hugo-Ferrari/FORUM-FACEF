@@ -17,7 +17,7 @@ export default function AllEvents() {
 
   if (events.length === 0) {
     return (
-      <div className="bg-white border p-6 w-full sm:w-80 lg:w-96 shadow-md">
+      <div className="bg-white border p-6 max-w-2xl shadow-md mr-10">
         <h2 className="text-lg font-semibold mb-3">Todos os eventos</h2>
         <p className="text-gray-500">Nenhum evento adicionado ainda.</p>
       </div>

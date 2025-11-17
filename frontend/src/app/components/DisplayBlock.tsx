@@ -28,7 +28,7 @@ function Block({ tipo, valor }: BlockProps) {
     }
 
     return (
-       <div className="bg-white p-6 shadow-sm w-full h-28 rounded-lg ">
+       <div className="bg-white p-6 shadow-sm w-full h-28 ">
             <div className=" flex items-center">
                 <div className={`p-3 rounded-lg ${bgClasses[tipo]}`}>
                     {icones[tipo]}

@@ -44,17 +44,17 @@ export function Calendario() {
   const dayEvents = events.filter((e) => e.date === selectedDateStr)
 
   return (
-    <div className="flex gap-10 ml-10 mt-5 items-start">
+    <div className="flex gap-5 ml-10 mt-5 items-start">
       <div>
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="rounded-lg border w-3xl"
+          className="rounded-lg border w-125"
         />
       </div>
 
-      <div className="bg-white border p-6 w-full sm:w-80 shadow-md">
+      <div className="bg-white border p-6 w-full sm:w-80 shadow-md ">
         <h2 className="text-lg font-semibold mb-3">
           {date
             ? `Eventos em ${date.toLocaleDateString("pt-BR")}`
