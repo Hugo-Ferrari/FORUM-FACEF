@@ -13,10 +13,10 @@ import {
     PopoverContent,
 } from "@/components/ui/popover";
 
-interface MateriasProps {
-    tipo: "provas" | "links" | "img";
-    valor: string | File;
-}
+type MateriasProps =
+    | { tipo: "provas"; valor: File | "" }
+    | { tipo: "img"; valor: File | "" }
+    | { tipo: "links"; valor: string | "" };
 
 export default function Materia() {
     const [data, setData] = useState<MateriasProps>({
@@ -33,11 +33,7 @@ export default function Materia() {
                     <Input
                         type="file"
                         accept="application/pdf"
-                        onChange={(e) =>
-                            setData((prev) => ({
-                                ...prev,
-                                valor: e.target.files?.[0] as File,
-                            }))
+                        onChange={(e) =>setData({tipo: "provas",valor: e.target.files?.[0] as File,})
                         }
                     />
                 );
@@ -48,10 +44,7 @@ export default function Materia() {
                         type="file"
                         accept="image/*"
                         onChange={(e) =>
-                            setData((prev) => ({
-                                ...prev,
-                                valor: e.target.files?.[0] as File,
-                            }))
+                            setData({tipo: "img",valor: e.target.files?.[0] as File,})
                         }
                     />
                 );
@@ -63,10 +56,7 @@ export default function Materia() {
                         placeholder="Cole seu link"
                         value={typeof data.valor === "string" ? data.valor : ""}
                         onChange={(e) =>
-                            setData((prev) => ({
-                                ...prev,
-                                valor: e.target.value,
-                            }))
+                            setData({tipo: "links",valor: e.target.value,})
                         }
                     />
                 );
@@ -81,11 +71,11 @@ export default function Materia() {
     }
 
     return (
-        <div className="space-y-6">
+        <div className="space-y-6 ml-10">
 
             <Popover>
                 <PopoverTrigger asChild>
-                    <Button>Adicionar Conteúdo</Button>
+                    <Button className="bg-blue-600 hover:bg-blue-700">Adicionar Conteúdo</Button>
                 </PopoverTrigger>
 
                 <PopoverContent className="w-80 space-y-4">
@@ -107,7 +97,7 @@ export default function Materia() {
 
                     {renderInput()}
 
-                    <Button className="w-full" onClick={handleSave}>
+                    <Button className="w-full bg-blue-600 hover:bg-blue-700" onClick={handleSave}>
                         Salvar
                     </Button>
                 </PopoverContent>

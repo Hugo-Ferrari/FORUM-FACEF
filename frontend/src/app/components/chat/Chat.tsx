@@ -14,15 +14,9 @@ type Msg = {
 }
 
 function Chat() {
-    const [messages, setMessages] = useState<Msg[]>(() => {
-        try {
-            return JSON.parse(localStorage.getItem("chat") || "[]")
-        } catch {
-            return []
-        }
-    })
+    const [messages, setMessages] = useState<Msg[]>([])
     const [input, setInput] = useState("")
-    const [name, setName] = useState(() => localStorage.getItem("chat_name") || "Você")
+    const [name, setName] = useState("Você")
     const listRef = useRef<HTMLDivElement | null>(null)
 
     useEffect(() => {
@@ -40,6 +34,17 @@ function Chat() {
         }
         window.addEventListener("storage", handleStorage)
         return () => window.removeEventListener("storage", handleStorage)
+    }, [])
+
+    useEffect(() => {
+        try {
+            const stored = localStorage.getItem("chat")
+            if (stored) setMessages(JSON.parse(stored))
+        } catch {
+            // ignore invalid json
+        }
+        const storedName = localStorage.getItem("chat_name")
+        if (storedName) setName(storedName)
     }, [])
 
     useEffect(() => {

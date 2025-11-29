@@ -8,7 +8,7 @@ function page() {
     <div className='py-10 w-full overflow-x-hidden'>
         <div className='flex'>
             <Chat/>
-            <div className='flex flex-col w-100 mt-10'>
+            <div className='flex flex-col w-115 mt-10 mr-15'>
 
             <DuvUsuario/>
             <Materia/>
