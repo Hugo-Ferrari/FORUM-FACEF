@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -12,6 +12,14 @@ import {
     PopoverTrigger,
     PopoverContent,
 } from "@/components/ui/popover";
+import {
+    Dialog,
+    DialogContent,
+    DialogTitle,
+    DialogHeader,
+    DialogFooter,
+    DialogClose,
+} from "@/components/ui/dialog";
 
 type MateriasProps =
     | { tipo: "provas"; valor: File | "" }
@@ -25,6 +33,9 @@ export default function Materia() {
     });
 
     const [lista, setLista] = useState<MateriasProps[]>([]);
+    const [modalOpen, setModalOpen] = useState(false);
+    const [modalImageFile, setModalImageFile] = useState<File | null>(null);
+    const [modalImageObjectUrl, setModalImageObjectUrl] = useState<string | null>(null);
 
     function renderInput() {
         switch (data.tipo) {
@@ -70,6 +81,25 @@ export default function Materia() {
         setData({ tipo: "provas", valor: "" }); 
     }
 
+    function openFileInNewTab(file: File) {
+        const url = URL.createObjectURL(file)
+        window.open(url, "_blank")
+    }
+
+    function openLinkInNewTab(link: string) {
+        window.open(link, "_blank")
+    }
+
+    // revoke object url when modal closes or file changes
+    useEffect(() => {
+        if (!modalOpen && modalImageObjectUrl) {
+            try {
+                URL.revokeObjectURL(modalImageObjectUrl)
+            } catch {}
+            setModalImageObjectUrl(null)
+        }
+    }, [modalOpen, modalImageObjectUrl])
+
     return (
         <div className="space-y-6 ml-10">
 
@@ -104,13 +134,13 @@ export default function Materia() {
             </Popover>
 
            
-            <div className="space-y-3">
+            <div className="space-y-3 max-h-[28vh] overflow-y-auto pr-2">
                 <h2 className="font-bold text-xl">Conteúdos Salvos</h2>
 
                 {lista.length === 0 && <p>Nenhum conteúdo adicionado ainda.</p>}
 
                 {lista.map((item, index) => (
-                    <div key={index} className="border p-3 rounded-lg">
+                    <div key={index} className="border p-3 rounded-lg ">
 
                         <p><strong>Tipo:</strong> {item.tipo}</p>
 
@@ -134,12 +164,52 @@ export default function Materia() {
                             <img
                                 src={URL.createObjectURL(item.valor as File)}
                                 alt="preview"
-                                className="w-32 rounded-md"
+                                        className="w-32 rounded-md cursor-pointer"
+                                        onClick={() => {
+                                            const file = item.valor as File
+                                            const url = URL.createObjectURL(file)
+                                            setModalImageObjectUrl(url)
+                                            setModalImageFile(file)
+                                            setModalOpen(true)
+                                        }}
                             />
                         )}
                     </div>
                 ))}
             </div>
+            <Dialog open={modalOpen} onOpenChange={(open) => setModalOpen(open)}>
+                <DialogContent className="max-w-5xl w-full">
+                    <DialogHeader>
+                        <DialogTitle>Visualização</DialogTitle>
+                    </DialogHeader>
+
+                    <div className="flex items-center justify-center">
+                        {modalImageObjectUrl && (
+                            <img src={modalImageObjectUrl} alt="preview" className="max-h-[80vh] object-contain" />
+                        )}
+                    </div>
+
+                    <DialogFooter>
+                        <div className="flex flex-wrap gap-2">
+                            {modalImageFile && (
+                                <Button onClick={() => openFileInNewTab(modalImageFile)}>Abrir Imagem</Button>
+                            )}
+
+                            {lista.filter((it) => it.tipo === "provas").map((it, i) => (
+                                <Button key={i} onClick={() => openFileInNewTab(it.valor as File)}>
+                                    Abrir PDF {i + 1}
+                                </Button>
+                            ))}
+
+                            {lista.filter((it) => it.tipo === "links").map((it, i) => (
+                                <Button key={i} onClick={() => openLinkInNewTab(it.valor as string)}>
+                                    Abrir Link {i + 1}
+                                </Button>
+                            ))}
+                        </div>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

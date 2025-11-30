@@ -36,10 +36,10 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
   }
 
   return (
-    <div className="flex flex-col items-start w-full py-6 gap-4">
+    <div className="flex flex-col items-start w-150 py-6 gap-4">
       <Popover>
         <PopoverTrigger asChild>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16">
+          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16 ">
             Adicionar Dúvida
           </button>
         </PopoverTrigger>
@@ -92,11 +92,12 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         {doubtsList.length === 0 ? (
           <p className="text-gray-500 ml-3">Nenhuma dúvida adicionada ainda.</p>
         ) : (
-          <ul className="space-y-2">
+          <div className="max-h-[32vh] overflow-y-auto pr-2">
+            <ul className="space-y-2">
             {doubtsList.map((item, index) => (
               <li key={index} className="p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200">
                 <Usuario />
-                <div className="flex flex-col items-center mt-4 mb-2">
+                <div className="flex items-center mt- mb-2">
                   <Badge variant="secondary">
                     <strong className="text-blue-600">{item.curso}:</strong>
                   </Badge>
@@ -104,7 +105,8 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
                 {item.texto}
               </li>
             ))}
-          </ul>
+            </ul>
+          </div>
         )}
       </div>
     </div>

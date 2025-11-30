@@ -53,14 +53,14 @@ export default function AllEvents({
     )
   }
 
- 
+
   const grouped = (eventsToShow || []).reduce<Record<string, string[]>>((acc, ev) => {
     if (!acc[ev.date]) acc[ev.date] = []
     acc[ev.date].push(ev.title)
     return acc
   }, {})
 
-  
+
   const sortedDates = Object.keys(grouped).sort(
     (a, b) => new Date(a).getTime() - new Date(b).getTime()
   )
