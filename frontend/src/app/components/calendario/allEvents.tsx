@@ -4,18 +4,47 @@ import React, { useEffect, useState } from "react"
 import { format } from "date-fns"
 import { ptBR } from "date-fns/locale"
 
-export default function AllEvents() {
-  const [events, setEvents] = useState<{ date: string; title: string }[]>([])
+export default function AllEvents({
+  events,
+}: {
+  events?: { date: string; title: string }[]
+}) {
+  // AllEvents now receives `events` optionally; if not provided, it reads from localStorage.
+  const [localEvents, setLocalEvents] = useState<{ date: string; title: string }[]>(
+    events || []
+  )
 
-  
   useEffect(() => {
+    if (events) {
+      setLocalEvents(events)
+      return
+    }
+
     const stored = localStorage.getItem("events")
     if (stored) {
-      setEvents(JSON.parse(stored))
+      try {
+        setLocalEvents(JSON.parse(stored))
+      } catch {
+        setLocalEvents([])
+      }
     }
-  }, [])
 
-  if (events.length === 0) {
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "events") {
+        try {
+          setLocalEvents(JSON.parse(e.newValue || "[]"))
+        } catch {
+          setLocalEvents([])
+        }
+      }
+    }
+
+    window.addEventListener("storage", handleStorage)
+    return () => window.removeEventListener("storage", handleStorage)
+  }, [events])
+  const eventsToShow = localEvents
+
+  if (!eventsToShow || eventsToShow.length === 0) {
     return (
       <div className="bg-white border p-6 max-w-2xl shadow-md mr-10">
         <h2 className="text-lg font-semibold mb-3">Todos os eventos</h2>
@@ -25,7 +54,7 @@ export default function AllEvents() {
   }
 
  
-  const grouped = events.reduce<Record<string, string[]>>((acc, ev) => {
+  const grouped = (eventsToShow || []).reduce<Record<string, string[]>>((acc, ev) => {
     if (!acc[ev.date]) acc[ev.date] = []
     acc[ev.date].push(ev.title)
     return acc
@@ -37,7 +66,7 @@ export default function AllEvents() {
   )
 
   return (
-    <div className="bg-white border rounded-xl p-6 w-full sm:w-80 lg:w-96 shadow-md overflow-y-auto max-h-[600px]">
+    <div className="bg-white border p-6 w-full sm:w-80 lg:w-96 shadow-md overflow-y-auto max-h-[600px]">
       <h2 className="text-lg font-semibold mb-3">Todos os eventos</h2>
 
       {sortedDates.map((date) => (
@@ -49,7 +78,7 @@ export default function AllEvents() {
             {grouped[date].map((title, i) => (
               <li
                 key={i}
-                className="text-sm text-gray-700 bg-blue-50 border border-blue-200 px-2 py-1 rounded-md"
+                className="text-sm text-gray-700 bg-blue-50 border border-blue-200 px-2 py-1 "
               >
                 • {title}
               </li>

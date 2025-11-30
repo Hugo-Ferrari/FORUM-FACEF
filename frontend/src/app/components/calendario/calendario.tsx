@@ -26,6 +26,18 @@ export function Calendario() {
     if (stored) {
       setEvents(JSON.parse(stored))
     }
+
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === "events") {
+        try {
+          setEvents(JSON.parse(e.newValue || "[]"))
+        } catch {
+          //ignore quando der erro
+        }
+      }
+    }
+    window.addEventListener("storage", handleStorage)
+    return () => window.removeEventListener("storage", handleStorage)
   }, [])
 
   React.useEffect(() => {
@@ -50,7 +62,7 @@ export function Calendario() {
           mode="single"
           selected={date}
           onSelect={setDate}
-          className="rounded-lg border w-125"
+          className=" border w-125"
         />
       </div>
 
@@ -68,7 +80,7 @@ export function Calendario() {
             {dayEvents.map((ev, index) => (
               <li
                 key={index}
-                className="bg-blue-50 border border-blue-200 text-blue-700 px-3 py-2 rounded-md text-sm"
+                className="bg-blue-50 border border-blue-200 text-blue-700 px-3 py-2 text-sm"
               >
                 • {ev.title}
               </li>
@@ -101,7 +113,7 @@ export function Calendario() {
           </DialogContent>
         </Dialog>
       </div>
-      <AllEvents />
+      <AllEvents events={events} />
     </div>
   )
 }
