@@ -76,8 +76,7 @@ export function Calendario() {
         {dayEvents.length === 0 ? (
           <p className="text-gray-500 mb-4">Nenhum evento nesta data.</p>
         ) : (
-          <div className="max-h-[36vh] overflow-y-auto mb-4 pr-2">
-            <ul className="space-y-2">
+          <ul className="space-y-2 mb-4">
             {dayEvents.map((ev, index) => (
               <li
                 key={index}
@@ -86,8 +85,7 @@ export function Calendario() {
                 • {ev.title}
               </li>
             ))}
-            </ul>
-          </div>
+          </ul>
         )}
 
         <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>

@@ -66,7 +66,7 @@ export default function AllEvents({
   )
 
   return (
-    <div className="bg-white border p-6 w-full sm:w-80 lg:w-96 shadow-md overflow-y-auto max-h-[600px]">
+    <div className="bg-white border p-6 w-full sm:w-80 lg:w-96 shadow-md overflow-y-auto max-h-[600px] ">
       <h2 className="text-lg font-semibold mb-3">Todos os eventos</h2>
 
       {sortedDates.map((date) => (

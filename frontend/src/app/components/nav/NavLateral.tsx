@@ -70,7 +70,7 @@ export default function NavLateral() {
       </div>
 
        {/* middle: nav items */}
-       <nav className="flex-1 mt-4 px-4 overflow-auto">
+       <nav className="flex-1 mt-4 px-4">
          <ul className="flex flex-col gap-2">
            {navItems.map(({ href, label, Icon }) => {
              const active = pathname === href
