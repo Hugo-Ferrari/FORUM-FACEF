@@ -4,7 +4,7 @@ import Block from '../DisplayBlock'
 import ButtonRanking from './ButtonRanking'
 
 
-function Ranking() {
+function RankingGeral() {
 
 
     return (
@@ -26,4 +26,4 @@ function Ranking() {
     )
 }
 
-export default Ranking
+export default RankingGeral

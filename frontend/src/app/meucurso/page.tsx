@@ -1,10 +1,10 @@
+import MeuCurso from '@/app/components/ranking/MeuCurso'
 import React from 'react'
-import Ranking from '../components/ranking/RankingGeral'
 
 function page() {
   return (
     <div>
-        <Ranking/>
+        <MeuCurso/>
     </div>
   )
 }
