@@ -6,23 +6,23 @@ import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 function Nav() {
-    const [openNotification, setOpenNotification] = useState(false)
-    const [openMenu, setOpenMenu] = useState(false)
-    const [ isDark, setIsDark] = useState(false)
+  const [openNotification, setOpenNotification] = useState(false)
+  const [openMenu, setOpenMenu] = useState(false)
+  const [isDark, setIsDark] = useState(false)
 
-  useEffect(()=>{
-    try{
+  useEffect(() => {
+    try {
       const stored = localStorage.getItem("theme")
-      if(stored === "dark"){
+      if (stored === "dark") {
         document.documentElement.classList.add("dark")
         setIsDark(true)
       }
-      else if(stored === "light"){
+      else if (stored === "light") {
         document.documentElement.classList.remove("dark")
         setIsDark(false)
       }
       else {
-        const prefersDark =window.matchMedia &&window.matchMedia('(prefers-color-scheme: dark)').matches
+        const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
         if (prefersDark) {
           document.documentElement.classList.add('dark')
           setIsDark(true)
@@ -52,53 +52,53 @@ function Nav() {
     }
   }
 
-    return (
-        <nav className="fixed w-full z-20 top-0 left-0 shadow-xl bg-[#1561B7]">
-            <div className="flex items-center justify-between h-20 mx-6 md:mx-10 px-4">
-                {/* logo */}
-                <Link href="#" className="flex items-center">
-                    <div className="relative h-12 w-44 md:w-52">
-                        <Image src="/img/Uni-FACEF.png" alt="Uni-FACEF" className="object-contain" fill />
+  return (
+    <nav className="fixed w-full z-20 top-0 left-0 shadow-xl bg-[#1561B7]">
+      <div className="flex items-center justify-between h-20 mx-6 md:mx-10 px-4">
+        {/* logo */}
+        <Link href="#" className="flex items-center">
+          <div className="relative h-12 w-44 md:w-52">
+            <Image src="/img/Uni-FACEF.png" alt="Uni-FACEF" className="object-contain" fill />
+          </div>
+        </Link>
+
+        {/* right controls */}
+        <div className="flex items-center gap-2 md:gap-4">
+          <ul className="flex items-center p-0 m-0 list-none gap-1 md:gap-2">
+            {/* notification*/}
+            <li className="relative">
+              <button
+                onClick={() => setOpenNotification(!openNotification)}
+                aria-label="Notificações"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white hover:bg-white/20 transition-all duration-75"
+              >
+                <div className="relative">
+                  <Link href="#" aria-label="Notificações" className="inline-flex items-center justify-center h-10 w-10 rounded-md text-white hover:bg-white/10 transition-transform duration-200 transform hover:scale-105">
+                    <BellIcon className="h-5 w-5 md:h-6 md:w-6" strokeWidth={1} />
+                  </Link>
+
+
+                </div>
+              </button>
+              {openNotification && (
+                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl p-4 space-y-3 animate-in fade-in slide-in-from-top-2">
+                  <div className="text-sm font-semibold text-gray-900">Notificações</div>
+                  <div className="space-y-2">
+                    <div className="p-2 bg-blue-50 rounded border-l-4 border-blue-500 text-sm text-gray-700">
+                      Um novo evento foi adicionado!  {/*tenho que integrar com as notifiçãoe que terá no back*/}
                     </div>
-                </Link>
+                    <div className="p-2 bg-yellow-50 rounded border-l-4 border-yellow-500 text-sm text-gray-700">
+                      Nova missão diaria. {/* exmeplos de notificação */}
+                    </div>
+                  </div>
+                  <button className="w-full text-xs text-blue-600 hover:text-blue-700 font-medium py-1">
+                    Ver todas
+                  </button>
+                </div>
+              )}
+            </li>
 
-                {/* right controls */}
-                <div className="flex items-center gap-2 md:gap-4">
-                    <ul className="flex items-center p-0 m-0 list-none gap-1 md:gap-2">
-                        {/* notification*/}
-                        <li className="relative">
-                            <button
-                                onClick={() => setOpenNotification(!openNotification)}
-                                aria-label="Notificações"
-                                className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white hover:bg-white/20 transition-all duration-75"
-                            >
-                                <div className="relative">
-                                    <Link href="#" aria-label="Notificações" className="inline-flex items-center justify-center h-10 w-10 rounded-md text-white hover:bg-white/10 transition-transform duration-200 transform hover:scale-105">
-                                        <BellIcon className="h-5 w-5 md:h-6 md:w-6" strokeWidth={1} />
-                                    </Link>
-
-
-                                </div>
-                            </button>
-                            {openNotification && (
-                                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl p-4 space-y-3 animate-in fade-in slide-in-from-top-2">
-                                    <div className="text-sm font-semibold text-gray-900">Notificações</div>
-                                    <div className="space-y-2">
-                                        <div className="p-2 bg-blue-50 rounded border-l-4 border-blue-500 text-sm text-gray-700">
-                                            Um novo evento foi adicionado!  {/*tenho que integrar com as notifiçãoe que terá no back*/}
-                                        </div>
-                                        <div className="p-2 bg-yellow-50 rounded border-l-4 border-yellow-500 text-sm text-gray-700">
-                                            Nova missão diaria. {/* exmeplos de notificação */}
-                                        </div>
-                                    </div>
-                                    <button className="w-full text-xs text-blue-600 hover:text-blue-700 font-medium py-1">
-                                        Ver todas
-                                    </button>
-                                </div>
-                            )}
-                        </li>
-
-                        {/* Modo Noturno */}
+            {/* Modo Noturno */}
             <li>
               <button
                 onClick={toggleDark}
@@ -111,7 +111,7 @@ function Nav() {
             </li>
 
 
-                        {/* Usuário + Menu */}
+            {/* Usuário + Menu */}
             <li className="relative">
               <button
                 onClick={() => setOpenMenu(!openMenu)}

@@ -19,7 +19,7 @@ export default function Home() {
               </div>
               <div className='mt-10 w-full flex'>
                   <DuvUsuario/>
-                  <div className="ml-15">
+                  <div className="ml-15 mt-15">
                   <AllEvents />
                   </div>
 

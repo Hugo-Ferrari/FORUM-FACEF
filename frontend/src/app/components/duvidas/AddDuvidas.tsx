@@ -86,25 +86,25 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         </PopoverContent>
       </Popover>
 
-      <div className="mt-4 w-full ml-5 ">
+      <div className="mt-3 w-full ml-2 bg-white p-3">
         <h2 className="text-xl font-semibold mb-3 text-gray-800 "> Dúvidas</h2>
 
         {doubtsList.length === 0 ? (
-          <p className="text-gray-500 ml-3">Nenhuma dúvida adicionada ainda.</p>
+          <p className="text-gray-600 ml-3">Nenhuma dúvida adicionada ainda.</p>
         ) : (
           <div className="max-h-[32vh] overflow-y-auto pr-2">
             <ul className="space-y-2">
-            {doubtsList.map((item, index) => (
-              <li key={index} className="p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200">
-                <Usuario />
-                <div className="flex items-center mt- mb-2">
-                  <Badge variant="secondary">
-                    <strong className="text-blue-600">{item.curso}:</strong>
-                  </Badge>
-                </div>
-                {item.texto}
-              </li>
-            ))}
+              {doubtsList.map((item, index) => (
+                <li key={index} className="p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200">
+                  <Usuario />
+                  <div className="flex items-center mt- mb-2">
+                    <Badge variant="secondary">
+                      <strong className="text-blue-600">{item.curso}:</strong>
+                    </Badge>
+                  </div>
+                  {item.texto}
+                </li>
+              ))}
             </ul>
           </div>
         )}

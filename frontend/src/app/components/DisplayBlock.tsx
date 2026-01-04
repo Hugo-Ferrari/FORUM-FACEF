@@ -20,7 +20,7 @@ function Block({ tipo, valor }: BlockProps) {
         sequencia: "Sequência Diária",
         materias: "Materiais Enviados"
     };
-    const bgClasses={
+    const bgClasses = {
         duvidas: "bg-green-50",
         ranking: "bg-yellow-50",
         sequencia: "bg-blue-50",
@@ -28,7 +28,7 @@ function Block({ tipo, valor }: BlockProps) {
     }
 
     return (
-       <div className="bg-white p-6 shadow-sm w-full h-28 ">
+        <div className="bg-white p-6 shadow-sm w-full h-28 ">
             <div className=" flex items-center">
                 <div className={`p-3 rounded-lg ${bgClasses[tipo]}`}>
                     {icones[tipo]}

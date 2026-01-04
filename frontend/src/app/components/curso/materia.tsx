@@ -44,7 +44,7 @@ export default function Materia() {
                     <Input
                         type="file"
                         accept="application/pdf"
-                        onChange={(e) =>setData({tipo: "provas",valor: e.target.files?.[0] as File,})
+                        onChange={(e) => setData({ tipo: "provas", valor: e.target.files?.[0] as File, })
                         }
                     />
                 );
@@ -55,7 +55,7 @@ export default function Materia() {
                         type="file"
                         accept="image/*"
                         onChange={(e) =>
-                            setData({tipo: "img",valor: e.target.files?.[0] as File,})
+                            setData({ tipo: "img", valor: e.target.files?.[0] as File, })
                         }
                     />
                 );
@@ -67,7 +67,7 @@ export default function Materia() {
                         placeholder="Cole seu link"
                         value={typeof data.valor === "string" ? data.valor : ""}
                         onChange={(e) =>
-                            setData({tipo: "links",valor: e.target.value,})
+                            setData({ tipo: "links", valor: e.target.value, })
                         }
                     />
                 );
@@ -77,8 +77,8 @@ export default function Materia() {
     function handleSave() {
         if (!data.valor) return;
 
-        setLista((prev) => [...prev, data]); 
-        setData({ tipo: "provas", valor: "" }); 
+        setLista((prev) => [...prev, data]);
+        setData({ tipo: "provas", valor: "" });
     }
 
     function openFileInNewTab(file: File) {
@@ -95,7 +95,7 @@ export default function Materia() {
         if (!modalOpen && modalImageObjectUrl) {
             try {
                 URL.revokeObjectURL(modalImageObjectUrl)
-            } catch {}
+            } catch { }
             setModalImageObjectUrl(null)
         }
     }, [modalOpen, modalImageObjectUrl])
@@ -133,7 +133,7 @@ export default function Materia() {
                 </PopoverContent>
             </Popover>
 
-           
+
             <div className="space-y-3 max-h-[28vh] overflow-y-auto pr-2">
                 <h2 className="font-bold text-xl">Conteúdos Salvos</h2>
 
@@ -164,14 +164,14 @@ export default function Materia() {
                             <img
                                 src={URL.createObjectURL(item.valor as File)}
                                 alt="preview"
-                                        className="w-32 rounded-md cursor-pointer"
-                                        onClick={() => {
-                                            const file = item.valor as File
-                                            const url = URL.createObjectURL(file)
-                                            setModalImageObjectUrl(url)
-                                            setModalImageFile(file)
-                                            setModalOpen(true)
-                                        }}
+                                className="w-32 rounded-md cursor-pointer"
+                                onClick={() => {
+                                    const file = item.valor as File
+                                    const url = URL.createObjectURL(file)
+                                    setModalImageObjectUrl(url)
+                                    setModalImageFile(file)
+                                    setModalOpen(true)
+                                }}
                             />
                         )}
                     </div>
