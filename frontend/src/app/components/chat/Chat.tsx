@@ -1,13 +1,15 @@
 "use client"
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Send } from "lucide-react"
 import React, { useEffect, useRef, useState } from "react"
+import { io, Socket } from "socket.io-client"
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Item, ItemContent, ItemHeader, ItemTitle } from "@/components/ui/item";
 
 type Msg = {
-    id: number
+    id: string
     text: string
     sender: string
     time: string
@@ -18,12 +20,31 @@ function Chat() {
     const [input, setInput] = useState("")
     const [name, setName] = useState("Você")
     const listRef = useRef<HTMLDivElement | null>(null)
+    const socketRef = useRef<Socket | null>(null)
+
+    // helper para gerar id único (usa crypto.randomUUID quando disponível)
+    const generateId = () => {
+        try {
+            if (typeof crypto !== 'undefined' && typeof (crypto as any).randomUUID === 'function') {
+                // prefer UUID
+                return (crypto as any).randomUUID()
+            }
+        } catch {
+            // ignore
+        }
+        return Date.now().toString() + Math.random().toString(36).slice(2, 8)
+    }
 
     useEffect(() => {
         const handleStorage = (e: StorageEvent) => {
             if (e.key === "chat") {
                 try {
-                    setMessages(JSON.parse(e.newValue || "[]"))
+                    const parsed = JSON.parse(e.newValue || "[]")
+                    // garante que os ids sejam strings e remove duplicatas
+                    const normalized: Msg[] = (parsed || []).map((m: any) => ({ ...m, id: String(m.id) }))
+                    // dedup
+                    const unique = normalized.filter((v: Msg, i: number, a: Msg[]) => a.findIndex(x => x.id === v.id) === i)
+                    setMessages(unique)
                 } catch {
 
                 }
@@ -39,7 +60,12 @@ function Chat() {
     useEffect(() => {
         try {
             const stored = localStorage.getItem("chat")
-            if (stored) setMessages(JSON.parse(stored))
+            if (stored) {
+                const parsed = JSON.parse(stored || "[]")
+                const normalized: Msg[] = (parsed || []).map((m: any) => ({ ...m, id: String(m.id) }))
+                const unique = normalized.filter((v: Msg, i: number, a: Msg[]) => a.findIndex(x => x.id === v.id) === i)
+                setMessages(unique)
+            }
         } catch {
             // ignore invalid json
         }
@@ -60,17 +86,93 @@ function Chat() {
         localStorage.setItem("chat_name", name)
     }, [name])
 
+    // cria conexão socket.io apenas no cliente
+    useEffect(() => {
+        if (typeof window === "undefined") return
+        try {
+            const socket = io("http://localhost:8000", {
+                path: "/socket.io",
+                withCredentials: true,
+                transports: ['websocket', 'polling'],
+                reconnectionAttempts: 5,
+                reconnectionDelay: 1000,
+            })
+            socketRef.current = socket
+
+            socket.on("connect", () => {
+                console.log("socket connected", socket.id)
+            })
+
+            socket.on("disconnect", (reason: any) => {
+                console.warn('socket disconnected', reason)
+            })
+
+            socket.on("connect_error", (err: any) => {
+                console.error('socket connect_error', err)
+            })
+
+            socket.on("reconnect_attempt", (attempt: number) => {
+                console.log('reconnect_attempt', attempt)
+            })
+
+            socket.on("reconnect_failed", () => {
+                console.error('reconnect_failed')
+            })
+
+            socket.on("welcome", (data: any) => {
+                console.log("welcome", data)
+            })
+
+            socket.on("chat_message", (msg: any) => {
+                // garante id como string e evita duplicatas
+                const incoming: Msg = { ...msg, id: String(msg.id ?? generateId()) }
+                setMessages((prev) => {
+                    if (prev.find(m => m.id === incoming.id)) return prev
+                    return [...prev, incoming]
+                })
+            })
+        } catch (err) {
+            console.error("socket.io import/connect failed", err)
+        }
+
+        return () => {
+            if (socketRef.current) {
+                socketRef.current.disconnect()
+                socketRef.current = null
+            }
+        }
+    }, [])
+
     const sendMessage = (e?: React.FormEvent) => {
         if (e) e.preventDefault()
         const text = input.trim()
         if (!text) return
         const msg: Msg = {
-            id: Date.now(),
+            id: generateId(),
             text,
             sender: name || "Você",
             time: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
         }
+        // envia localmente
         setMessages(prev => [...prev, msg])
+        // envia para o servidor via socket
+        try {
+            const socket = socketRef.current
+            if (socket && (socket as any).connected) {
+                socket.emit('chat_message', msg)
+            } else if (socket) {
+                // se não está conectado no momento, tente emitir quando reconectar
+                const tryEmitOnReconnect = () => {
+                    if ((socket as any).connected) {
+                        socket.emit('chat_message', msg)
+                        socket.off('connect', tryEmitOnReconnect)
+                    }
+                }
+                socket.on('connect', tryEmitOnReconnect)
+            }
+        } catch (err) {
+            console.error('emit failed', err)
+        }
         setInput("")
     }
 
