@@ -2,7 +2,6 @@
 from ...models.auth_type import AuthUserModel
 from ...models.auth_type import AuthRegisterModel
 from ..supabase_client import supabase
-import requests
 from typing import Optional
 
 
