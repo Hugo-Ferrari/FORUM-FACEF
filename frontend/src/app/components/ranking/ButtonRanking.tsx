@@ -27,7 +27,7 @@ function ButtonRanking({ tipo }: ButtonProps) {
       <button
         type="button"
         className="flex items-center gap-2 p-3 rounded-lg 
-                   hover:bg-gray-200 hover:text-yellow-600 
+                   hover:bg-white hover:text-yellow-500 
                    text-gray-700 transition"
       >
         {icons[tipo]}

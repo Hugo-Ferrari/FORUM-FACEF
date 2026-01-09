@@ -20,6 +20,7 @@ function MeuCurso() {
                 <ButtonRanking tipo='curso' />
 
             </div>
+            <h1>Ranking - (curso)</h1>
         </div>
     )
 }

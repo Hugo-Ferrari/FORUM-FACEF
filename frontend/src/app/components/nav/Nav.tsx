@@ -74,7 +74,7 @@ function Nav() {
               >
                 <div className="relative">
                   <Link href="#" aria-label="Notificações" className="inline-flex items-center justify-center h-10 w-10 rounded-md text-white hover:bg-white/10 transition-transform duration-200 transform hover:scale-105">
-                    <BellIcon className="h-5 w-5 md:h-6 md:w-6" strokeWidth={1} />
+                    <BellIcon className="h-5 w-5 md:h-6 md:w-6 " strokeWidth={1} />
                   </Link>
 
 

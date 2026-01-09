@@ -2,6 +2,10 @@
 import React, { useState } from 'react'
 import Block from '../DisplayBlock'
 import ButtonRanking from './ButtonRanking'
+import Users from '../user/UsuarioRanking'
+
+
+
 
 
 function RankingGeral() {
@@ -21,6 +25,15 @@ function RankingGeral() {
                 <ButtonRanking tipo='ranking' />
                 <ButtonRanking tipo='curso' />
 
+            </div>
+            <div  className='py-5'>
+            <h1 className='font-semibold text-lg '>Ranking - Geral</h1>
+
+            </div>
+            <div className="max-h-[32vh] overflow-y-auto pr-2 max-w-2xl">
+                <Users colocacao='primeiro' pontos={130} />
+                <Users colocacao='segundo' pontos={120} />
+                <Users colocacao='terceiro' pontos={111} />
             </div>
         </div>
     )
