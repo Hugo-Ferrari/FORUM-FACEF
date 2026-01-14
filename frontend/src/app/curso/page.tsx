@@ -11,6 +11,7 @@ function page() {
         <div className='flex flex-col w-115 mt-10 mr-15 '>
           <DuvUsuario />
           <Materia />
+          
         </div>
       </div>
     </div>

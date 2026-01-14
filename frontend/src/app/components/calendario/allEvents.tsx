@@ -7,10 +7,10 @@ import { ptBR } from "date-fns/locale"
 export default function AllEvents({
   events,
 }: {
-  events?: { date: string; title: string }[]
+  events?: { date: string; title: string; type: string }[]
 }) {
   // AllEvents now receives `events` optionally; if not provided, it reads from localStorage.
-  const [localEvents, setLocalEvents] = useState<{ date: string; title: string }[]>(
+  const [localEvents, setLocalEvents] = useState<{ date: string; title: string; type: string }[]>(
     events || []
   )
 
@@ -54,9 +54,9 @@ export default function AllEvents({
   }
 
 
-  const grouped = (eventsToShow || []).reduce<Record<string, string[]>>((acc, ev) => {
+  const grouped = (eventsToShow || []).reduce<Record<string, { title: string; type: string }[]>>((acc, ev) => {
     if (!acc[ev.date]) acc[ev.date] = []
-    acc[ev.date].push(ev.title)
+    acc[ev.date].push({ title: ev.title, type: ev.type })
     return acc
   }, {})
 
@@ -75,12 +75,12 @@ export default function AllEvents({
             {format(new Date(date), "dd 'de' MMMM 'de' yyyy", { locale: ptBR })}
           </h3>
           <ul className="ml-3 mt-1 space-y-1">
-            {grouped[date].map((title, i) => (
+            {grouped[date].map((event, i) => (
               <li
                 key={i}
                 className="text-sm text-gray-700 bg-blue-50 border border-blue-200 px-2 py-1 "
               >
-                • {title}
+                • <span className="font-semibold">{event.type}</span> {event.title}
               </li>
             ))}
           </ul>

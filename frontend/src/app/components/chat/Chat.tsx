@@ -7,6 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 import { Item, ItemContent, ItemHeader, ItemTitle } from "@/components/ui/item";
+import Diretrizes from "./Diretrizes";
 
 type Msg = {
     id: string
@@ -183,8 +184,8 @@ function Chat() {
     }
 
     return (
-        <div className="max-w-5xl w-full px-12">
-            <Item className="rounded-lg">
+        <div className="max-w-7xl w-full px-12 flex">
+            <Item className="rounded-lg grow-1">
                 <ItemHeader>
                     <div className="flex items-center justify-between gap-4">
                         <div>
@@ -245,6 +246,9 @@ function Chat() {
                     </div>
                 </ItemContent>
             </Item>
+            
+
+            
         </div>
     )
 }

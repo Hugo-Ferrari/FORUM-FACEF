@@ -1,5 +1,5 @@
 "use client"
-import { BellIcon, UserRoundIcon, MoonIcon, LogOutIcon, SunIcon } from "lucide-react"
+import { BellIcon, UserRoundIcon, MoonIcon, LogOutIcon, SunIcon, User, Settings } from "lucide-react"
 import React, { useEffect, useState } from "react"
 import Link from "next/link";
 import Image from "next/image";
@@ -74,7 +74,7 @@ function Nav() {
               >
                 <div className="relative">
                   <Link href="#" aria-label="Notificações" className="inline-flex items-center justify-center h-10 w-10 rounded-md text-white hover:bg-white/10 transition-transform duration-200 transform hover:scale-105">
-                    <BellIcon className="h-5 w-5 md:h-6 md:w-6 " strokeWidth={1} />
+                    <BellIcon className="h-5 w-5 md:h-6 md:w-6 " strokeWidth={1.5} />
                   </Link>
 
 
@@ -138,13 +138,15 @@ function Nav() {
                       href="/configuracoes"
                       className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded transition-colors"
                     >
-                      ⚙️ Configurações
+                      <Settings className="h-5 w-5" strokeWidth={1.5}/>
+                       Configurações
                     </Link>
                     <Link
                       href="/perfil"
                       className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded transition-colors"
                     >
-                      👤 Perfil
+                      <User className = "h-5 w-5"strokeWidth={1.5}/>
+                       Perfil
                     </Link>
                   </div>
                   <button

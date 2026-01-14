@@ -12,12 +12,14 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import AllEvents from "./allEvents"
+import { NativeSelect, NativeSelectOption } from "@/components/ui/native-select"
 
 export function Calendario() {
   const [date, setDate] = React.useState<Date | undefined>(new Date())
-  const [events, setEvents] = React.useState<{ date: string; title: string }[]>([])
+  const [events, setEvents] = React.useState<{ date: string; title: string; type: string }[]>([])
   const [newEvent, setNewEvent] = React.useState("")
   const [isDialogOpen, setIsDialogOpen] = React.useState(false)
+  const [selectedEvent, setSelectedEvent] = React.useState("")
 
   const selectedDateStr = date ? date.toISOString().split("T")[0] : ""
 
@@ -45,11 +47,12 @@ export function Calendario() {
   }, [events])
 
   const handleAddEvent = () => {
-    if (!date || !newEvent.trim())
-      return alert("Selecione uma data e digite um evento.")
-    const newItem = { date: selectedDateStr, title: newEvent.trim() }
+    if (!date || !newEvent.trim() || !selectedEvent)
+      return alert("Selecione uma data, o tipo de evento e digite um evento.")
+    const newItem = { date: selectedDateStr, title: newEvent.trim(), type: selectedEvent }
     setEvents([...events, newItem])
     setNewEvent("")
+    setSelectedEvent("")
     setIsDialogOpen(false)
   }
 
@@ -62,7 +65,7 @@ export function Calendario() {
           mode="single"
           selected={date}
           onSelect={setDate}
-          className=" border w-125"
+          className=" border w-150"
         />
       </div>
 
@@ -82,7 +85,7 @@ export function Calendario() {
                 key={index}
                 className="bg-blue-50 border border-blue-200 text-blue-700 px-3 py-2 text-sm"
               >
-                • {ev.title}
+                • <span className="font-semibold">[{ev.type}]</span> {ev.title}
               </li>
             ))}
           </ul>
@@ -98,6 +101,21 @@ export function Calendario() {
             <DialogHeader>
               <DialogTitle>Adicionar Evento</DialogTitle>
             </DialogHeader>
+            <NativeSelect
+            value={selectedEvent}
+            onChange={(e) => setSelectedEvent(e.target.value)}
+            className="mb-3 w-full"
+          >
+            <NativeSelectOption value="">Selecione o Evento</NativeSelectOption>
+            <NativeSelectOption value="Prova">Prova</NativeSelectOption>
+            <NativeSelectOption value="Apresentação">Apresentação</NativeSelectOption>
+            <NativeSelectOption value="Workshops">Workshops</NativeSelectOption>
+            <NativeSelectOption value="Seminários">Seminários</NativeSelectOption>
+            <NativeSelectOption value="Feiras de Profissões">Feiras de Profissões</NativeSelectOption>
+            <NativeSelectOption value="Cerimônias de Formatura">Cerimônias de Formatura</NativeSelectOption>
+            <NativeSelectOption value="Palestras">Palestras</NativeSelectOption>
+            <NativeSelectOption value="Trote">Trote</NativeSelectOption>
+          </NativeSelect>
             <Input
               placeholder="Digite o nome do evento"
               value={newEvent}

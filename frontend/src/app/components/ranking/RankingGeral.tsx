@@ -9,8 +9,6 @@ import Users from '../user/UsuarioRanking'
 
 
 function RankingGeral() {
-
-
     return (
         <div className='flex flex-col p-8 max-w-7xl mx-auto'>
             <h1 className=' text-black font-extrabold text-4xl '>Ranking</h1>
@@ -38,5 +36,4 @@ function RankingGeral() {
         </div>
     )
 }
-
 export default RankingGeral
