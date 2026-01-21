@@ -1,0 +1,107 @@
+import React from 'react'
+import { Badge } from '@/components/ui/badge'
+import { Message } from '../types/socketEvents'
+
+type ChatMessageProps = {
+    message: Message
+    isOwnMessage: boolean
+    displayTime: string
+}
+
+/**
+ * Componente para exibir uma única mensagem no chat
+ *
+ * Responsabilidades:
+ * - Renderizar mensagem com estilo apropriado (própria vs. outros)
+ * - Mostrar nome do remetente (se não for mensagem própria)
+ * - Exibir horário da mensagem
+ * - Aplicar estilos diferentes para mensagens próprias e de outros
+ *
+ * @param message - Dados da mensagem
+ * @param isOwnMessage - Se a mensagem é do usuário atual
+ * @param displayTime - Horário formatado para exibição
+ */
+export function ChatMessage({ message, isOwnMessage, displayTime }: ChatMessageProps) {
+    return (
+        <div className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}>
+            <div className={`flex flex-col max-w-[70%] sm:max-w-[50%] min-w-[6rem] px-3 py-2 rounded-lg break-words transition-all duration-300 ease-in-out ${
+                isOwnMessage 
+                    ? "bg-blue-600 text-white rounded-br-none shadow-lg" 
+                    : "bg-white border text-gray-800 rounded-bl-none"
+            }`}>
+                {/* Nome do remetente (apenas para mensagens de outros) */}
+                {!isOwnMessage && (
+                    <div className="text-sm font-medium text-left text-gray-700">
+                        {message.sender_name}
+                    </div>
+                )}
+
+                {/* Texto da mensagem */}
+                <div className="mt-1 text-sm leading-relaxed">
+                    {message.text}
+                </div>
+
+                {/* Horário */}
+                <div className={`text-xs mt-2 ${
+                    isOwnMessage ? "text-white/80 text-right" : "text-gray-400 text-left"
+                }`}>
+                    {displayTime}
+                </div>
+            </div>
+        </div>
+    )
+}
+
+type ChatMessagesListProps = {
+    messages: Message[]
+    currentUserId: string
+}
+
+/**
+ * Componente para exibir a lista de mensagens do chat
+ *
+ * Responsabilidades:
+ * - Renderizar todas as mensagens do chat
+ * - Mostrar estado vazio quando não há mensagens
+ * - Determinar se cada mensagem é do usuário atual
+ *
+ * @param messages - Array de mensagens para exibir
+ * @param currentUserId - ID do usuário atual (para determinar mensagens próprias)
+ */
+export function ChatMessagesList({ messages, currentUserId }: ChatMessagesListProps) {
+    if (messages.length === 0) {
+        return (
+            <div className="flex items-center justify-center h-full">
+                <div className="text-center">
+                    <Badge className="bg-transparent border-gray-200 text-gray-500">
+                        Nenhuma mensagem ainda
+                    </Badge>
+                    <p className="text-sm text-muted-foreground mt-2">
+                        Dê início à conversa!
+                    </p>
+                </div>
+            </div>
+        )
+    }
+
+    return (
+        <>
+            {messages.map(message => {
+                const isOwnMessage = message.sender === currentUserId
+                const displayTime = new Date(message.created_at).toLocaleTimeString([], {
+                    hour: "2-digit",
+                    minute: "2-digit"
+                })
+
+                return (
+                    <ChatMessage
+                        key={message.id}
+                        message={message}
+                        isOwnMessage={isOwnMessage}
+                        displayTime={displayTime}
+                    />
+                )
+            })}
+        </>
+    )
+}
