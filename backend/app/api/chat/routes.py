@@ -1,5 +1,5 @@
-from fastapi import APIRouter, HTTPException, Depends
-from ..database.supabase_client import supabase
+from fastapi import APIRouter, HTTPException
+from ...database.supabase_client import supabase
 
 router = APIRouter()
 
@@ -7,18 +7,32 @@ router = APIRouter()
 
 @router.get('/chats')
 async def list_chats(user_id: str):
-    # retorna lista de chats que o usuário participa
-    res = supabase.table('chats_members').select('chat_id').eq('user_id', user_id).execute()
-    if res.status_code != 200:
-        raise HTTPException(status_code=500, detail='db error')
-    chat_ids = [r['chat_id'] for r in res.data]
-    return {'chats': chat_ids}
+    """Retorna lista de chats que o usuário participa"""
+    try:
+        # Busca o usuário
+        user_data = supabase.table('users').select('course_id').eq('facef_code', int(user_id)).execute().data[0]
+        course_id = user_data['course_id']
+        print(f"LIST User course_id: {course_id}")
+
+        # Busca os chats do curso (res.data já é uma lista)
+        res = supabase.table('chats').select('id, name, is_general').eq('course_id', course_id).execute()
+        print(f"LIST Chats encontrados: {res.data}")
+
+        # res.data já é a lista de chats
+        chats = res.data if res.data else []
+        return {'chats': chats}
+    except Exception as e:
+        print(f"Erro ao listar chats: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
 
 @router.get('/chats/{chat_id}/messages')
 async def get_chat_messages(chat_id: str):
-    # retorna mensagens do chat ordenadas por timestamp asc
-    res = supabase.table('messages').select('*').eq('chat_id', chat_id).order('created_at', asc=True).execute()
-    if res.status_code != 200:
-        raise HTTPException(status_code=500, detail='db error')
-    return {'messages': res.data}
+    """Retorna mensagens do chat ordenadas por timestamp asc"""
+    try:
+        res = supabase.table('messages').select('*').eq('chat_id', chat_id).order('created_at', asc=True).execute()
+        return {'messages': res.data if res.data else []}
+    except Exception as e:
+        print(f"Erro ao buscar mensagens: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
