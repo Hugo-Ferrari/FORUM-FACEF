@@ -1,6 +1,6 @@
 "use client"
 import React, { useState } from 'react'
-import Block from '../DisplayBlock'
+import Block from '../blocosDeExibição/DisplayBlock'
 import ButtonRanking from './ButtonRanking'
 import Users from '../user/UsuarioRanking'
 

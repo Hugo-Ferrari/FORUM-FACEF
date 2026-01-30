@@ -1,5 +1,5 @@
 import React from 'react'
-import Block from '../DisplayBlock'
+import Block from '../blocosDeExibição/DisplayBlock'
 import ButtonRanking from './ButtonRanking'
 
 function MeuCurso() {

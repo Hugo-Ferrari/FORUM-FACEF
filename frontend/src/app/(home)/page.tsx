@@ -1,4 +1,4 @@
-import Block from "@/app/components/DisplayBlock";
+import Block from "@/app/components/blocosDeExibição/DisplayBlock";
 import DuvUsuario from "@/app/components/duvidas/CaixaDuvida";
 import React from "react";
 import AllEvents from "../components/calendario/allEvents";
