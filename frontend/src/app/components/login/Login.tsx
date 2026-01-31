@@ -88,7 +88,7 @@ export default function Login() {
                 style={{filter: 'brightness(0) saturate(100%) invert(34%) sepia(92%) saturate(1292%) hue-rotate(201deg)'}}
               />
             </div>
-            <h1 className="text-4xl font-extrabold text-[#1561B7] mb-4">
+            <h1 className="text-4xl font-extrabold text-blue-600 mb-4">
               Fórum FACEF
             </h1>
             <p className="text-lg text-gray-700 max-w-md font-medium mb-8">
@@ -97,8 +97,8 @@ export default function Login() {
 
             <div className="space-y-4">
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-[#1561B7]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-[#1561B7] font-bold text-sm">✓</span>
+                <div className="w-6 h-6 rounded-full bg-blue-600/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Comunidade Ativa</h3>
@@ -107,8 +107,8 @@ export default function Login() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-[#1561B7]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-[#1561B7] font-bold text-sm">✓</span>
+                <div className="w-6 h-6 rounded-full bg-blue-600/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Respostas Rápidas</h3>
@@ -117,8 +117,8 @@ export default function Login() {
               </div>
 
               <div className="flex items-start gap-3">
-                <div className="w-6 h-6 rounded-full bg-[#1561B7]/20 flex items-center justify-center flex-shrink-0 mt-1">
-                  <span className="text-[#1561B7] font-bold text-sm">✓</span>
+                <div className="w-6 h-6 rounded-full bg-blue-600/20 flex items-center justify-center flex-shrink-0 mt-1">
+                  <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900">Gamificação</h3>
@@ -135,7 +135,7 @@ export default function Login() {
             
 
             <div className="md:hidden mb-6 text-center">
-              <h1 className="text-3xl font-extrabold text-[#1561B7]">
+              <h1 className="text-3xl font-extrabold text-blue-600">
                 Fórum FACEF
               </h1>
             </div>
@@ -171,7 +171,7 @@ export default function Login() {
                     required
                     autoComplete="email"
                     placeholder="seu@email.com"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1561B7] focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                     />
                 </div>
@@ -184,7 +184,7 @@ export default function Login() {
                   </label>
                   <Link
                     href="/recuperar-senha"
-                    className="text-xs text-[#1561B7] hover:text-[#0d3d7a] transition-colors font-medium">
+                    className="text-xs text-blue-600 hover:text-[#0d3d7a] transition-colors font-medium">
                     Esqueceu?
                   </Link>
                 </div>
@@ -199,7 +199,7 @@ export default function Login() {
                     required
                     autoComplete="current-password"
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-[#1561B7] focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                   />
                 </div>
@@ -208,7 +208,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-[#1561B7] hover:bg-[#0d3d7a] text-white font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
+                className="w-full bg-blue-600 hover:bg-[#0d3d7a] text-white font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
 >
                 {loading ? (
                   <>
@@ -237,7 +237,7 @@ export default function Login() {
 
             <Link
               href="/cadastro"
-              className="w-full block text-center px-4 py-2.5 border-2 border-[#1561B7] text-[#1561B7] font-semibold rounded-lg hover:bg-[#1561B7]/5 transition-all duration-200">
+              className="w-full block text-center px-4 py-2.5 border-2 border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-[#1561B7]/5 transition-all duration-200">
               Criar Conta
             </Link>
 
