@@ -106,8 +106,7 @@ async def handle_room_message(sio: socketio.AsyncServer, sid: str, data: dict):
     # Guarda o room_id original para retornar ao frontend
     original_room_id = room_id
 
-    # Se for nome amigável (não parece UUID), mapeia para UUID real
-    if len(room_id) < 30:  # UUIDs têm 36 chars, nomes amigáveis são menores
+    if len(room_id) < 30:
         real_uuid = await get_room_uuid_by_name(room_id)
         if not real_uuid:
             await sio.emit('error', {'msg': f'Room "{room_id}" não encontrada'}, to=sid)
@@ -124,7 +123,6 @@ async def handle_room_message(sio: socketio.AsyncServer, sid: str, data: dict):
         return
 
     # Verifica se o usuário tem acesso a esta room
-    # ChatsModel: is_general=True permite todos, senão verifica course_id
     has_access = await check_user_in_chat(user_id, room_id)
     if not has_access:
         await sio.emit('error', {'msg': 'no permission for this room'}, to=sid)
@@ -150,11 +148,10 @@ async def handle_room_message(sio: socketio.AsyncServer, sid: str, data: dict):
         print(f"ROOM MESSAGE: Erro ao verificar participantes: {e}")
 
     # Transmite mensagem para todos os membros da room
-    # IMPORTANTE: Retorna o room_id ORIGINAL (nome amigável) para o frontend
     await sio.emit('room_response', {
-        'room_id': original_room_id,  # Envia o nome amigável de volta
+        'room_id': original_room_id,
         'message': payload
-    }, room=room_id)  # Mas usa o UUID para enviar para a room correta
+    }, room=room_id)
 
     print(f"ROOM MESSAGE: ✅ Broadcast enviado com room_id={original_room_id}")
 

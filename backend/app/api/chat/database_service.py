@@ -65,7 +65,7 @@ async def fetch_chat_messages(chat_id: str):
     """
     Busca mensagens do chat no banco de dados
 
-    Converte campos do banco (content, sender_id) para formato do frontend (text, sender)
+    Converte campos do banco (content, sender_id UUID) para formato do frontend (text, sender facef_code)
 
     Args:
         chat_id: ID do chat ou room
@@ -74,23 +74,29 @@ async def fetch_chat_messages(chat_id: str):
         Lista de mensagens ordenadas por data de criação
     """
     try:
-        res = supabase.table('messages')\
-            .select('*')\
+        res = supabase.table('chat_messages')\
+            .select('*, users:sender_id(facef_code, name)')\
             .eq('chat_id', chat_id)\
-            .order('created_at', asc=True)\
+            .order('created_at', desc=False)\
             .execute()
 
-        if res.status_code == 200 and res.data:
-            # Mapeia campos do banco para o frontend
-            # Banco: content, sender_id
-            # Frontend: text, sender
+        if res.data:
             messages = []
             for msg in res.data:
+                user_data = msg.get('users')
+
+                if user_data:
+                    sender = user_data.get('facef_code')
+                    sender_name = user_data.get('name', 'Usuário')
+                else:
+                    sender = msg.get('sender_id')
+                    sender_name = 'Usuário'
+
                 frontend_msg = {
                     'id': msg.get('id'),
-                    'text': msg.get('content'),          # Banco: content -> Frontend: text
-                    'sender': msg.get('sender_id'),      # Banco: sender_id -> Frontend: sender
-                    'sender_name': msg.get('sender_name', 'Usuário'),  # Opcional
+                    'text': msg.get('content'),
+                    'sender': sender,
+                    'sender_name': sender_name,
                     'created_at': msg.get('created_at'),
                     'chat_id': msg.get('chat_id')
                 }
@@ -99,6 +105,8 @@ async def fetch_chat_messages(chat_id: str):
             return messages
     except Exception as e:
         print(f'Erro ao buscar mensagens do chat {chat_id}:', e)
+        import traceback
+        traceback.print_exc()
     return []
 
 
@@ -114,14 +122,14 @@ async def fetch_chat_messages_limited(chat_id: str, limit: int = MESSAGE_HISTORY
         Lista com as últimas N mensagens
     """
     try:
-        res = supabase.table('messages')\
+        res = supabase.table('chat_messages')\
             .select('*')\
             .eq('chat_id', chat_id)\
-            .order('created_at', asc=True)\
+            .order('created_at', desc=False)\
             .limit(limit)\
             .execute()
 
-        if res.status_code == 200:
+        if res.data:
             return res.data
     except Exception as e:
         print(f'Erro ao buscar histórico de mensagens do chat {chat_id}:', e)
@@ -139,23 +147,53 @@ async def save_message(message_data: dict, chat_id: str):
     Returns:
         True se salvou com sucesso, False caso contrário
     """
+    print(f"SAVE MESSAGE: Salvando mensagem no chat {chat_id}: {message_data}")
     try:
+        sender = message_data.get('sender')
+
+        # Se sender for facef_code (int ou string numérica), converte para UUID do usuário
+        sender_uuid = sender
+        if sender:
+            # Verifica se parece ser um facef_code (número ou string numérica pequena)
+            # UUIDs têm 36 caracteres, facef_code são números menores
+            sender_str = str(sender)
+            if len(sender_str) < 20:  # Não é um UUID
+                print(f"SAVE MESSAGE: Convertendo facef_code {sender} para UUID...")
+                try:
+                    user_data = supabase.table('users')\
+                        .select('id')\
+                        .eq('facef_code', int(sender_str))\
+                        .limit(1)\
+                        .execute()
+
+                    if user_data.data and len(user_data.data) > 0:
+                        sender_uuid = user_data.data[0]['id']
+                        print(f"SAVE MESSAGE: UUID encontrado: {sender_uuid}")
+                    else:
+                        print(f"SAVE MESSAGE: ⚠️ Usuário com facef_code {sender} não encontrado!")
+                        return False
+                except ValueError:
+                    # Se não conseguir converter para int, assume que já é UUID
+                    print(f"SAVE MESSAGE: sender não é numérico, assumindo UUID: {sender}")
+                    pass
+
         # Mapeia campos do frontend para o modelo do banco
-        # Frontend: text, sender, sender_name
-        # Banco (ChatsMessageModel): content, sender_id
         db_message = {
-            'id': message_data.get('id'),
             'chat_id': chat_id,
-            'sender_id': message_data.get('sender'),  # Frontend envia 'sender'
-            'content': message_data.get('text'),       # Frontend envia 'text'
-            'created_at': message_data.get('created_at')
+            'sender_id': sender_uuid,
+            'content': message_data.get('text'),
         }
 
         print(f"SAVE MESSAGE: Salvando no banco: {db_message}")
 
-        result = supabase.table('messages').insert(db_message).execute()
+        result = supabase.table('chat_messages').insert(db_message).execute()
 
-        print(f"SAVE MESSAGE: ✅ Mensagem salva com sucesso")
+        # Verifica se houve erro na resposta
+        if hasattr(result, 'error') and result.error:
+            print(f"SAVE MESSAGE: ❌ Erro do Supabase: {result.error}")
+            return False
+
+        print(f"SAVE MESSAGE: ✅ Mensagem salva com sucesso - Response: {result.data}")
         return True
     except Exception as e:
         print(f'SAVE MESSAGE: ❌ Erro ao salvar mensagem no chat {chat_id}:', e)

@@ -4,7 +4,6 @@ from ...models.auth_type import AuthRegisterModel
 from ..supabase_client import supabase
 from typing import Optional
 
-
 async def get_user_req(register: AuthRegisterModel) -> Optional[UserModel]:
     try:
         res = supabase.table("users").select("*").eq("facef_code", register.code).execute()
