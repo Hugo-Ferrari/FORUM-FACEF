@@ -5,9 +5,9 @@ import AllEvents from "../components/calendario/allEvents";
 
 export default function Home() {
   return (
-      <div className='bg-[#EFF0F6] min-h-screen w-full overflow-x-hidden'>
+      <div className='bg-background min-h-screen w-full overflow-x-hidden'>
           <div className='flex flex-col items-center p-8 max-w-7xl mx-auto'>
-              <h1 className='mt-20 text-black font-extrabold text-5xl'>Bem-Vindo à Comunidade</h1>
+              <h1 className='mt-20 text-black dark:text-white font-extrabold text-5xl'>Bem-Vindo à Comunidade</h1>
               <p className='text-gray-700  mt-4 text-center'>
                   Conecte-se, tire dúvidas, compartilhe conhecimento e cresça junto com seus colegas acadêmicos.
               </p>
