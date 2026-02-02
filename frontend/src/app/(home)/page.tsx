@@ -22,9 +22,7 @@ export default function Home() {
                   <div className="ml-15 mt-15">
                   <AllEvents />
                   </div>
-
               </div>
-
           </div>
       </div>
   );
