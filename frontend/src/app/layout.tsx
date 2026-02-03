@@ -30,20 +30,21 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      <NavLateral />
-      <Nav/>
+        <NavLateral />
+        <Nav />
 
-      {/* main wrapper: use CSS variable set by NavLateral to push content when sidebar expands */}
-      <div
-        style={{
-          paddingLeft: 'var(--sidebar-width, 5rem)',
-          transition: 'padding-left 300ms ease-in-out',
-        }}
-        className="pt-20 min-h-screen bg-background"
-      >
-        {children}
-      </div>
-       </body>
-     </html>
-   );
- }
+        {/* main wrapper: use CSS variable set by NavLateral to push content when sidebar expands */}
+        <div
+          style={{
+            paddingLeft: 'var(--sidebar-width, 5rem)',
+            transition: 'padding-left 300ms ease-in-out',
+          }}
+          className="pt-20 min-h-screen bg-background transition-colors duration-300"
+        >
+          {children}
+        </div>
+
+      </body>
+    </html>
+  );
+}

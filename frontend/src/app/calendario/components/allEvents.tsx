@@ -78,7 +78,7 @@ export default function AllEvents({
             {grouped[date].map((event, i) => (
               <li
                 key={i}
-                className="text-sm text-gray-700 dark:text-gray-200 bg-blue-50 dark:bg-card border border-blue-200 px-2 py-1 "
+                className="text-sm text-foreground dark:text-foreground bg-blue-50 dark:bg-muted border border-blue-200 dark:border-border px-2 py-1 "
               >
                 • <span className="font-semibold">{event.type}</span> {event.title}
               </li>

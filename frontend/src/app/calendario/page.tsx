@@ -83,7 +83,7 @@ export function Calendario() {
             {dayEvents.map((ev, index) => (
               <li
                 key={index}
-                className="bg-blue-50 dark:bg-card border border-blue-200 text-blue-700 px-3 py-2 text-sm"
+                className="bg-blue-50 dark:bg-muted border border-blue-200 dark:border-border text-blue-700 dark:text-blue-400 px-3 py-2 text-sm"
               >
                 • <span className="font-semibold">[{ev.type}]</span> {ev.title}
               </li>

@@ -91,7 +91,7 @@ export default function Login() {
             <h1 className="text-4xl font-extrabold text-blue-600 mb-4">
               Fórum FACEF
             </h1>
-            <p className="text-lg text-gray-700 max-w-md font-medium mb-8">
+            <p className="text-lg text-foreground dark:text-foreground max-w-md font-medium mb-8">
               Conecte-se com sua comunidade acadêmica, tire dúvidas e compartilhe conhecimento.
             </p>
 
@@ -101,8 +101,8 @@ export default function Login() {
                   <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Comunidade Ativa</h3>
-                  <p className="text-sm text-gray-600">Interaja com alunos e professores</p>
+                  <h3 className="font-semibold text-foreground dark:text-foreground">Comunidade Ativa</h3>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Interaja com alunos e professores</p>
                 </div>
               </div>
 
@@ -111,8 +111,8 @@ export default function Login() {
                   <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Respostas Rápidas</h3>
-                  <p className="text-sm text-gray-600">Tire suas dúvidas com a comunidade</p>
+                  <h3 className="font-semibold text-foreground dark:text-foreground">Respostas Rápidas</h3>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tire suas dúvidas com a comunidade</p>
                 </div>
               </div>
 
@@ -122,7 +122,7 @@ export default function Login() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">Gamificação</h3>
-                  <p className="text-sm text-gray-600">Ganhe pontos e suba no ranking</p>
+                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Ganhe pontos e suba no ranking</p>
                 </div>
               </div>
             </div>
@@ -141,10 +141,10 @@ export default function Login() {
             </div>
 
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-gray-900 mb-2">
+              <h2 className="text-3xl font-bold text-foreground dark:text-foreground mb-2">
                 Bem-vindo de volta
               </h2>
-              <p className="text-gray-600">
+              <p className="text-muted-foreground dark:text-muted-foreground">
                 Entre com sua conta para acessar a comunidade
               </p>
             </div>
@@ -157,7 +157,7 @@ export default function Login() {
 
             <form onSubmit={handleLogin} className="space-y-5" noValidate>
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-gray-900 mb-2">
+                <label htmlFor="email" className="block text-sm font-semibold text-foreground dark:text-foreground mb-2">
                   Email
                 </label>
                 <div className="relative">
@@ -171,7 +171,7 @@ export default function Login() {
                     required
                     autoComplete="email"
                     placeholder="seu@email.com"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-gray-50 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-foreground dark:text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                     />
                 </div>
@@ -179,7 +179,7 @@ export default function Login() {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="password" className="block text-sm font-semibold text-gray-900 dark:text-white">
+                  <label htmlFor="password" className="block text-sm font-semibold text-foreground dark:text-foreground">
                     Senha
                   </label>
                   <Link
@@ -199,7 +199,7 @@ export default function Login() {
                     required
                     autoComplete="current-password"
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-foreground dark:text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                   />
                 </div>
@@ -226,7 +226,7 @@ export default function Login() {
 
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t  border-gray-200 dark:border-gray-700"></div>
+                <div className="w-full border-t border-border dark:border-border"></div>
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white dark:bg-black text-gray-600">
@@ -241,8 +241,8 @@ export default function Login() {
               Criar Conta
             </Link>
 
-            <div className="mt-6 pt-6 border-t  border-gray-200 dark:border-gray-700">
-              <p className="text-xs text-center text-gray-500">
+            <div className="mt-6 pt-6 border-t border-border dark:border-border">
+              <p className="text-xs text-center text-muted-foreground dark:text-muted-foreground">
                 Ao acessar, você concorda com nossos{' '}
                 <Link href="/termos" className="text-[#1561B7] hover:underline font-medium">
                   Termos de Serviço

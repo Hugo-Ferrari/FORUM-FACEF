@@ -50,7 +50,7 @@ export default function NavLateral() {
   return (
     <aside
       aria-label="Navegação lateral"
-      className={`fixed top-20 left-0 z-40 h-[calc(100vh-5rem)] bg-white dark:bg-gray-900 text-black dark:text-white shadow-sm flex flex-col justify-between transition-all duration-300 ease-in-out overflow-hidden ${open ? "w-65" : "w-20"
+      className={`fixed top-20 left-0 z-40 h-[calc(100vh-5rem)] bg-white dark:bg-muted text-black dark:text-white shadow-sm flex flex-col justify-between transition-all duration-300 ease-in-out overflow-hidden ${open ? "w-65" : "w-20"
         }`}
     >
       {/* top: logo + toggle (simplified, fewer divs) */}
@@ -99,7 +99,7 @@ export default function NavLateral() {
 
       {open && (
         <div className="flex-shrink-0 px-4 py-2">
-          <Item variant={"muted"} className={"border border-gray-200"}>
+          <Item variant={"muted"} className={"border border-gray-200 dark:border-border"}>
             <ItemHeader>
               <ItemTitle>
                 <TrophyIcon className={"text-blue-400"} />

@@ -27,11 +27,11 @@ export function ChatMessage({ message, isOwnMessage, displayTime }: ChatMessageP
             <div className={`flex flex-col max-w-[70%] sm:max-w-[50%] min-w-[6rem] px-3 py-2 rounded-lg break-words transition-all duration-300 ease-in-out ${
                 isOwnMessage 
                     ? "bg-blue-600 text-white dark:text-black rounded-br-none shadow-lg" 
-                    : "bg-white dark:bg-black border text-gray-800 dark:text-gray-200 rounded-bl-none"
+                    : "bg-white dark:bg-card border text-foreground dark:text-foreground rounded-bl-none"
             }`}>
                 {/* Nome do remetente (apenas para mensagens de outros) */}
                 {!isOwnMessage && (
-                    <div className="text-sm font-medium text-left text-gray-700">
+                    <div className="text-sm font-medium text-left text-foreground dark:text-foreground">
                         {message.sender_name}
                     </div>
                 )}
@@ -73,7 +73,7 @@ export function ChatMessagesList({ messages, currentUserId }: ChatMessagesListPr
         return (
             <div className="flex items-center justify-center h-full">
                 <div className="text-center">
-                    <Badge className="bg-transparent border-gray-200 text-gray-500">
+                    <Badge className="bg-transparent border-border text-muted-foreground">
                         Nenhuma mensagem ainda
                     </Badge>
                     <p className="text-sm text-muted-foreground mt-2">

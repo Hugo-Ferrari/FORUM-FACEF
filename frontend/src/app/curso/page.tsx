@@ -8,7 +8,7 @@ function page() {
     <div className='py-10 w-full overflow-x-hidden bg-background'>
       <div className='flex'>
           <ChatCurso />
-        <div className='flex flex-col w-115 mt-10 mr-15 bg-background'>
+        <div className='flex flex-col w-115 mt-10 mr-15 bg-background text-black dark:text-white'>
           <DuvUsuario />
           <Materia />
         </div>

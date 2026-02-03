@@ -22,7 +22,7 @@ function UsuarioRanking({ colocacao, pontos }: TypeUser) {
   return (
     <div className="max-h-[32vh] overflow-y-auto pr-2 bg-background">
       <ul className="space-y-2 py-2">
-        <li className="flex items-center gap-6 p-3 bg-gray-100 dark:bg-gray-900 rounded-md shadow-sm  ">
+        <li className="flex items-center gap-6 p-3 bg-muted dark:bg-muted rounded-md shadow-sm  ">
           
           <div className={`px-3 py-1 rounded-xl text-white dark:text-black font-semibold ${bgColocacao[colocacao]}`}>
             {colocacaotitulo[colocacao]}

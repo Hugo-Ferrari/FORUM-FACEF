@@ -30,7 +30,7 @@ function ButtonRanking({ tipo, setSelected }: ButtonProps) {
           onClick={handleClick}
           className="flex items-center gap-2 p-3 rounded-lg
                  hover:bg-b hover:text-yellow-500 dark:hover:text-yellow-500
-                 text-gray-700 dark:text-gray-200 transition"
+                 text-foreground dark:text-foreground transition"
       >
         {icons[tipo]}
         <span className="text-sm font-medium">

@@ -45,7 +45,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         </PopoverTrigger>
 
         <PopoverContent className="w-80 p-4">
-          <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Nova Dúvida</h2>
+          <h2 className="text-lg font-semibold mb-2 text-foreground dark:text-foreground">Nova Dúvida</h2>
 
           <NativeSelect
             value={selectedCourse}
@@ -72,7 +72,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
             value={newDoubt}
             onChange={(e) => setNewDoubt(e.target.value)}
             placeholder="Digite sua dúvida"
-            className="w-full border border-gray-300 rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full border border-border dark:border-border rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-card text-foreground dark:text-foreground"
           />
 
           <div className="flex justify-end">
@@ -87,7 +87,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
       </Popover>
 
       <div className="mt-3 w-full ml-2 bg-background p-3 ">
-        <h2 className="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-200  "> Dúvidas</h2>
+        <h2 className="text-xl font-semibold mb-3 text-foreground dark:text-foreground  "> Dúvidas</h2>
 
         {doubtsList.length === 0 ? (
           <p className="text-gray-600 ml-3">Nenhuma dúvida adicionada ainda.</p>
@@ -95,7 +95,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
           <div className="max-h-[32vh] overflow-y-auto pr-2 bg-background">
             <ul className="space-y-2">
               {doubtsList.map((item, index) => (
-                <li key={index} className="p-3 bg-gray-100 dark:bg-gray-800 rounded-md shadow-sm hover:bg-gray-200">
+                <li key={index} className="p-3 bg-muted dark:bg-muted rounded-md shadow-sm hover:bg-muted/70 dark:hover:bg-muted/50">
                   <Usuario />
                   <div className="flex items-center mt- mb-2">
                     <Badge variant="secondary">

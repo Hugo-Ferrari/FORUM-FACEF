@@ -81,12 +81,12 @@ function Nav() {
               </button>
               {openNotification && (
                 <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-black rounded-lg shadow-xl p-4 space-y-3 animate-in fade-in slide-in-from-top-2">
-                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notificações</div>
+                  <div className="text-sm font-semibold text-foreground dark:text-foreground">Notificações</div>
                   <div className="space-y-2">
-                    <div className="p-2 bg-blue-50 dark:bg-card rounded border-l-4 border-blue-500 text-sm text-gray-700 dark:text-gray-300">
+                    <div className="p-2 bg-blue-50 dark:bg-muted rounded border-l-4 border-blue-500 text-sm text-foreground dark:text-foreground">
                       Um novo evento foi adicionado!  {/*tenho que integrar com as notifiçãoe que terá no back*/}
                     </div>
-                    <div className="p-2 bg-yellow-50 rounded border-l-4 border-yellow-500 text-sm text-gray-700 ">
+                    <div className="p-2 bg-yellow-50 dark:bg-muted rounded border-l-4 border-yellow-500 text-sm text-foreground dark:text-foreground ">
                       Nova missão diaria. {/* exmeplos de notificação */}
                     </div>
                   </div>
@@ -128,21 +128,21 @@ function Nav() {
               {/* User Menu Dropdown */}
               {openMenu && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-black  rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2">
-                  <div className="px-4 py-3 border-b bg-gray-50">
-                    <h1 className="text-sm font-semibold text-gray-900">Hugo Ferrari</h1>
-                    <h1 className="text-xs text-gray-500 dark:text-gray-400">usuario@example.com</h1>
+                  <div className="px-4 py-3 border-b bg-muted dark:bg-card">
+                    <h1 className="text-sm font-semibold text-foreground dark:text-foreground">Hugo Ferrari</h1>
+                    <h1 className="text-xs text-muted-foreground dark:text-muted-foreground">usuario@example.com</h1>
                   </div>
                   <div className="p-2 space-y-1">
                     <Link
                       href="/configuracoes"
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-foreground dark:text-foreground hover:bg-muted dark:hover:bg-muted/80 hover:text-primary rounded transition-colors"
                     >
                       <Settings className="h-5 w-5" strokeWidth={1.5}/>
                        Configurações
                     </Link>
                     <Link
                       href="/perfil"
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-foreground dark:text-foreground hover:bg-muted dark:hover:bg-muted/80 hover:text-primary rounded transition-colors"
                     >
                       <User className = "h-5 w-5" strokeWidth={1.5}/>
                        Perfil

@@ -8,7 +8,7 @@ export default function Home() {
       <div className='bg-background min-h-screen w-full overflow-x-hidden'>
           <div className='flex flex-col items-center p-8 max-w-7xl mx-auto'>
               <h1 className='mt-20 text-black dark:text-white font-extrabold text-5xl'>Bem-Vindo à Comunidade</h1>
-              <p className='text-gray-700 dark:text-gray-400 mt-4 text-center'>
+              <p className='text-muted-foreground dark:text-muted-foreground mt-4 text-center'>
                   Conecte-se, tire dúvidas, compartilhe conhecimento e cresça junto com seus colegas acadêmicos.
               </p>
               <div className='mt-10 w-full max-w-7xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6'>
