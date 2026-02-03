@@ -336,12 +336,12 @@ export function isMessage(obj: unknown): obj is Message {
     return (
         typeof obj === 'object' &&
         obj !== null &&
-        typeof (obj as Message).id === 'string' &&
-        typeof (obj as Message).text === 'string' &&
-        typeof (obj as Message).sender === 'string' &&
-        typeof (obj as Message).sender_name === 'string' &&
-        typeof (obj as Message).created_at === 'string' &&
-        typeof (obj as Message).chat_id === 'string'
+        (obj as Message).id === 'string' &&
+        (obj as Message).text === 'string' &&
+        (obj as Message).sender === 'string' &&
+        (obj as Message).sender_name === 'string' &&
+        (obj as Message).created_at === 'string' &&
+        (obj as Message).chat_id === 'string'
     )
 }
 
@@ -364,7 +364,7 @@ export function isSocketError(obj: unknown): obj is SocketError {
     return (
         typeof obj === 'object' &&
         obj !== null &&
-        typeof (obj as SocketError).msg === 'string'
+        (obj as SocketError).msg === 'string'
     )
 }
 

@@ -18,7 +18,6 @@ import {
     DialogTitle,
     DialogHeader,
     DialogFooter,
-    DialogClose,
 } from "@/components/ui/dialog";
 
 type MateriasProps =
@@ -65,7 +64,7 @@ export default function Materia() {
                     <Input
                         type="url"
                         placeholder="Cole seu link"
-                        value={typeof data.valor === "string" ? data.valor : ""}
+                        value={data.valor === "string" ? data.valor : ""}
                         onChange={(e) =>
                             setData({ tipo: "links", valor: e.target.value, })
                         }

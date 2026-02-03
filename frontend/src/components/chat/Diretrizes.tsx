@@ -9,8 +9,8 @@ const diretrizes = [
 ]
 
 function Diretrizes() {
-    const listaItens = diretrizes.map(dire =>
-        <li className='py-2 list-disc font-medium'>{dire}</li>
+    const listaItens = diretrizes.map((dire, i) =>
+        <li className='py-2 list-disc font-medium' key={i}>{dire}</li>
     )
     return (
         <div >

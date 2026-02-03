@@ -20,7 +20,7 @@ export function useAutoScroll(dependencies: any[] = []) {
                 behavior: 'smooth'
             })
         }
-    }, dependencies)
+    }, [dependencies])
 
     return scrollRef
 }

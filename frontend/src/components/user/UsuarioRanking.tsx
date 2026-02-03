@@ -1,6 +1,5 @@
 import React from 'react'
 import Usuario from './Usuario'
-import { Badge } from '@/components/ui/badge'
 
 interface TypeUser {
   colocacao: "primeiro" | "segundo" | "terceiro";
