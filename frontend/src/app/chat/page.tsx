@@ -9,7 +9,7 @@ function page() {
         <main className="">
           <div className=" mx-auto flex">
             <ChatGeral />
-            <div className="mt-20 bg-blue-100 dark:bg-card h-65 p-6 rounded-2xl border-2 ">
+            <div className="mt-20 bg-blue-100 dark:bg-card h-85 p-6 rounded-2xl border-2 ">
               <Diretrizes/>
             </div>
           </div>

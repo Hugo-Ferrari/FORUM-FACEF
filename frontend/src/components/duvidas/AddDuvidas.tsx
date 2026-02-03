@@ -87,7 +87,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
       </Popover>
 
       <div className="mt-3 w-full ml-2 bg-background p-3 ">
-        <h2 className="text-xl font-semibold mb-3 text-foreground dark:text-foreground  "> Dúvidas</h2>
+        <h2 className="text-xl font-semibold mb-3 text-black dark:text-foreground  "> Dúvidas</h2>
 
         {doubtsList.length === 0 ? (
           <p className="text-gray-600 ml-3">Nenhuma dúvida adicionada ainda.</p>

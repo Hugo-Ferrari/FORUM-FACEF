@@ -14,11 +14,11 @@ function Diretrizes() {
     )
     return (
         <div >
-            <div className='flex items-center justify-center gap-2'>
+            <div className='flex items-center justify-center gap-2 text-black dark:text-white'>
                 <Scale />
-                <h1 className='font-semibold text-lg'>Diretrizes</h1>
+                <h1 className='font-semibold text-lg text-black dark:text-white'>Diretrizes</h1>
             </div>
-            <ul >
+            <ul className='text-black dark:text-white'>
                 {listaItens}
             </ul>
         </div>
