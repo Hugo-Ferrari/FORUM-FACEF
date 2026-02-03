@@ -81,12 +81,12 @@ function Nav() {
               </button>
               {openNotification && (
                 <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-black rounded-lg shadow-xl p-4 space-y-3 animate-in fade-in slide-in-from-top-2">
-                  <div className="text-sm font-semibold text-gray-900">Notificações</div>
+                  <div className="text-sm font-semibold text-gray-900 dark:text-gray-100">Notificações</div>
                   <div className="space-y-2">
-                    <div className="p-2 bg-blue-50 rounded border-l-4 border-blue-500 text-sm text-gray-700">
+                    <div className="p-2 bg-blue-50 dark:bg-card rounded border-l-4 border-blue-500 text-sm text-gray-700 dark:text-gray-300">
                       Um novo evento foi adicionado!  {/*tenho que integrar com as notifiçãoe que terá no back*/}
                     </div>
-                    <div className="p-2 bg-yellow-50 rounded border-l-4 border-yellow-500 text-sm text-gray-700">
+                    <div className="p-2 bg-yellow-50 rounded border-l-4 border-yellow-500 text-sm text-gray-700 ">
                       Nova missão diaria. {/* exmeplos de notificação */}
                     </div>
                   </div>

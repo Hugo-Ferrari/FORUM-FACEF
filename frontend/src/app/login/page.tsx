@@ -131,7 +131,7 @@ export default function Login() {
 
         
         <div className="flex flex-col justify-center">
-          <div className="bg-white dark:bg-balck rounded shadow-lg p-8 border border-gray-100">
+          <div className="bg-white dark:bg-black rounded shadow-lg p-8 border border-gray-100">
             
 
             <div className="md:hidden mb-6 text-center">
@@ -171,7 +171,7 @@ export default function Login() {
                     required
                     autoComplete="email"
                     placeholder="seu@email.com"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-gray-50 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                     />
                 </div>
@@ -208,7 +208,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-[#0d3d7a] text-white dark:text-white font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
+                className="w-full bg-blue-600 hover:bg-[#0d3d7a] text-white dark:text-black font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
 >
                 {loading ? (
                   <>

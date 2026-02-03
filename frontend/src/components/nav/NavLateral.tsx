@@ -50,7 +50,7 @@ export default function NavLateral() {
   return (
     <aside
       aria-label="Navegação lateral"
-      className={`fixed top-20 left-0 z-40 h-[calc(100vh-5rem)] bg-white dark:bg-black text-black dark:text-white shadow-sm flex flex-col justify-between transition-all duration-300 ease-in-out overflow-hidden ${open ? "w-65" : "w-20"
+      className={`fixed top-20 left-0 z-40 h-[calc(100vh-5rem)] bg-white dark:bg-gray-900 text-black dark:text-white shadow-sm flex flex-col justify-between transition-all duration-300 ease-in-out overflow-hidden ${open ? "w-65" : "w-20"
         }`}
     >
       {/* top: logo + toggle (simplified, fewer divs) */}
@@ -63,7 +63,7 @@ export default function NavLateral() {
             aria-label={open ? "Fechar menu" : "Abrir menu"}
             className="flex items-center justify-center w-10 h-10 text-black transition-transform hover:scale-105"
           >
-            <PanelLeft className="transform transition-transform duration-300 ease-in-out rotate-180" size={20} />
+            <PanelLeft className=" text-black dark:text-white transform transition-transform duration-300 ease-in-out rotate-180" size={20} />
           </Button>
         </div>
       </div>
@@ -77,7 +77,7 @@ export default function NavLateral() {
               <li key={href}>
                 <Link
                   href={href}
-                  className={`group flex items-center h-10 px-3 rounded-lg transition-colors duration-200 ${active ? "bg-blue-50 text-blue-600 font-semibold" : "hover:bg-[rgba(21,97,183,0.06)] hover:text-blue-600"
+                  className={`group flex items-center h-10 px-3 rounded-lg transition-colors duration-200 ${active ? "bg-blue-50 dark:bg-card text-blue-600 font-semibold" : "hover:bg-[rgba(21,97,183,0.06)] hover:text-blue-600"
                     } ${open ? 'gap-3 justify-start' : 'justify-center'}`}
                 >
                   <span className="flex items-center justify-center w-8 flex-shrink-0">
