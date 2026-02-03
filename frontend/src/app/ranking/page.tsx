@@ -1,7 +1,6 @@
 import React from 'react'
-import Ranking from '../components/ranking/RankingGeral'
-import Block from "@/app/components/blocosDeExibição/DisplayBlock";
-import ButtonRanking from "@/app/components/ranking/ButtonRanking";
+import Block from "@/components/DisplayBlock";
+import RankingGeral from "@/app/ranking/components/RankingGeral";
 
 function page() {
   return (
@@ -15,7 +14,7 @@ function page() {
             <Block tipo="materias" valor={27} />
         </div>
 
-        <Ranking />
+        <RankingGeral />
     </div>
   )
 }

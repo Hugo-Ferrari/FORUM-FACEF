@@ -1,5 +1,5 @@
-import Diretrizes from "../components/chat/Diretrizes";
-import ChatGeral from "@/app/components/chat/ChatGeral";
+import Diretrizes from "@/components/chat/Diretrizes";
+import ChatGeral from "@/components/chat/ChatGeral";
 
 function page() {
   return (

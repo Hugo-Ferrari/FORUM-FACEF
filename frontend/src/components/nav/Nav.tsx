@@ -3,7 +3,6 @@ import { BellIcon, UserRoundIcon, MoonIcon, LogOutIcon, SunIcon, User, Settings 
 import React, { useEffect, useState } from "react"
 import Link from "next/link";
 import Image from "next/image";
-import { Button } from "@/components/ui/button";
 
 function Nav() {
   const [openNotification, setOpenNotification] = useState(false)
@@ -145,7 +144,7 @@ function Nav() {
                       href="/perfil"
                       className="flex items-center gap-2 px-3 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 rounded transition-colors"
                     >
-                      <User className = "h-5 w-5"strokeWidth={1.5}/>
+                      <User className = "h-5 w-5" strokeWidth={1.5}/>
                        Perfil
                     </Link>
                   </div>

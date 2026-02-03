@@ -1,5 +1,5 @@
-import Block from "@/app/components/blocosDeExibição/DisplayBlock";
-import DuvUsuario from "@/app/components/duvidas/CaixaDuvida";
+import Block from "@/components/DisplayBlock";
+import DuvUsuario from "@/components/duvidas/CaixaDuvida";
 import React from "react";
 import AllEvents from "../calendario/components/allEvents";
 

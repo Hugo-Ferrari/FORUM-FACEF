@@ -13,7 +13,6 @@ function Block({ tipo, valor }: BlockProps) {
         materias: <BookOpen className="text-green-600" />
     };
 
-
     const titulos = {
         duvidas: "Dúvidas Respondidas",
         ranking: "Posição Ranking",

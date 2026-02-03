@@ -1,21 +1,16 @@
 "use client"
 import { useState } from "react";
-import { X } from "lucide-react";
 import AddDuvidas from "./AddDuvidas";
 
 
 function DuvUsuario() {
-  const [clicked, setClicked] = useState(false);
   const [doubtsList, setDoubtsList] = useState<{ curso: string; texto: string }[]>([]);
 
-  const handleClick = () => setClicked(!clicked);
 
   return (
     <div className="text-black p-6  ">
       <div className="flex w-full gap-6 ml-4">
         <h1 className="text-2xl font-bold">Dúvidas Recentes</h1>
-
-
       </div>
 
 

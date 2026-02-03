@@ -1,7 +1,7 @@
 import React from 'react'
-import DuvUsuario from '../components/duvidas/CaixaDuvida'
-import Materia from '../components/curso/materia'
-import ChatCurso from "@/app/components/chat/ChatCurso";
+import DuvUsuario from '@/components/duvidas/CaixaDuvida'
+import Materia from '@/components/materia'
+import ChatCurso from "@/components/chat/ChatCurso";
 
 function page() {
   return (
