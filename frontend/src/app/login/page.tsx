@@ -73,7 +73,7 @@ export default function Login() {
   }
     
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#EFF0F6] p-4">
+    <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-center">
         
         
@@ -121,7 +121,7 @@ export default function Login() {
                   <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900">Gamificação</h3>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Gamificação</h3>
                   <p className="text-sm text-gray-600">Ganhe pontos e suba no ranking</p>
                 </div>
               </div>
@@ -131,7 +131,7 @@ export default function Login() {
 
         
         <div className="flex flex-col justify-center">
-          <div className="bg-white rounded shadow-lg p-8 border border-gray-100">
+          <div className="bg-white dark:bg-balck rounded shadow-lg p-8 border border-gray-100">
             
 
             <div className="md:hidden mb-6 text-center">
@@ -179,7 +179,7 @@ export default function Login() {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="password" className="block text-sm font-semibold text-gray-900">
+                  <label htmlFor="password" className="block text-sm font-semibold text-gray-900 dark:text-white">
                     Senha
                   </label>
                   <Link
@@ -199,7 +199,7 @@ export default function Login() {
                     required
                     autoComplete="current-password"
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-gray-300 rounded-lg bg-white dark:bg-black text-gray-900 dark:text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                   />
                 </div>
@@ -208,7 +208,7 @@ export default function Login() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full bg-blue-600 hover:bg-[#0d3d7a] text-white font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
+                className="w-full bg-blue-600 hover:bg-[#0d3d7a] text-white dark:text-white font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
 >
                 {loading ? (
                   <>
@@ -226,10 +226,10 @@ export default function Login() {
 
             <div className="relative my-6">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-200"></div>
+                <div className="w-full border-t  border-gray-200 dark:border-gray-700"></div>
               </div>
               <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-600">
+                <span className="px-2 bg-white dark:bg-black text-gray-600">
                   Não tem conta?
                 </span>
               </div>
@@ -241,7 +241,7 @@ export default function Login() {
               Criar Conta
             </Link>
 
-            <div className="mt-6 pt-6 border-t border-gray-200">
+            <div className="mt-6 pt-6 border-t  border-gray-200 dark:border-gray-700">
               <p className="text-xs text-center text-gray-500">
                 Ao acessar, você concorda com nossos{' '}
                 <Link href="/termos" className="text-[#1561B7] hover:underline font-medium">

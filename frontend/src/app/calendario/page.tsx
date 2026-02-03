@@ -59,17 +59,17 @@ export function Calendario() {
   const dayEvents = events.filter((e) => e.date === selectedDateStr)
 
   return (
-    <div className="flex gap-5 ml-10 mt-5 items-start">
+    <div className="flex gap-5 ml-10 mt-5 items-start bg-background ">
       <div>
         <Calendar
           mode="single"
           selected={date}
           onSelect={setDate}
-          className=" border w-150"
+          className=" border w-150 text-black dark:text-white"
         />
       </div>
 
-      <div className="bg-white border p-6 w-full sm:w-80 shadow-md ">
+      <div className="bg-white dark:bg-black border p-6 w-full sm:w-80 shadow-md ">
         <h2 className="text-lg font-semibold mb-3">
           {date
             ? `Eventos em ${date.toLocaleDateString("pt-BR")}`
@@ -77,7 +77,7 @@ export function Calendario() {
         </h2>
 
         {dayEvents.length === 0 ? (
-          <p className="text-gray-500 mb-4">Nenhum evento nesta data.</p>
+          <p className="text-gray-500 dark:text-gray-400 mb-4">Nenhum evento nesta data.</p>
         ) : (
           <ul className="space-y-2 mb-4">
             {dayEvents.map((ev, index) => (

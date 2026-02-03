@@ -34,10 +34,10 @@ export function ChatHeader({
         <div className="flex items-center justify-between gap-4">
             {/* Título e Status */}
             <div className="flex items-center gap-2">
-                <ItemTitle className="text-black text-lg md:text-2xl">
+                <ItemTitle className="text-black dark:text-white text-lg md:text-2xl">
                     {title}
                 </ItemTitle>
-                <Badge className={`${isConnected ? 'bg-green-500' : 'bg-red-500'} text-white`}>
+                <Badge className={`${isConnected ? 'bg-green-500' : 'bg-red-500'} text-white dark:text-black`}>
                     {isConnected ? 'Conectado' : 'Desconectado'}
                 </Badge>
             </div>

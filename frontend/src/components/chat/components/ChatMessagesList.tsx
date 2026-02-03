@@ -26,8 +26,8 @@ export function ChatMessage({ message, isOwnMessage, displayTime }: ChatMessageP
         <div className={`flex ${isOwnMessage ? "justify-end" : "justify-start"}`}>
             <div className={`flex flex-col max-w-[70%] sm:max-w-[50%] min-w-[6rem] px-3 py-2 rounded-lg break-words transition-all duration-300 ease-in-out ${
                 isOwnMessage 
-                    ? "bg-blue-600 text-white rounded-br-none shadow-lg" 
-                    : "bg-white border text-gray-800 rounded-bl-none"
+                    ? "bg-blue-600 text-white dark:text-black rounded-br-none shadow-lg" 
+                    : "bg-white dark:bg-black border text-gray-800 dark:text-gray-200 rounded-bl-none"
             }`}>
                 {/* Nome do remetente (apenas para mensagens de outros) */}
                 {!isOwnMessage && (

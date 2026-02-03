@@ -39,18 +39,18 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
     <div className="flex flex-col items-start w-150 py-6 gap-4">
       <Popover>
         <PopoverTrigger asChild>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16 ">
+          <button className="bg-blue-600 text-white dark:text-black px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16 ">
             Adicionar Dúvida
           </button>
         </PopoverTrigger>
 
         <PopoverContent className="w-80 p-4">
-          <h2 className="text-lg font-semibold mb-2 text-gray-800">Nova Dúvida</h2>
+          <h2 className="text-lg font-semibold mb-2 text-gray-800 dark:text-gray-200">Nova Dúvida</h2>
 
           <NativeSelect
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
-            className="mb-3 w-full"
+            className="mb-3 w-full text-black dark:text-white"
           >
             <NativeSelectOption value="">Selecione o curso</NativeSelectOption>
             <NativeSelectOption value="Administração">Administração</NativeSelectOption>
@@ -78,7 +78,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
           <div className="flex justify-end">
             <button
               onClick={handleAddDoubt}
-              className="bg-blue-600 text-white px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              className="bg-blue-600 text-white dark:text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
             >
               Enviar
             </button>
@@ -86,16 +86,16 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         </PopoverContent>
       </Popover>
 
-      <div className="mt-3 w-full ml-2 bg-white p-3">
-        <h2 className="text-xl font-semibold mb-3 text-gray-800 "> Dúvidas</h2>
+      <div className="mt-3 w-full ml-2 bg-background p-3 ">
+        <h2 className="text-xl font-semibold mb-3 text-gray-800 dark:text-gray-200  "> Dúvidas</h2>
 
         {doubtsList.length === 0 ? (
           <p className="text-gray-600 ml-3">Nenhuma dúvida adicionada ainda.</p>
         ) : (
-          <div className="max-h-[32vh] overflow-y-auto pr-2">
+          <div className="max-h-[32vh] overflow-y-auto pr-2 bg-background">
             <ul className="space-y-2">
               {doubtsList.map((item, index) => (
-                <li key={index} className="p-3 bg-gray-100 rounded-md shadow-sm hover:bg-gray-200">
+                <li key={index} className="p-3 bg-gray-100 dark:bg-gray-800 rounded-md shadow-sm hover:bg-gray-200">
                   <Usuario />
                   <div className="flex items-center mt- mb-2">
                     <Badge variant="secondary">

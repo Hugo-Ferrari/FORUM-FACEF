@@ -8,9 +8,9 @@ function DuvUsuario() {
 
 
   return (
-    <div className="text-black p-6  ">
+    <div className="text-black dark:text-white p-6  ">
       <div className="flex w-full gap-6 ml-4">
-        <h1 className="text-2xl font-bold">Dúvidas Recentes</h1>
+        <h1 className="text-2xl font-bold text-black dark:text-white">Dúvidas Recentes</h1>
       </div>
 
 

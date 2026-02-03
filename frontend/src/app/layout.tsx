@@ -39,7 +39,7 @@ export default function RootLayout({
           paddingLeft: 'var(--sidebar-width, 5rem)',
           transition: 'padding-left 300ms ease-in-out',
         }}
-        className="pt-20 min-h-screen bg-[#EFF0F6]"
+        className="pt-20 min-h-screen bg-background"
       >
         {children}
       </div>

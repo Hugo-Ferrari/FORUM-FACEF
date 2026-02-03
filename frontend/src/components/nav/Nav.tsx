@@ -69,10 +69,10 @@ function Nav() {
               <button
                 onClick={() => setOpenNotification(!openNotification)}
                 aria-label="Notificações"
-                className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white hover:bg-white/20 transition-all duration-75"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white dark:text-black hover:bg-white/20 transition-all duration-75"
               >
                 <div className="relative">
-                  <Link href="#" aria-label="Notificações" className="inline-flex items-center justify-center h-10 w-10 rounded-md text-white hover:bg-white/10 transition-transform duration-200 transform hover:scale-105">
+                  <Link href="#" aria-label="Notificações" className="inline-flex items-center justify-center h-10 w-10 rounded-md text-white dark:text-black hover:bg-white/10 transition-transform duration-200 transform hover:scale-105">
                     <BellIcon className="h-5 w-5 md:h-6 md:w-6 " strokeWidth={1.5} />
                   </Link>
 
@@ -80,7 +80,7 @@ function Nav() {
                 </div>
               </button>
               {openNotification && (
-                <div className="absolute right-0 mt-2 w-72 bg-white rounded-lg shadow-xl p-4 space-y-3 animate-in fade-in slide-in-from-top-2">
+                <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-black rounded-lg shadow-xl p-4 space-y-3 animate-in fade-in slide-in-from-top-2">
                   <div className="text-sm font-semibold text-gray-900">Notificações</div>
                   <div className="space-y-2">
                     <div className="p-2 bg-blue-50 rounded border-l-4 border-blue-500 text-sm text-gray-700">
@@ -103,7 +103,7 @@ function Nav() {
                 onClick={toggleDark}
                 aria-label={isDark ? "Desativar modo escuro" : "Ativar modo escuro"}
                 aria-pressed={isDark}
-                className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white hover:bg-white/20 transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/30"
+                className="inline-flex items-center justify-center h-10 w-10 rounded-lg text-white dark:text-black hover:bg-white/20 transition-all duration-200 transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-white/30"
               >
                 {isDark ? <SunIcon className="h-5 w-5 md:h-6 md:w-6" strokeWidth={1.5} /> : <MoonIcon className="h-5 w-5 md:h-6 md:w-6" strokeWidth={1.5} />}
               </button>
@@ -117,9 +117,9 @@ function Nav() {
                 className="flex items-center gap-2 md:gap-3 h-10 px-2 md:px-3 rounded-lg hover:bg-white/10 transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-white/30"
               >
                 <div className="inline-flex items-center justify-center h-8 w-8 rounded-full bg-white/20 border border-white/30">
-                  <UserRoundIcon className="h-5 w-5 text-white" strokeWidth={1.5} />
+                  <UserRoundIcon className="h-5 w-5 text-white dark:text-black" strokeWidth={1.5} />
                 </div>
-                <div className="hidden md:flex flex-col leading-tight text-white/95 text-left">
+                <div className="hidden md:flex flex-col leading-tight text-white dark:text-black/95 text-left">
                   <span className="text-sm font-medium">Hugo Ferrari</span>
                   <span className="text-xs opacity-75">Engenharia de Software {/*curso do aluno(englobar com o back)*/}</span>
                 </div>
@@ -127,10 +127,10 @@ function Nav() {
 
               {/* User Menu Dropdown */}
               {openMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2">
+                <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-black  rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2">
                   <div className="px-4 py-3 border-b bg-gray-50">
                     <h1 className="text-sm font-semibold text-gray-900">Hugo Ferrari</h1>
-                    <h1 className="text-xs text-gray-500">usuario@example.com</h1>
+                    <h1 className="text-xs text-gray-500 dark:text-gray-400">usuario@example.com</h1>
                   </div>
                   <div className="p-2 space-y-1">
                     <Link

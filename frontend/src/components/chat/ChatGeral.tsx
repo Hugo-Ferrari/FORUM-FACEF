@@ -150,7 +150,7 @@ function ChatGeral() {
                         ref={scrollRef}
                         role="log"
                         aria-live="polite"
-                        className="mb-3 h-[36rem] overflow-auto space-y-3 px-4 py-6 border-t rounded-b bg-gray-50"
+                        className="mb-3 h-[36rem] overflow-auto space-y-3 px-4 py-6 border-t rounded-b bg-gray-50 dark:bg-black"
                     >
                         <ChatMessagesList
                             messages={messages}

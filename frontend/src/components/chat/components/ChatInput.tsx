@@ -62,7 +62,7 @@ export function ChatInput({
                 type="submit"
                 aria-label="Enviar mensagem"
                 size="icon"
-                className="bg-blue-600 text-white hover:bg-blue-700"
+                className="bg-blue-600 text-white dark:text-black hover:bg-blue-700"
                 disabled={disabled || !value.trim()}
             >
                 <Send className="h-4 w-4" />

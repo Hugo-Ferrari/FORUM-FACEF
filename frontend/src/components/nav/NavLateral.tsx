@@ -50,7 +50,7 @@ export default function NavLateral() {
   return (
     <aside
       aria-label="Navegação lateral"
-      className={`fixed top-20 left-0 z-40 h-[calc(100vh-5rem)] bg-white text-black shadow-sm flex flex-col justify-between transition-all duration-300 ease-in-out overflow-hidden ${open ? "w-65" : "w-20"
+      className={`fixed top-20 left-0 z-40 h-[calc(100vh-5rem)] bg-white dark:bg-black text-black dark:text-white shadow-sm flex flex-col justify-between transition-all duration-300 ease-in-out overflow-hidden ${open ? "w-65" : "w-20"
         }`}
     >
       {/* top: logo + toggle (simplified, fewer divs) */}
@@ -112,7 +112,7 @@ export default function NavLateral() {
                   <p>
                     Responda 3 dúvidas
                   </p>
-                  <Badge className={"bg-white border border-gray-400 text-black"}>
+                  <Badge className={"bg-white dark:bg-black border border-gray-400 text-black dark:text-white"}>
                     2 / 3
                   </Badge>
                 </div>
@@ -123,7 +123,7 @@ export default function NavLateral() {
                   <p>
                     Responda 5 dúvidas
                   </p>
-                  <Badge className={"bg-white border border-gray-400 text-black"}>
+                  <Badge className={"bg-white dark:bg-black border border-gray-400 text-black dark:text-white"}>
                     5 / 5
                   </Badge>
                 </div>
@@ -134,7 +134,7 @@ export default function NavLateral() {
                   <p>
                     Responda 2 dúvidas
                   </p>
-                  <Badge className={"bg-white border border-gray-400 text-black"}>
+                  <Badge className={"bg-white dark:bg-black border border-gray-400 text-black dark:text-white"}>
                     0 / 2
                   </Badge>
                 </div>
