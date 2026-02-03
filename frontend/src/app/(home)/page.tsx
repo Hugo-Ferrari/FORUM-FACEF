@@ -1,7 +1,7 @@
 import Block from "@/app/components/blocosDeExibição/DisplayBlock";
 import DuvUsuario from "@/app/components/duvidas/CaixaDuvida";
 import React from "react";
-import AllEvents from "../components/calendario/allEvents";
+import AllEvents from "../calendario/components/allEvents";
 
 export default function Home() {
   return (
