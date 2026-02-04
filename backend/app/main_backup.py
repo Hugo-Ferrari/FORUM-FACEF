@@ -34,7 +34,7 @@ tags_metadata = [
     },
     {
         "name": "Post Votes",
-        "description": "Sistema de votação (upvote/downvote) para posts"
+        "description": "Sistema de votação (upvote/downvote) para posts",
     }
 ]
 
@@ -51,23 +51,21 @@ fastapi_app = FastAPI(
     * **Votos** - Sistema de upvote/downvote para posts
     * **Chat** - Mensagens em tempo real via WebSocket
     
-    ### 🌐 WebSocket
+    ### WebSocket
     Conecte-se ao chat em tempo real via: `ws://localhost:8000/api/ws`
     
-    ### 🔐 Autenticação
+    ### Autenticação
     Muitas rotas requerem o header `user-id` para identificação do usuário.
-    
-    ### 📚 Documentação
-    Acesse a especificação OpenAPI completa em: `/openapi.json`
     """,
     version="1.0.0",
     contact={
-        "name": "uniFACEF Dev Team",
-        "url": "https://unifacef.com.br",
+        "name": "FACEF Dev Team",
+        "url": "https://facef.br",
+        "email": "dev@facef.br"
     },
     openapi_tags=tags_metadata,
     docs_url="/docs",
-    redoc_url=None,  # Desabilita ReDoc, mantém apenas Swagger
+    redoc_url="/redoc",
     openapi_url="/openapi.json"
 )
 

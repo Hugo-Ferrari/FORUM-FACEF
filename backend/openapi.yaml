@@ -6,12 +6,14 @@ info:
     \ * **Threads** - Tópicos do fórum organizados por curso\n    * **Posts** - Respostas\
     \ e comentários nas threads\n    * **Votos** - Sistema de upvote/downvote para\
     \ posts\n    * **Chat** - Mensagens em tempo real via WebSocket\n    \n    ###\
-    \ WebSocket\n    Conecte-se ao chat em tempo real via: `ws://localhost:8000/api/ws`\n\
-    \    \n    ### Autenticação\n    Muitas rotas requerem o header `user-id` para\
-    \ identificação do usuário.\n    "
+    \ \U0001F310 WebSocket\n    Conecte-se ao chat em tempo real via: `ws://localhost:8000/api/ws`\n\
+    \    \n    ### \U0001F510 Autenticação\n    Muitas rotas requerem o header `user-id`\
+    \ para identificação do usuário.\n    \n    ### \U0001F4DA Documentação\n    Acesse\
+    \ a especificação OpenAPI completa em: `/openapi.json`\n    "
   contact:
-    name: uniFACEF Dev Team
-    url: https://www.unifacef.com.br
+    name: FACEF Dev Team
+    url: https://facef.br/
+    email: dev@facef.br
   version: 1.0.0
 paths:
   /:
@@ -97,7 +99,6 @@ paths:
   /api/threads/posts/:
     post:
       tags:
-      - Threads
       - Posts
       summary: Create New Post
       description: 'Cria um novo post em uma thread.
@@ -137,7 +138,6 @@ paths:
   /api/threads/posts/{post_id}:
     get:
       tags:
-      - Threads
       - Posts
       summary: Get Post
       description: 'Retorna um post específico pelo ID.
@@ -166,7 +166,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     patch:
       tags:
-      - Threads
       - Posts
       summary: Update Post
       description: 'Atualiza um post existente.
@@ -211,7 +210,6 @@ paths:
                 $ref: '#/components/schemas/HTTPValidationError'
     delete:
       tags:
-      - Threads
       - Posts
       summary: Delete Post
       description: 'Deleta um post existente.
@@ -247,7 +245,6 @@ paths:
   /api/threads/votes/:
     post:
       tags:
-      - Threads
       - Post Votes
       summary: Vote On Post
       description: 'Cria ou atualiza um voto em um post.
@@ -288,7 +285,6 @@ paths:
   /api/threads/votes/post/{post_id}:
     get:
       tags:
-      - Threads
       - Post Votes
       summary: Get Votes For Post
       description: 'Retorna todos os votos de um post específico.
@@ -318,7 +314,6 @@ paths:
   /api/threads/votes/user/me:
     get:
       tags:
-      - Threads
       - Post Votes
       summary: Get My Votes
       description: Retorna todos os votos do usuário autenticado.
@@ -345,7 +340,6 @@ paths:
   /api/threads/votes/{post_id}:
     delete:
       tags:
-      - Threads
       - Post Votes
       summary: Remove Vote
       description: 'Remove o voto do usuário em um post específico.

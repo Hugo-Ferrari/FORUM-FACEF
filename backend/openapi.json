@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "FORUM FACEF API",
-    "description": "\n    ## API do Fórum da FACEF\n    \n    Esta API fornece endpoints para gerenciar:\n    * **Autenticação** - Login e registro de usuários\n    * **Threads** - Tópicos do fórum organizados por curso\n    * **Posts** - Respostas e comentários nas threads\n    * **Votos** - Sistema de upvote/downvote para posts\n    * **Chat** - Mensagens em tempo real via WebSocket\n    \n    ### WebSocket\n    Conecte-se ao chat em tempo real via: `ws://localhost:8000/api/ws`\n    \n    ### Autenticação\n    Muitas rotas requerem o header `user-id` para identificação do usuário.\n    ",
+    "description": "\n    ## API do Fórum da FACEF\n    \n    Esta API fornece endpoints para gerenciar:\n    * **Autenticação** - Login e registro de usuários\n    * **Threads** - Tópicos do fórum organizados por curso\n    * **Posts** - Respostas e comentários nas threads\n    * **Votos** - Sistema de upvote/downvote para posts\n    * **Chat** - Mensagens em tempo real via WebSocket\n    \n    ### 🌐 WebSocket\n    Conecte-se ao chat em tempo real via: `ws://localhost:8000/api/ws`\n    \n    ### 🔐 Autenticação\n    Muitas rotas requerem o header `user-id` para identificação do usuário.\n    \n    ### 📚 Documentação\n    Acesse a especificação OpenAPI completa em: `/openapi.json`\n    ",
     "contact": {
       "name": "FACEF Dev Team",
       "url": "https://facef.br/",
@@ -135,7 +135,6 @@
     "/api/threads/posts/": {
       "post": {
         "tags": [
-          "Threads",
           "Posts"
         ],
         "summary": "Create New Post",
@@ -187,7 +186,6 @@
     "/api/threads/posts/{post_id}": {
       "get": {
         "tags": [
-          "Threads",
           "Posts"
         ],
         "summary": "Get Post",
@@ -227,7 +225,6 @@
       },
       "patch": {
         "tags": [
-          "Threads",
           "Posts"
         ],
         "summary": "Update Post",
@@ -286,7 +283,6 @@
       },
       "delete": {
         "tags": [
-          "Threads",
           "Posts"
         ],
         "summary": "Delete Post",
@@ -337,7 +333,6 @@
     "/api/threads/votes/": {
       "post": {
         "tags": [
-          "Threads",
           "Post Votes"
         ],
         "summary": "Vote On Post",
@@ -389,7 +384,6 @@
     "/api/threads/votes/post/{post_id}": {
       "get": {
         "tags": [
-          "Threads",
           "Post Votes"
         ],
         "summary": "Get Votes For Post",
@@ -431,7 +425,6 @@
     "/api/threads/votes/user/me": {
       "get": {
         "tags": [
-          "Threads",
           "Post Votes"
         ],
         "summary": "Get My Votes",
@@ -473,7 +466,6 @@
     "/api/threads/votes/{post_id}": {
       "delete": {
         "tags": [
-          "Threads",
           "Post Votes"
         ],
         "summary": "Remove Vote",

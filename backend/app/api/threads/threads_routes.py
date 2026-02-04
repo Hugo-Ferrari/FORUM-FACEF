@@ -16,7 +16,7 @@ router.include_router(posts_router, prefix="/posts", tags=["Posts"])
 router.include_router(post_votes_router, prefix="/votes", tags=["Post Votes"])
 
 
-@router.post("/", status_code=201)
+@router.post("/", status_code=201, tags=["Threads"])
 async def create_new_thread(
     data: ThreadsType,
     user_id: str = Header(..., alias="user-id")
@@ -43,7 +43,7 @@ async def create_new_thread(
         raise HTTPException(status_code=500, detail=f"Erro interno ao criar thread: {str(e)}")
 
 
-@router.get("/course/{course_id}")
+@router.get("/course/{course_id}", tags=["Threads"])
 async def get_course_threads(course_id: str):
     """
     Retorna todas as threads de um curso específico.
@@ -59,7 +59,7 @@ async def get_course_threads(course_id: str):
         raise HTTPException(status_code=500, detail=f"Erro ao buscar threads do curso: {str(e)}")
 
 
-@router.get("/{thread_id}")
+@router.get("/{thread_id}", tags=["Threads"])
 async def get_thread(thread_id: str):
     """
     Retorna uma thread específica pelo ID.
@@ -79,7 +79,7 @@ async def get_thread(thread_id: str):
         raise HTTPException(status_code=500, detail=f"Erro ao buscar thread: {str(e)}")
 
 
-@router.patch("/{thread_id}")
+@router.patch("/{thread_id}", tags=["Threads"])
 async def update_thread(
     thread_id: str,
     data: dict,
@@ -114,7 +114,7 @@ async def update_thread(
         raise HTTPException(status_code=500, detail=f"Erro ao atualizar thread: {str(e)}")
 
 
-@router.delete("/{thread_id}", status_code=200)
+@router.delete("/{thread_id}", status_code=200, tags=["Threads"])
 async def delete_thread(
     thread_id: str,
     user_id: str = Header(..., alias="user-id")
