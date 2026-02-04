@@ -8,8 +8,13 @@ from .querys.thread_querys import (
     delete_thread_by_id
 )
 from ...models.threads_type import ThreadsType
+from .posts_routes import router as posts_router
+from .post_votes_routes import router as post_votes_router
 
 router = APIRouter()
+router.include_router(posts_router, prefix="/posts", tags=["Posts"])
+router.include_router(post_votes_router, prefix="/votes", tags=["Post Votes"])
+
 
 @router.post("/", status_code=201)
 async def create_new_thread(

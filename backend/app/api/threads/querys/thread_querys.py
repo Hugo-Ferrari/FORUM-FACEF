@@ -3,6 +3,7 @@ from ....models.threads_type import ThreadsType
 
 async def create_thread(data: ThreadsType, user_id: str) -> bool:
     print("LOG: THREAD CREATION ATTEMPTED")
+
     try:
         user_data = supabase.table('users').select('course_id, course_year').eq("id", user_id).execute().data[0]
         course_id = user_data.get('course_id')

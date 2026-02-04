@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional
+from ..models.post_type import PostTypeResponse
+
 
 class ThreadsType(BaseModel):
     id: Optional[str] = None
@@ -12,3 +14,8 @@ class ThreadsType(BaseModel):
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
     ai_suggested_answer: Optional[str] = None
+
+
+class ThreadsResponse(BaseModel):
+    thread: ThreadsType
+    posts: list[PostTypeResponse]
