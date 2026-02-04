@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 
-from ..database.querys.user_querys import get_user_req
+from .user_querys import get_user_req
 from ..models.auth_type import AuthRegisterModel
 
 router = APIRouter()

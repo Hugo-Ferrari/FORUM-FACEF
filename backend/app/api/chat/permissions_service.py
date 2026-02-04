@@ -1,8 +1,7 @@
 """
 Serviços de controle de acesso e permissões para rooms
 """
-from ...database.querys.user_querys import get_user_by_id
-from .constants import GENERAL_ROOM, PRIVATE_ROOMS, COURSE_TO_ROOM
+from backend.app.auth.user_querys import get_user_by_id
 
 
 async def get_user_private_rooms(user_id: str):

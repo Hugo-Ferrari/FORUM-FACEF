@@ -6,9 +6,8 @@ import socketio
 
 # importa o sio criado em app/api/chat/server.py
 from .api.chat.server import sio
-from .api.chat import routes as chat_routes
+from .api.routes import router as api_router
 
-# configura logging para debug e especificamente para socketio/engineio
 logging.basicConfig(level=logging.DEBUG)
 
 # Cria o FastAPI app normalmente
@@ -27,10 +26,8 @@ def get_root():
     return {"message": "Hello World | Inicio"}
 
 fastapi_app.include_router(auth_routes, prefix="/auth")
-# inclui as rotas do chat CRUD
-fastapi_app.include_router(chat_routes.router, prefix="/api")
+fastapi_app.include_router(api_router, prefix="/api")
 
 sio_app = socketio.ASGIApp(sio, other_asgi_app=fastapi_app, socketio_path='/api/ws')
 
-# Exponha sio_app como o objeto ASGI principal para o servidor (uvicorn apontará para app:app)
 app = sio_app

@@ -5,7 +5,7 @@ router = APIRouter()
 
 # NOTE: This is a minimal example — adjust authentication and error handling to your app
 
-@router.get('/chats')
+@router.get('/')
 async def list_chats(user_id: str):
     """Retorna lista de chats que o usuário participa"""
     try:
@@ -26,7 +26,7 @@ async def list_chats(user_id: str):
         raise HTTPException(status_code=500, detail=str(e))
 
 
-@router.get('/chats/{chat_id}/messages')
+@router.get('/{chat_id}/messages')
 async def get_chat_messages(chat_id: str):
     """Retorna mensagens do chat ordenadas por timestamp asc"""
     try:

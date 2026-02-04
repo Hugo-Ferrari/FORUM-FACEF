@@ -1,7 +1,7 @@
 
-from ...models.user_type import UserModel
-from ...models.auth_type import AuthRegisterModel
-from ..supabase_client import supabase
+from ..models.user_type import UserModel
+from ..models.auth_type import AuthRegisterModel
+from ..database.supabase_client import supabase
 from typing import Optional
 
 async def get_user_req(register: AuthRegisterModel) -> Optional[UserModel]:
