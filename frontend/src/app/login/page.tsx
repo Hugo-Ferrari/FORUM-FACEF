@@ -16,6 +16,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, Lock, ArrowRight, Hourglass } from 'lucide-react'
+import api from '@/lib/api'
 
 export default function Login() {
   const router = useRouter()
@@ -24,53 +25,35 @@ export default function Login() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
-  const API= process.env.NEXT_PUBLIC_API_URL
-
   const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setError('')
-
-    if (!email || !password) {
-      setError('Preencha email e senha.')
-      return
-    }
-
-    setLoading(true)
-
-    try {
-      const res = await fetch(`${API}/auth/login`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      let data: any = {}
-      try {
-        data = await res.json()
-      } catch {
-        data = {}
-      }
-
-      if (!res.ok) {
-        setError(data.detail || data.message || 'Erro ao fazer login')
-        setLoading(false)
-        return
-      }
-
-      if (data.access_token) {
-        localStorage.setItem('token', data.access_token)
-      } else if (data.token) {
-        localStorage.setItem('token', data.token)
-      }
-
-      router.push('/')
-    } catch (error) {
-      console.error('Login error:', error)
-      setError('Erro ao conectar ao servidor.')
-    } finally {
-      setLoading(false)
-    }
+  e.preventDefault();
+  setError("");
+  if (!email || !password) {
+    setError("Preencha email e senha.");
+    return;
   }
+  setLoading(true);
+  try {
+    const res = await api.post("/auth/login", { email, password });
+    const data = res.data || {};
+    if (data.access_token) {
+      localStorage.setItem("token", data.access_token);
+    } else if (data.token) {
+      localStorage.setItem("token", data.token);
+    }
+    router.push("/");
+  } catch (err: any) {
+    const msg =
+      err?.response?.data?.detail ||
+      err?.response?.data?.message ||
+      err?.message ||
+      "Erro ao conectar ao servidor.";
+    setError(String(msg));
+    console.error("Login error:", err);
+  } finally {
+    setLoading(false);
+  }
+};
     
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
@@ -91,7 +74,7 @@ export default function Login() {
             <h1 className="text-4xl font-extrabold text-blue-600 mb-4">
               Fórum FACEF
             </h1>
-            <p className="text-lg text-foreground dark:text-foreground max-w-md font-medium mb-8">
+            <p className="text-lg text-gray-900 dark:text-white max-w-md font-medium mb-8">
               Conecte-se com sua comunidade acadêmica, tire dúvidas e compartilhe conhecimento.
             </p>
 
@@ -101,8 +84,8 @@ export default function Login() {
                   <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground dark:text-foreground">Comunidade Ativa</h3>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Interaja com alunos e professores</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Comunidade Ativa</h3>
+                  <p className="text-sm text-gray-900 dark:text-white">Interaja com alunos e professores</p>
                 </div>
               </div>
 
@@ -111,8 +94,8 @@ export default function Login() {
                   <span className="text-blue-600 font-bold text-sm">✓</span>
                 </div>
                 <div>
-                  <h3 className="font-semibold text-foreground dark:text-foreground">Respostas Rápidas</h3>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Tire suas dúvidas com a comunidade</p>
+                  <h3 className="font-semibold text-gray-900 dark:text-white">Respostas Rápidas</h3>
+                  <p className="text-sm text-gray-900 dark:text-white">Tire suas dúvidas com a comunidade</p>
                 </div>
               </div>
 
@@ -122,7 +105,7 @@ export default function Login() {
                 </div>
                 <div>
                   <h3 className="font-semibold text-gray-900 dark:text-white">Gamificação</h3>
-                  <p className="text-sm text-muted-foreground dark:text-muted-foreground">Ganhe pontos e suba no ranking</p>
+                  <p className="text-sm text-gray-900 dark:text-white">Ganhe pontos e suba no ranking</p>
                 </div>
               </div>
             </div>
@@ -141,10 +124,10 @@ export default function Login() {
             </div>
 
             <div className="mb-8">
-              <h2 className="text-3xl font-bold text-foreground dark:text-foreground mb-2">
+              <h2 className="text-3xl font-bold text-black dark:text-foreground mb-2  ">
                 Bem-vindo de volta
               </h2>
-              <p className="text-muted-foreground dark:text-muted-foreground">
+              <p className="text-gray-900 dark:text-white">
                 Entre com sua conta para acessar a comunidade
               </p>
             </div>
@@ -157,7 +140,7 @@ export default function Login() {
 
             <form onSubmit={handleLogin} className="space-y-5" noValidate>
               <div>
-                <label htmlFor="email" className="block text-sm font-semibold text-foreground dark:text-foreground mb-2">
+                <label htmlFor="email" className="block text-sm font-semibold text-black dark:text-foreground mb-2">
                   Email
                 </label>
                 <div className="relative">
@@ -171,7 +154,7 @@ export default function Login() {
                     required
                     autoComplete="email"
                     placeholder="seu@email.com"
-                    className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-foreground dark:text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-gray-900 dark:text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                     />
                 </div>
@@ -179,7 +162,7 @@ export default function Login() {
 
               <div>
                 <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="password" className="block text-sm font-semibold text-foreground dark:text-foreground">
+                  <label htmlFor="password" className="block text-sm font-semibold text-black dark:text-foreground">
                     Senha
                   </label>
                   <Link
@@ -199,7 +182,7 @@ export default function Login() {
                     required
                     autoComplete="current-password"
                     placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-foreground dark:text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
+                    className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-gray-900 dark:text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                   />
                 </div>
@@ -242,7 +225,7 @@ export default function Login() {
             </Link>
 
             <div className="mt-6 pt-6 border-t border-border dark:border-border">
-              <p className="text-xs text-center text-muted-foreground dark:text-muted-foreground">
+              <p className="text-xs text-center text-gray-900 dark:text-white">
                 Ao acessar, você concorda com nossos{' '}
                 <Link href="/termos" className="text-[#1561B7] hover:underline font-medium">
                   Termos de Serviço

@@ -10,8 +10,7 @@ import {
   NativeSelect,
   NativeSelectOption,
 } from "@/components/ui/native-select"
-import { Badge } from "@/components/ui/badge"
-import Usuario from "../user/Usuario"
+import DuvidasList from "./DuvidasList"
 
 
 interface AddDuvidasProps {
@@ -30,7 +29,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
     }
 
     const newItem = { curso: selectedCourse, texto: newDoubt }
-    setDoubtsList([...doubtsList, newItem])
+    setDoubtsList([newItem, ...doubtsList])
     setNewDoubt("")
     setSelectedCourse("")
   }
@@ -86,29 +85,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         </PopoverContent>
       </Popover>
 
-      <div className="mt-3 w-full ml-2 bg-background p-3 ">
-        <h2 className="text-xl font-semibold mb-3 text-black dark:text-foreground  "> Dúvidas</h2>
-
-        {doubtsList.length === 0 ? (
-          <p className="text-gray-600 ml-3">Nenhuma dúvida adicionada ainda.</p>
-        ) : (
-          <div className="max-h-[32vh] overflow-y-auto pr-2 bg-background">
-            <ul className="space-y-2">
-              {doubtsList.map((item, index) => (
-                <li key={index} className="p-3 bg-muted dark:bg-muted rounded-md shadow-sm hover:bg-muted/70 dark:hover:bg-muted/50">
-                  <Usuario />
-                  <div className="flex items-center mt- mb-2">
-                    <Badge variant="secondary">
-                      <strong className="text-blue-600">{item.curso}:</strong>
-                    </Badge>
-                  </div>
-                  {item.texto}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-      </div>
+      <DuvidasList doubtsList={doubtsList} />
     </div>
   )
 }
