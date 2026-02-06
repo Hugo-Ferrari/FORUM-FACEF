@@ -38,7 +38,7 @@ function ButtonRes({numberVot,numberRes,icon1: Icon1,icon2: Icon2,respostasIcon:
           <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full">
             <button className='text-red-500' onClick={() => setOpen(false)}>Fechar</button>
 
-            <DuvidasList doubtsList={doubtsList}/>
+            <DuvidasList doubtsList={doubtsList} type={"modal"}/>
           </div>
         </div>
       )}

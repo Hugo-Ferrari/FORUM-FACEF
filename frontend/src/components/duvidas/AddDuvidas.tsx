@@ -85,7 +85,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         </PopoverContent>
       </Popover>
 
-      <DuvidasList doubtsList={doubtsList} />
+      <DuvidasList doubtsList={doubtsList} type={"modal"}/>
     </div>
   )
 }
