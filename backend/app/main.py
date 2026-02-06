@@ -8,7 +8,6 @@ import socketio
 from .api.chat.server import sio
 from .api.routes import router as api_router
 
-logging.basicConfig(level=logging.DEBUG)
 
 # Metadados para documentação Swagger/OpenAPI
 tags_metadata = [

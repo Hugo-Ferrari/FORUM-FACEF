@@ -60,15 +60,21 @@ async def get_course_threads(course_id: str):
 
 
 @router.get("/{thread_id}", tags=["Threads"])
-async def get_thread(thread_id: str):
+async def get_thread(
+    thread_id: str,
+    user_id: str = Header(None, alias="user-id")
+):
     """
-    Retorna uma thread específica pelo ID.
+    Retorna uma thread específica pelo ID com todos os posts.
 
     - **thread_id**: ID da thread
+
+    **Header opcional:**
+    - **user-id**: ID do usuário para verificar votos (se não fornecido, não mostra votos do usuário)
     """
     print(f"LOG: GET THREAD BY ID {thread_id}")
     try:
-        thread = await get_thread_by_id(thread_id)
+        thread = await get_thread_by_id(thread_id, user_id)
         if not thread:
             raise HTTPException(status_code=404, detail="Thread não encontrada")
         return thread
@@ -97,10 +103,6 @@ async def update_thread(
         thread = await get_thread_by_id(thread_id)
         if not thread:
             raise HTTPException(status_code=404, detail="Thread não encontrada")
-
-        # Verifica permissão (opcional - descomente se quiser validar)
-        # if thread.get('created_by') != user_id:
-        #     raise HTTPException(status_code=403, detail="Sem permissão para editar esta thread")
 
         res = await edit_thread_by_id(data, thread_id)
         if res:

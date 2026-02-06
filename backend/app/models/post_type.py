@@ -29,4 +29,5 @@ class PostTypeResponse(BaseModel):
     created_by: Optional[str] = None
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
-    votes: list[PostsVotesType] = []
+    vote: Optional[PostsVotesType] = None
+    relevancy: Optional[int] = 0

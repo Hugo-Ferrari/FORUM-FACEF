@@ -39,49 +39,6 @@ async def vote_on_post(
         raise HTTPException(status_code=500, detail=f"Erro interno ao registrar voto: {str(e)}")
 
 
-@router.get("/post/{post_id}")
-async def get_votes_for_post(post_id: str):
-    """
-    Retorna todos os votos de um post específico.
-
-    - **post_id**: ID do post
-    """
-    print(f"LOG: GET VOTES FOR POST {post_id}")
-    try:
-        votes = await get_post_votes(post_id)
-
-        # Calcula estatísticas dos votos
-        upvotes = sum(1 for vote in votes if vote.vote_type == 'upvote')
-        downvotes = sum(1 for vote in votes if vote.vote_type == 'downvote')
-        total = upvotes - downvotes
-
-        return {
-            "votes": votes,
-            "statistics": {
-                "upvotes": upvotes,
-                "downvotes": downvotes,
-                "total": total
-            }
-        }
-    except Exception as e:
-        print(f"ERROR: {e}")
-        raise HTTPException(status_code=500, detail=f"Erro ao buscar votos do post: {str(e)}")
-
-
-@router.get("/user/me")
-async def get_my_votes(user_id: str = Header(..., alias="user-id")):
-    """
-    Retorna todos os votos do usuário autenticado.
-    """
-    print(f"LOG: GET VOTES FOR USER {user_id}")
-    try:
-        votes = await get_user_post_votes(user_id)
-        return {"votes": votes if votes else []}
-    except Exception as e:
-        print(f"ERROR: {e}")
-        raise HTTPException(status_code=500, detail=f"Erro ao buscar votos do usuário: {str(e)}")
-
-
 @router.delete("/{post_id}", status_code=200)
 async def remove_vote(
     post_id: str,

@@ -10,10 +10,11 @@ class ThreadsType(BaseModel):
     created_by: Optional[str] = None
     is_anonymous: bool
     course_id: Optional[str] = None
-    year: Optional[str] = None
+    year: Optional[int] = None
     created_at: Optional[str] = None
     updated_at: Optional[str] = None
     ai_suggested_answer: Optional[str] = None
+    posts: Optional[int] = 0
 
 
 class ThreadsResponse(BaseModel):

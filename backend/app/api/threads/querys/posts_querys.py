@@ -1,4 +1,4 @@
-from .posts_vote_query import get_post_votes
+from .posts_vote_query import get_post_votes, get_user_post_id_vote
 from ....database.supabase_client import supabase
 from ....models.post_type import PostCreateRequest, PostTypeResponse
 
@@ -30,18 +30,27 @@ async def get_post_by_id(post_id: str) -> PostTypeResponse | None:
             return None
 
         post_data = result.data[0]
+        print(f"LOG: POST DATA: {post_data}")
 
         # Busca os votos do post
         try:
             votes_result = await get_post_votes(post_id)
+            user_vote = await get_user_post_id_vote(user_id=post_data['created_by'], post_id=post_id)
             votes = votes_result if votes_result else []
 
-            post_data['votes'] = votes
+            # Calcula estatísticas dos votos
+            upvotes = sum(1 for vote in votes if vote.vote_type == 'upvote')
+            downvotes = sum(1 for vote in votes if vote.vote_type == 'downvote')
+            total = upvotes - downvotes
+
+            post_data['vote'] = user_vote  # Pode ser None ou um objeto PostsVotesType
+            post_data['relevancy'] = total
             print(f"LOG: POST RETURNED WITH {len(votes)} VOTES")
 
         except Exception as e:
             print(f"Erro ao pegar post_votes do post {post_id}: {e}")
-            post_data['votes'] = []
+            post_data['vote'] = None  # None em vez de []
+            post_data['relevancy'] = 0
 
         # Cria a resposta usando o modelo
         response = PostTypeResponse(**post_data)
@@ -52,24 +61,49 @@ async def get_post_by_id(post_id: str) -> PostTypeResponse | None:
         return None
 
 
-async def get_posts_by_thread_id(thread_id: str) -> list[PostTypeResponse]:
+async def get_posts_by_thread_id(thread_id: str, user_id: str) -> list[PostTypeResponse]:
     print(f"LOG: GET POSTS BY THREAD ID {thread_id}")
     try:
-        result = supabase.table('posts').select('*').eq('thread_id', thread_id).execute()
+        result = supabase.table('posts').select('*').eq('thread_id', thread_id).execute().data
+        print(f"LOG: POSTS DATA: {result}")
 
-        if not result.data:
+        if not result:
             print("LOG: NO POSTS FOUND")
             return []
 
         posts = []
-        for post_data in result.data:
-            # Busca votos para cada post
+
+        for post_data in result:
+            # Cria estatísticas do post
+
+            print(f"LOG: GET VOTES FOR POST {post_data['id']}")
+
             try:
                 votes_result = await get_post_votes(post_data['id'])
-                post_data['votes'] = votes_result if votes_result else []
+
+                # Calcula estatísticas dos votos
+                upvotes = sum(1 for vote in votes_result if vote.vote_type == 'upvote')
+                downvotes = sum(1 for vote in votes_result if vote.vote_type == 'downvote')
+                total = upvotes - downvotes
+                print(f"LOG: ${total} VOTES FOR POST")
+
+                post_data['relevancy'] = total
+
             except Exception as e:
                 print(f"Erro ao pegar votos do post {post_data['id']}: {e}")
-                post_data['votes'] = []
+                post_data['relevancy'] = 0
+
+
+            print(f"LOG: GET USER VOTE FOR POST {post_data['id']}")
+            # Pega o voto do Usuario
+            try:
+                user_vote = await get_user_post_id_vote(user_id, post_data['id'])
+                post_data['vote'] = user_vote  # Pode ser None ou um objeto PostsVotesType
+
+            except Exception as e:
+                print(f"Erro ao pegar user_vote do post {post_data['id']}: {e}")
+                post_data['vote'] = None  # None em vez de []
+
 
             posts.append(PostTypeResponse(**post_data))
 

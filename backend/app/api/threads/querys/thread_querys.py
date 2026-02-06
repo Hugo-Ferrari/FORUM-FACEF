@@ -1,5 +1,8 @@
+from .posts_querys import get_posts_by_thread_id
 from ....database.supabase_client import supabase
-from ....models.threads_type import ThreadsType
+from ....models.post_type import PostTypeResponse
+from ....models.threads_type import ThreadsType, ThreadsResponse
+
 
 async def create_thread(data: ThreadsType, user_id: str) -> bool:
     print("LOG: THREAD CREATION ATTEMPTED")
@@ -36,17 +39,38 @@ async def get_threads_by_course(course_id: str) -> list[ThreadsType]:
     print(f"LOG: GET THREADS BY COURSE {course_id}")
     try:
         data: list[ThreadsType] = supabase.table('threads').select('*').eq('course_id', course_id).execute().data
-        return data
+        if data:
+            for thread in data:
+                print(thread)
+                count = supabase.table('posts').select('*').eq('thread_id', thread["id"]).execute().data
+                thread["posts"] = len(count)
+
+            return data
+        return []
     except Exception as e:
         print(f"Erro ao pegar threads do curso {course_id}: {e}")
         return []
 
 
-async def get_thread_by_id(thread_id: str) -> ThreadsType | None:
+async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadsResponse | None:
     print(f"LOG: GET THREAD BY ID {thread_id}")
     try:
-        data: ThreadsType = supabase.table('threads').select('*').eq('id', thread_id).execute().data[0]
-        return data
+        res: ThreadsType = supabase.table('threads').select('*').eq('id', thread_id).execute().data[0]
+        print(f"LOG: THREAD DATA: {res}")
+
+        # Usa o user_id passado ou o created_by da thread
+        request_user_id = user_id if user_id else res["created_by"]
+
+        answers: list[PostTypeResponse] = await get_posts_by_thread_id(thread_id, request_user_id)
+        print(f"LOG: ANSWERS DATA: {answers}")
+
+        if res:
+            # Adiciona o campo statistics (número de posts)
+            res["posts"] = len(answers)
+
+            data: ThreadsResponse = ThreadsResponse(thread=res, posts=answers)
+            print(f"LOG: THREAD RESPONSE: {data}")
+            return data
 
     except Exception as e:
         print(f"Erro ao pegar thread {thread_id}: {e}")
