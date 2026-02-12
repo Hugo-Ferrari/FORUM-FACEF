@@ -58,11 +58,6 @@ A API estará disponível em: `http://localhost:8000`
 
 - **Swagger UI**: http://localhost:8000/docs
 
-Para exportar a especificação OpenAPI:
-```bash
-python3 export_swagger.py
-```
-
 ## 🏗️ Funcionalidades Implementadas
 
 ### ✅ Autenticação

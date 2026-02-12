@@ -7,6 +7,7 @@ from .querys.thread_querys import (
     edit_thread_by_id,
     delete_thread_by_id
 )
+from ...auth.user_querys import check_token
 from ...models.threads_type import ThreadsType
 from .posts_routes import router as posts_router
 from .post_votes_routes import router as post_votes_router
@@ -19,15 +20,13 @@ router.include_router(post_votes_router, prefix="/votes", tags=["Post Votes"])
 @router.post("/", status_code=201, tags=["Threads"])
 async def create_new_thread(
     data: ThreadsType,
-    user_id: str = Header(..., alias="user-id")
+    authorization: str = Header(...)
 ):
-    """
-    Cria uma nova thread no fórum.
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
 
-    - **title**: Título da thread
-    - **content**: Conteúdo da thread
-    - **is_anonymous**: Se a thread é anônima ou não
-    """
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
     print(f"LOG: THREAD CREATION ATTEMPTED BY USER {user_id}")
     print(data)
     try:
@@ -62,17 +61,15 @@ async def get_course_threads(course_id: str):
 @router.get("/{thread_id}", tags=["Threads"])
 async def get_thread(
     thread_id: str,
-    user_id: str = Header(None, alias="user-id")
+    authorization: str = Header(...)
 ):
-    """
-    Retorna uma thread específica pelo ID com todos os posts.
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
 
-    - **thread_id**: ID da thread
-
-    **Header opcional:**
-    - **user-id**: ID do usuário para verificar votos (se não fornecido, não mostra votos do usuário)
-    """
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
     print(f"LOG: GET THREAD BY ID {thread_id}")
+
     try:
         thread = await get_thread_by_id(thread_id, user_id)
         if not thread:
@@ -89,14 +86,13 @@ async def get_thread(
 async def update_thread(
     thread_id: str,
     data: dict,
-    user_id: str = Header(..., alias="user-id")
+    authorization: str = Header(...)
 ):
-    """
-    Atualiza uma thread existente.
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
 
-    - **thread_id**: ID da thread a ser atualizada
-    - **data**: Dados a serem atualizados (title, content, etc.)
-    """
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
     print(f"LOG: UPDATE THREAD {thread_id} BY USER {user_id}")
     try:
         # Verifica se a thread existe e se o usuário é o criador
@@ -119,13 +115,13 @@ async def update_thread(
 @router.delete("/{thread_id}", status_code=200, tags=["Threads"])
 async def delete_thread(
     thread_id: str,
-    user_id: str = Header(..., alias="user-id")
+    authorization: str = Header(...)
 ):
-    """
-    Deleta uma thread existente.
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
 
-    - **thread_id**: ID da thread a ser deletada
-    """
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
     print(f"LOG: DELETE THREAD {thread_id} BY USER {user_id}")
     try:
         # Verifica se a thread existe

@@ -3,10 +3,10 @@ from fastapi import APIRouter, HTTPException, Header
 from ...api.threads.querys.posts_querys import (
     create_post,
     get_post_by_id,
-    get_posts_by_thread_id,
     edit_post_by_id,
     delete_post_by_id
 )
+from ...auth.user_querys import check_token
 from ...models.post_type import PostCreateRequest, PostUpdateRequest
 
 router = APIRouter()
@@ -14,15 +14,14 @@ router = APIRouter()
 @router.post("/", status_code=201)
 async def create_new_post(
         data: PostCreateRequest,
-        user_id: str = Header(..., alias="user-id")
+        authorization: str = Header(...)
 ):
-    """
-    Cria um novo post em uma thread.
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
 
-    - **thread_id**: ID da thread onde o post será criado
-    - **content**: Conteúdo do post
-    - **is_anonymous**: Se o post é anônimo ou não
-    """
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
+
     print(f"LOG: POST CREATION ATTEMPTED BY USER {user_id}")
     print(data)
     try:
@@ -62,7 +61,7 @@ async def get_post(post_id: str):
 async def update_post(
     post_id: str,
     data: PostUpdateRequest,
-    user_id: str = Header(..., alias="user-id")
+    authorization: str = Header(...)
 ):
     """
     Atualiza um post existente.
@@ -71,6 +70,11 @@ async def update_post(
     - **content**: Novo conteúdo do post
     - **is_anonymous**: Se o post é anônimo ou não
     """
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
     print(f"LOG: UPDATE POST {post_id} BY USER {user_id}")
     try:
         # Verifica se o post existe
@@ -98,13 +102,17 @@ async def update_post(
 @router.delete("/{post_id}", status_code=200)
 async def delete_post(
     post_id: str,
-    user_id: str = Header(..., alias="user-id")
+    authorization: str = Header(...)
 ):
     """
     Deleta um post existente.
-
     - **post_id**: ID do post a ser deletado
     """
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
     print(f"LOG: DELETE POST {post_id} BY USER {user_id}")
     try:
         # Verifica se o post existe

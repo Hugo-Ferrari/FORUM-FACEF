@@ -9,9 +9,9 @@ export const req_login = async (code: number) => {
     console.log("LOG: Iniciando login")
     try {
         console.log("LOG: Fazendo login")
-        const res = await api.get("/auth/login", {
-            params: {code}
-        })
+        const res = await api.post("/auth/login",{
+            code
+        }, {})
 
         if(res.data.token){
             console.log("LOG: Token recebido")

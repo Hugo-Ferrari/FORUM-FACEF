@@ -1,20 +1,20 @@
+from pyexpat.errors import messages
+
 from fastapi import APIRouter, HTTPException, Header
 
 from ...api.threads.querys.posts_vote_query import (
     create_post_vote,
-    get_post_votes,
-    get_user_post_votes,
     delete_post_vote
 )
+from ...auth.user_querys import check_token
 from ...models.post_votes_types import PostsVotesCreateRequest
-
 router = APIRouter()
 
 
 @router.post("/", status_code=201)
 async def vote_on_post(
     data: PostsVotesCreateRequest,
-    user_id: str = Header(..., alias="user-id")
+        authorization: str = Header(...)
 ):
     """
     Cria ou atualiza um voto em um post.
@@ -24,10 +24,18 @@ async def vote_on_post(
 
     Se o usuário já votou, o voto será atualizado.
     """
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
+
     print(f"LOG: POST VOTE CREATION ATTEMPTED BY USER {user_id}")
     print(data)
+
     try:
         res = await create_post_vote(data, user_id)
+
         if res:
             return {"message": "Voto registrado com sucesso!", "success": True}
         raise HTTPException(status_code=400, detail="Erro ao registrar voto")
@@ -42,13 +50,19 @@ async def vote_on_post(
 @router.delete("/{post_id}", status_code=200)
 async def remove_vote(
     post_id: str,
-    user_id: str = Header(..., alias="user-id")
+    authorization: str = Header(...)
 ):
     """
     Remove o voto do usuário em um post específico.
 
     - **post_id**: ID do post
     """
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
+    if not user_id:
+        raise HTTPException(status_code=500, detail=f"Erro ao validar token: usuário não encontrado")
+
     print(f"LOG: DELETE VOTE ON POST {post_id} BY USER {user_id}")
     try:
         res = await delete_post_vote(post_id, user_id)

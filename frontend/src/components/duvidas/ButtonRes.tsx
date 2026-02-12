@@ -2,7 +2,6 @@
 import { LucideIcon } from 'lucide-react'
 import React, { useState } from 'react'
 import { Badge } from '../ui/badge'
-import DuvUsuario from './CaixaDuvida'
 import DuvidasList from './DuvidasList'
 
 interface PropsButton {

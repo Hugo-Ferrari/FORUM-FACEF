@@ -1,4 +1,4 @@
-import MeuCurso from '@/app/components/ranking/MeuCurso'
+import MeuCurso from '@/components/ranking/MeuCurso'
 import React from 'react'
 
 function page() {
