@@ -49,8 +49,8 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
           <NativeSelect
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
-            className="mb-3 w-full text-black dark:text-white"
-          >
+            className="mb-3 w-full text-black ">
+              
             <NativeSelectOption value="">Selecione o curso</NativeSelectOption>
             <NativeSelectOption value="Administração">Administração</NativeSelectOption>
             <NativeSelectOption value="Ciência da Computação">Ciência da Computação</NativeSelectOption>
@@ -71,7 +71,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
             value={newDoubt}
             onChange={(e) => setNewDoubt(e.target.value)}
             placeholder="Digite sua dúvida"
-            className="w-full border border-border dark:border-border rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-card text-foreground dark:text-foreground"
+            className=" w-full border border-border dark:border-border rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-card text-black dark:text-white"
           />
 
           <div className="flex justify-end">
@@ -85,7 +85,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
         </PopoverContent>
       </Popover>
 
-      <DuvidasList doubtsList={doubtsList} type={"modal"}/>
+      <DuvidasList doubtsList={doubtsList} type={"modal"} />
     </div>
   )
 }
