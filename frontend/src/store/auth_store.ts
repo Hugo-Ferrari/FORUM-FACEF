@@ -9,7 +9,7 @@ interface AuthState {
     description: string;
     skills: string[];
     links: string[];
-    darkmode: boolean;
+    dark_mode: boolean;
     course: string;
     course_year: number;
 }
@@ -27,7 +27,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
             description: "",
             skills: [],
             links: [],
-            darkmode: false,
+            dark_mode: false,
             course: "",
             course_year: 0,
 
@@ -36,7 +36,16 @@ export const useAuthStore = create<AuthState & AuthActions>()(
                 try {
                     const user: AuthState =  await req_login(code)
                     if (user) {
-                        set(user)
+                        set({
+                            name: user.name,
+                            code: user.code,
+                            description: user.description,
+                            skills: user.skills,
+                            links: user.links,
+                            dark_mode: user.dark_mode,
+                            course: user.course,
+                            course_year: user.course_year
+                        })
                     } else {
                         console.log("Falha na autenticação - dados do usuário não recebidos")
                     }
@@ -55,7 +64,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
                       description: "",
                       skills: [],
                       links: [],
-                      darkmode: false,
+                      dark_mode: false,
                       course: "",
                       course_year: 0
                   })
