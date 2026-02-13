@@ -50,7 +50,7 @@ async def get_user(authorization: str = Header(...)):
 
     try:
         decoded = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        data = AuthRegisterModel(code=decoded["facef_code"], password="")
+        data = AuthRegisterModel(code=decoded["code"], password="")
         print(f"LOG: DECODED TOKEN DATA: {decoded}")
 
         try:

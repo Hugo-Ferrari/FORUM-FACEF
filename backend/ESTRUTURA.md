@@ -22,6 +22,7 @@ backend/
     ├── auth/                    # Módulo de autenticação
     │   ├── __init__.py
     │   ├── auth_routes.py       # Rotas de autenticação
+    │   ├── middleware.py        # Autenticacao middleware
     │   └── user_querys.py       # Queries de usuários
     │
     ├── database/                # Configuração do banco
