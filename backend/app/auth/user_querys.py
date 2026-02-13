@@ -54,3 +54,12 @@ async def check_token(token: str) -> str | None:
     except Exception as e:
         print(f"Error decoding token: {e}")
         return None
+
+
+async def get_course(course_id: str) -> str | None:
+    try:
+        res = supabase.table("courses").select("name").eq("id", course_id).execute().data[0]
+        print(res)
+        return res["name"]
+    except Exception as e:
+        print(f"Error fetching course: {e}")
