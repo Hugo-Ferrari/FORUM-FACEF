@@ -3,11 +3,16 @@ import { BellIcon, UserRoundIcon, MoonIcon, LogOutIcon, SunIcon, User, Settings 
 import React, { useEffect, useState } from "react"
 import Link from "next/link";
 import Image from "next/image";
+import { useAuthStore } from "@/store/auth_store";
 
 function Nav() {
   const [openNotification, setOpenNotification] = useState(false)
   const [openMenu, setOpenMenu] = useState(false)
   const [isDark, setIsDark] = useState(false)
+
+  const {name} = useAuthStore.getState()
+  const {code} = useAuthStore.getState()
+  const {course} = useAuthStore.getState()
 
   useEffect(() => {
     try {
@@ -120,8 +125,8 @@ function Nav() {
                   <UserRoundIcon className="h-5 w-5 text-white dark:text-black" strokeWidth={1.5} />
                 </div>
                 <div className="hidden md:flex flex-col leading-tight text-white dark:text-black/95 text-left">
-                  <span className="text-sm font-medium">Hugo Ferrari</span>
-                  <span className="text-xs opacity-75">Engenharia de Software {/*curso do aluno(englobar com o back)*/}</span>
+                  <span className="text-sm font-medium">{name}</span>
+                  <span className="text-xs opacity-75">{course} {/*curso do aluno(englobar com o back)*/}</span>
                 </div>
               </button>
 
@@ -129,22 +134,22 @@ function Nav() {
               {openMenu && (
                 <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-black  rounded-lg shadow-xl overflow-hidden animate-in fade-in slide-in-from-top-2">
                   <div className="px-4 py-3 border-b bg-muted dark:bg-card">
-                    <h1 className="text-sm font-semibold text-foreground dark:text-foreground">Hugo Ferrari</h1>
-                    <h1 className="text-xs text-muted-foreground dark:text-muted-foreground">usuario@example.com</h1>
+                    <h1 className="text-sm font-semibold text-foreground dark:text-foreground">{name}</h1>
+                    <h1 className="text-xs text-black dark:text-white">{code}</h1>
                   </div>
                   <div className="p-2 space-y-1">
                     <Link
                       href="/configuracoes"
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-foreground dark:text-foreground hover:bg-muted dark:hover:bg-muted/80 hover:text-primary rounded transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-black dark:text-white hover:bg-muted dark:hover:bg-muted/80 hover:text-primary rounded transition-colors"
                     >
                       <Settings className="h-5 w-5" strokeWidth={1.5}/>
                        Configurações
                     </Link>
                     <Link
                       href="/perfil"
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-foreground dark:text-foreground hover:bg-muted dark:hover:bg-muted/80 hover:text-primary rounded transition-colors"
+                      className="flex items-center gap-2 px-3 py-2 text-sm text-black dark:text-white hover:bg-muted dark:hover:bg-muted/80 hover:text-primary rounded transition-colors"
                     >
-                      <User className = "h-5 w-5" strokeWidth={1.5}/>
+                      <User className = "h-5 w-5 " strokeWidth={1.5}/>
                        Perfil
                     </Link>
                   </div>

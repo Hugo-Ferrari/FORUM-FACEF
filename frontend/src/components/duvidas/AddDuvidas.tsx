@@ -45,7 +45,7 @@ function AddDuvidas({ doubtsList, setDoubtsList }: AddDuvidasProps) {
 
         <PopoverContent className="w-80 p-4">
           <h2 className="text-lg font-semibold mb-2 text-foreground dark:text-foreground">Nova Dúvida</h2>
-
+    
           <NativeSelect
             value={selectedCourse}
             onChange={(e) => setSelectedCourse(e.target.value)}
