@@ -6,21 +6,28 @@ const api = axios.create({baseURL: API_BASE})
 
 
 export const req_login = async (code: number) => {
-    console.log("LOG: Iniciando login")
+    console.log("LOG: Iniciando login", code)
     try {
         console.log("LOG: Fazendo login")
         const res = await api.post("/auth/login",{
-            code
-        }, {})
+            code: code,
+            password: ""
+        })
+        console.log("LOG: Login feito", res.data)
 
-        if(res.data.token){
+        if(res.data.access_token){  // Corrigido: access_token em vez de token
             console.log("LOG: Token recebido")
-            setCookie("token", res.data.token)
+            setCookie("token", res.data.access_token)
         }
 
         try {
             console.log("LOG: Pegando info do usuario")
-            const user = await api.get("/auth/user")
+            // Passando o token no header Authorization
+            const user = await api.get("/auth/user", {
+                headers: {
+                    'Authorization': `Bearer ${res.data.access_token}`
+                }
+            })
 
             if(user.data){
                 console.log("LOG: Info do usuario recebida")
@@ -29,9 +36,11 @@ export const req_login = async (code: number) => {
             return null
         } catch (error) {
             console.log(`ERROR: conseguir pegar info do usuario: ${error}`)
+            return error  // Propaga o erro
         }
     } catch (error) {
         console.log(`ERROR: fazer login: ${error}`)
+        throw error  // Propaga o erro para o store/componente
     }
 }
 

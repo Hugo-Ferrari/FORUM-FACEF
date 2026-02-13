@@ -15,33 +15,29 @@ import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Mail, Lock, ArrowRight, Hourglass } from 'lucide-react'
-import api from '@/lib/api'
+import { Mail, ArrowRight, Hourglass } from 'lucide-react'
+import { useAuthStore } from "@/store/auth_store"
 
 export default function Login() {
   const router = useRouter()
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [code, setCode] = useState(0)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
 
   const handleLogin = async (e: React.FormEvent) => {
   e.preventDefault();
   setError("");
-  if (!email || !password) {
-    setError("Preencha email e senha.");
-    return;
-  }
   setLoading(true);
+
+  console.log(code)
+
   try {
-    const res = await api.post("/auth/login", { email, password });
-    const data = res.data || {};
-    if (data.access_token) {
-      localStorage.setItem("token", data.access_token);
-    } else if (data.token) {
-      localStorage.setItem("token", data.token);
-    }
+    const {login} = useAuthStore.getState()
+    console.log(e)
+    await login(code)
+
     router.push("/");
+
   } catch (err: any) {
     const msg =
       err?.response?.data?.detail ||
@@ -58,8 +54,6 @@ export default function Login() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <div className="w-full max-w-4xl grid md:grid-cols-2 gap-8 items-center">
-        
-        
         <div className="hidden md:flex flex-col justify-center">
           <div className="mb-8">
             <div className="w-48 h-20 relative mb-6">
@@ -146,45 +140,17 @@ export default function Login() {
                 <div className="relative">
                   <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
                   <input
-                    id="email"
-                    name="email"
-                    type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
+                    id="code"
+                    name="code"
+                    type="number"
+                    value={code}
+                    onChange={e => setCode(e.target.valueAsNumber)}
                     required
-                    autoComplete="email"
+                    autoComplete="code"
                     placeholder="seu@email.com"
                     className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-gray-900 dark:text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
                     disabled={loading}
                     />
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-2">
-                  <label htmlFor="password" className="block text-sm font-semibold text-black dark:text-foreground">
-                    Senha
-                  </label>
-                  <Link
-                    href="/recuperar-senha"
-                    className="text-xs text-blue-600 hover:text-[#0d3d7a] transition-colors font-medium">
-                    Esqueceu?
-                  </Link>
-                </div>
-                <div className="relative">
-                  <Lock className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
-                  <input
-                    id="password"
-                    name="password"
-                    type="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    required
-                    autoComplete="current-password"
-                    placeholder="••••••••"
-                    className="w-full pl-10 pr-4 py-2.5 border border-border dark:border-border rounded-lg bg-white dark:bg-card text-gray-900 dark:text-white placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all"
-                    disabled={loading}
-                  />
                 </div>
               </div>
 

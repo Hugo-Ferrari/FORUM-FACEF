@@ -32,11 +32,17 @@ export const useAuthStore = create<AuthState & AuthActions>()(
             course_year: 0,
 
             login: async (code: number) => {
+                console.log("LOG: Iniciando login (store)", code)
                 try {
                     const user: AuthState = await req_login(code)
-                    set(user)
+                    if (user) {
+                        set(user)
+                    } else {
+                        return Error("Falha na autenticação - dados do usuário não recebidos")
+                    }
                 } catch (error) {
-                    console.log(error)
+                    console.log("Error no login:", error)
+                    throw error  // Propaga o erro para o componente
                 }
             },
 
