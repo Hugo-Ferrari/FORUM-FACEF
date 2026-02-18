@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Header
-from .user_querys import get_user_req
+from .user_querys import get_user_req, get_user_by_id, get_course
 from ..models.auth_type import AuthRegisterModel
 import jwt
 import os
@@ -50,17 +50,30 @@ async def get_user(authorization: str = Header(...)):
 
     try:
         decoded = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        data = AuthRegisterModel(code=decoded["code"], password="")
         print(f"LOG: DECODED TOKEN DATA: {decoded}")
+        user_data = {}
 
         try:
-            user_data = await get_user_req(data)
-            print(f"LOG: GETTING THE USER INFO {user_data}")
+            data = await get_user_by_id(decoded["sub"])
 
-            if not user_data or not isinstance(user_data, list) or len(user_data) == 0:
-                raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
+            user_data["name"] = data["name"]
+            user_data["code"] = data["facef_code"]
+            user_data["description"] = data["description"]
+            user_data["skills"] = data["skills"]
+            user_data["links"] = data["links"]
+            user_data["dark_mode"] = data["dark_mode"]
+            user_data["course_year"] = data["course_year"]
 
-            return user_data[0]
+            try:
+                user_course = await get_course(data["course_id"])
+                user_data["course"] = user_course
+
+                print(f"LOG: GETTING THE USER INFO {user_data}")
+
+
+                return user_data
+            except Exception as e:
+                print(f"ERROR: {e}")
         except Exception as e:
             print(f"ERROR: {e}")
 
