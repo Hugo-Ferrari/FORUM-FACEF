@@ -20,20 +20,7 @@ export interface ThreadResponse {
   posts: number
 }
 
-export interface ResponseResponse {
-  id: string
-  content: string
-  thread_id: string
-  created_by: string
-  created_at: string
-}
-
-export const req_threads = async (
-  title: string,
-  content: string,
-  course_id: string,
-  is_anonymous: boolean
-): Promise<ThreadResponse> => {
+export const req_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<ThreadResponse> => {
   try {
     const res = await api.post<ThreadResponse>(
       "/api/threads",
@@ -54,9 +41,7 @@ export const req_threads = async (
   }
 }
 
-export const getThreadsByCourse = async (
-  course_id: string
-): Promise<ThreadResponse[]> => {
+export const getThreadsByCourse = async (course_id: string): Promise<ThreadResponse[]> => {
   try {
     const res = await api.get<ThreadResponse[]>(
       `/api/threads/course/${course_id}`
@@ -66,26 +51,22 @@ export const getThreadsByCourse = async (
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message ||
-        "Erro ao buscar threads"
+        "Erro ao listar threads"
     )
   }
 }
-
-export const createResponseRequest = async (
-  thread_id: string,
-  content: string
-): Promise<ResponseResponse> => {
+export const getThreadById = async (thread_id: string): Promise<ThreadResponse> => {
   try {
-    const res = await api.post<ResponseResponse>(
-      `/api/threads/${thread_id}/responses`,
-      { content }
+    const res = await api.get<ThreadResponse>(
+      `/api/threads/${thread_id}`
     )
 
     return res.data
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message ||
-        "Erro ao criar resposta"
+        "Erro ao buscar thread"
     )
   }
 }
+

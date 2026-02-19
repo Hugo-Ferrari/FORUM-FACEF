@@ -1,4 +1,4 @@
-import {getThreadsByCourse,req_threads,createResponseRequest, } from "@/requests/threads_request"
+import { getThreadById, getThreadsByCourse, req_threads,  } from "@/requests/threads_request"
 
 import { create } from "zustand"
 
@@ -80,17 +80,16 @@ export const useThreadStore = create<ThreadStore>((set) => ({
     }
   },
 
-  createResponse: async (thread_id, content) => {
+  createResponse: async (thread_id) => {
     set({ loading: true, error: null })
 
     try {
-      await createResponseRequest(thread_id, content)
+      await getThreadById(thread_id)
 
       set((state) => ({
-        threads: state.threads.map((thread) =>
-          thread.id === thread_id
-            ? { ...thread, posts: thread.posts + 1 }
-            : thread
+        threads: state.threads.map((thread) => thread.id === thread_id
+          ? { ...thread, posts: thread.posts + 1 }
+          : thread
         ),
         loading: false,
       }))
