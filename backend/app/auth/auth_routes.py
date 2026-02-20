@@ -63,6 +63,7 @@ async def get_user(authorization: str = Header(...)):
             user_data["links"] = data["links"]
             user_data["dark_mode"] = data["dark_mode"]
             user_data["course_year"] = data["course_year"]
+            user_data["course_id"] = data["course_id"]
 
             try:
                 user_course = await get_course(data["course_id"])
@@ -80,10 +81,11 @@ async def get_user(authorization: str = Header(...)):
     except jwt.PyJWTError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Token inválido: {str(e)}")
 
-@router.get("/")
-async def get_auth(credentials: HTTPAuthorizationCredentials = Security(HTTPBearer())):
+@router.get("/token")
+async def get_auth(authorization: str = Header(...)):
     """Validar token e obter dados do usuário"""
-    token = credentials.credentials
+    token = authorization.replace("Bearer ", "").strip()
+
     try:
         decoded = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         data = AuthRegisterModel(code=decoded["facef_code"], password="")
@@ -92,6 +94,6 @@ async def get_auth(credentials: HTTPAuthorizationCredentials = Security(HTTPBear
         if not user_data or not isinstance(user_data, list) or len(user_data) == 0:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Usuário não encontrado")
 
-        return user_data[0]
+        return {"validated": True}
     except jwt.PyJWTError as e:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail=f"Token inválido: {str(e)}")
