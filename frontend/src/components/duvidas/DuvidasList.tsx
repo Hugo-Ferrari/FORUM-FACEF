@@ -1,38 +1,43 @@
 "use client"
 
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import Usuario from "../user/Usuario"
 import ButtonRes from "./ButtonRes"
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
+import { useThreadStore } from "@/store/threads_store"
 
 interface DuvidasListProps {
-  doubtsList: { curso: string; texto: string }[]
   type: "modal" | "page"
 }
 
-function DuvidasList({ doubtsList, type }: DuvidasListProps) {
-  const [openModalIndex, setOpenModalIndex] = useState<number | null>(null)
+function DuvidasList({ type }: DuvidasListProps) {
+  const [openThreadId, setOpenThreadId] = useState<string | null>(null)
   const [responseText, setResponseText] = useState("")
-  const [responses, setResponses] = useState<{ [key: number]: string[] }>({})
 
-  const handleOpenModal = (index: number) => {
-    setOpenModalIndex(index)
+  const threads = useThreadStore((s) => s.threads)
+  const fetchThreads = useThreadStore((s) => s.fetchThreads)
+  const createResponse = useThreadStore((s) => s.createResponse)
+  const loading = useThreadStore((s) => s.loading)
+
+  useEffect(() => {
+    fetchThreads("id-do-curso")
+  }, [fetchThreads])
+
+  const handleOpenModal = (threadId: string) => {
+    setOpenThreadId(threadId)
     setResponseText("")
   }
 
   const handleCloseModal = () => {
-    setOpenModalIndex(null)
+    setOpenThreadId(null)
     setResponseText("")
   }
 
-  const handleSendResponse = () => {
-    if (openModalIndex === null || responseText.trim() === "") return
+  const handleSendResponse = async (threadId: string) => {
+    if (!responseText.trim()) return
 
-    setResponses((prev) => ({
-      ...prev,
-      [openModalIndex]: [...(prev[openModalIndex] || []), responseText],
-    }))
+    await createResponse(threadId, responseText)
 
     setResponseText("")
   }
@@ -43,42 +48,43 @@ function DuvidasList({ doubtsList, type }: DuvidasListProps) {
         Dúvidas
       </h2>
 
-      {doubtsList.length === 0 ? (
+      {loading ? (
+        <p className="text-gray-600 ml-3">Carregando...</p>
+      ) : threads.length === 0 ? (
         <p className="text-gray-600 ml-3">
           Nenhuma dúvida adicionada ainda.
         </p>
       ) : (
         <div className="max-h-[32vh] overflow-y-auto pr-2 bg-background">
           <ul className="space-y-2">
-            {doubtsList.map((item, index) => (
+            {threads.map((thread) => (
               <li
-                key={index}
+                key={thread.id}
                 className="p-3 bg-muted dark:bg-muted rounded-md shadow-sm hover:bg-muted/70 dark:hover:bg-muted/50 cursor-pointer"
-                onClick={() => handleOpenModal(index)}
+                onClick={() => handleOpenModal(thread.id)}
               >
                 <Usuario />
 
                 <div className="flex items-center mb-2">
                   <Badge variant="secondary">
                     <strong className="text-blue-600">
-                      {item.curso}
+                      {thread.course_id}
                     </strong>
                   </Badge>
                 </div>
 
                 <p className="max-w-full break-words whitespace-pre-wrap">
-                  {item.texto}
+                  {thread.content}
                 </p>
 
-                
-                {openModalIndex === index && (
+                {openThreadId === thread.id && (
                   <div
                     className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
-                    onClick={handleCloseModal} // clicar fora fecha
+                    onClick={handleCloseModal}
                   >
                     <div
                       className="bg-white dark:bg-card p-4 rounded-lg shadow-lg max-w-md w-full"
-                      onClick={(e) => e.stopPropagation()} // impede reabrir
+                      onClick={(e) => e.stopPropagation()}
                     >
                       <h3 className="text-lg font-semibold mb-2">
                         Dúvida
@@ -87,12 +93,12 @@ function DuvidasList({ doubtsList, type }: DuvidasListProps) {
                       <div className="mb-2">
                         <Badge variant="secondary">
                           <strong className="text-blue-600">
-                            {item.curso}
+                            {thread.course_id}
                           </strong>
                         </Badge>
 
                         <p className="mt-2 text-black dark:text-white">
-                          {item.texto}
+                          {thread.content}
                         </p>
                       </div>
 
@@ -102,24 +108,9 @@ function DuvidasList({ doubtsList, type }: DuvidasListProps) {
                         Respostas
                       </h4>
 
-                      <div className="max-h-32 overflow-y-auto mb-2">
-                        {responses[index]?.length ? (
-                          <ul className="space-y-1">
-                            {responses[index].map((resp, i) => (
-                              <li
-                                key={i}
-                                className="bg-muted p-2 rounded text-black dark:text-white"
-                              >
-                                {resp}
-                              </li>
-                            ))}
-                          </ul>
-                        ) : (
-                          <p className="text-gray-500">
-                            Nenhuma resposta ainda.
-                          </p>
-                        )}
-                      </div>
+                      <p className="text-gray-500 mb-2">
+                        Total de respostas: {thread.posts}
+                      </p>
 
                       <textarea
                         value={responseText}
@@ -140,7 +131,7 @@ function DuvidasList({ doubtsList, type }: DuvidasListProps) {
                         </button>
 
                         <button
-                          onClick={handleSendResponse}
+                          onClick={() => handleSendResponse(thread.id)}
                           className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
                         >
                           Enviar resposta
@@ -155,9 +146,8 @@ function DuvidasList({ doubtsList, type }: DuvidasListProps) {
                     icon1={ArrowUp}
                     icon2={ArrowDown}
                     numberVot={1120}
-                    numberRes={responses[index]?.length || 0}
+                    numberRes={thread.posts}
                     respostasIcon={MessageCircle}
-                    doubtsList={doubtsList}
                   />
                 )}
               </li>

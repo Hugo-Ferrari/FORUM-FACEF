@@ -14,6 +14,9 @@ function Nav() {
   const {code} = useAuthStore.getState()
   const {course} = useAuthStore.getState()
 
+
+  
+
   useEffect(() => {
     try {
       const stored = localStorage.getItem("theme")
