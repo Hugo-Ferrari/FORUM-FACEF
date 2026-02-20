@@ -21,17 +21,9 @@ interface ThreadStore {
   error: string | null
 
   fetchThreads: (course_id: string) => Promise<void>
-  createThread: (
-    title: string,
-    content: string,
-    course_id: string,
-    is_anonymous: boolean
-  ) => Promise<void>
+  createThread: (title: string,content: string,course_id: string,is_anonymous: boolean) => Promise<void>
 
-  createResponse: (
-    thread_id: string,
-    content: string
-  ) => Promise<void>
+  createResponse: (thread_id: string,content: string) => Promise<void>
 }
 
 export const useThreadStore = create<ThreadStore>((set) => ({

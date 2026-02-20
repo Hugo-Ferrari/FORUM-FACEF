@@ -1,11 +1,10 @@
 import axios from "axios"
+import { getCookie } from "cookies-next"
 
-const API_BASE =
-  process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
 
-const api = axios.create({
-  baseURL: API_BASE,
-})
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+const api = axios.create({baseURL: API_BASE})
+
 
 export interface ThreadResponse {
   id: string
@@ -22,6 +21,12 @@ export interface ThreadResponse {
 
 export const req_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<ThreadResponse> => {
   try {
+    const token = getCookie("token")
+
+    if (!token) {
+      throw new Error("Usuário não autenticado")
+    }
+
     const res = await api.post<ThreadResponse>(
       "/api/threads",
       {
@@ -29,6 +34,11 @@ export const req_threads = async (title: string,content: string,course_id: strin
         content,
         course_id,
         is_anonymous,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
       }
     )
 
@@ -36,7 +46,7 @@ export const req_threads = async (title: string,content: string,course_id: strin
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message ||
-        "Erro ao criar thread"
+      "Erro ao criar thread"
     )
   }
 }
