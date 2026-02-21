@@ -1,4 +1,4 @@
-import { getThreadById, getThreadsByCourse, req_threads,  } from "@/requests/threads_request"
+import { req_ThreadById, req_ThreadsByCourse, req_threads,  } from "@/requests/threads_request"
 
 import { create } from "zustand"
 
@@ -35,7 +35,7 @@ export const useThreadStore = create<ThreadStore>((set) => ({
     set({ loading: true, error: null })
 
     try {
-      const data = await getThreadsByCourse(course_id)
+      const data = await req_ThreadsByCourse(course_id)
 
       set({
         threads: data,
@@ -76,7 +76,7 @@ export const useThreadStore = create<ThreadStore>((set) => ({
     set({ loading: true, error: null })
 
     try {
-      await getThreadById(thread_id)
+      await req_ThreadById(thread_id)
 
       set((state) => ({
         threads: state.threads.map((thread) => thread.id === thread_id

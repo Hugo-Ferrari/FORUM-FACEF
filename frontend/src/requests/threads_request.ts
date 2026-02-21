@@ -51,7 +51,7 @@ export const req_threads = async (title: string,content: string,course_id: strin
   }
 }
 
-export const getThreadsByCourse = async (course_id: string): Promise<ThreadResponse[]> => {
+export const req_ThreadsByCourse = async (course_id: string): Promise<ThreadResponse[]> => {
   try {
     const res = await api.get<ThreadResponse[]>(
       `/api/threads/course/${course_id}`
@@ -65,7 +65,7 @@ export const getThreadsByCourse = async (course_id: string): Promise<ThreadRespo
     )
   }
 }
-export const getThreadById = async (thread_id: string): Promise<ThreadResponse> => {
+export const req_ThreadById = async (thread_id: string): Promise<ThreadResponse> => {
   try {
     const res = await api.get<ThreadResponse>(
       `/api/threads/${thread_id}`
