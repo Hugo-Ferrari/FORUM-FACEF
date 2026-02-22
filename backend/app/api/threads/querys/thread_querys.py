@@ -8,11 +8,23 @@ async def create_thread(data: ThreadsType, user_id: str) -> bool:
     print("LOG: THREAD CREATION ATTEMPTED")
 
     try:
-        user_data = supabase.table('users').select('course_id, course_year').eq("id", user_id).execute().data[0]
+        # Busca dados do usuário com validação
+        user_response = supabase.table('users').select('course_id, course_year').eq("id", user_id).execute()
+
+        if not user_response.data:
+            print(f"LOG: ERROR - User {user_id} not found")
+            return False
+
+        user_data = user_response.data[0]
         course_id = user_data.get('course_id')
         course_year = user_data.get('course_year')
+
+        if not course_id:
+            print("LOG: ERROR - User has no course_id")
+            return False
+
         print("LOG: COURSE_ID AND COURSE_YEAR SUCCESSFULLY RETRIEVED")
-        print(course_id, course_year)
+        print(f"Course ID: {course_id}, Course Year: {course_year}")
 
         # Converte o objeto Pydantic para dict e adiciona os campos
         thread_data = data.model_dump(exclude_unset=True)
@@ -20,18 +32,20 @@ async def create_thread(data: ThreadsType, user_id: str) -> bool:
         thread_data['year'] = course_year
         thread_data['created_by'] = user_id
 
-        print(thread_data)
-        try:
-            supabase.table('threads').insert(thread_data).execute()
+        print(f"Thread data to insert: {thread_data}")
+
+        # Insere a thread no banco
+        response = supabase.table('threads').insert(thread_data).execute()
+
+        if response.data:
             print("LOG: THREAD CREATED SUCCESSFULLY")
             return True
-
-        except Exception as e:
-            print(f"LOG: ERROR CREATING THREAD: {e}")
+        else:
+            print("LOG: ERROR - No data returned from insert")
             return False
 
     except Exception as e:
-        print(f"LOG: ERROR RETRIEVING COURSE ID: {e}")
+        print(f"LOG: ERROR CREATING THREAD: {e}")
         return False
 
 
@@ -55,7 +69,13 @@ async def get_threads_by_course(course_id: str) -> list[ThreadsType]:
 async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadsResponse | None:
     print(f"LOG: GET THREAD BY ID {thread_id}")
     try:
-        res: ThreadsType = supabase.table('threads').select('*').eq('id', thread_id).execute().data[0]
+        thread_response = supabase.table('threads').select('*').eq('id', thread_id).execute()
+
+        if not thread_response.data:
+            print(f"LOG: Thread {thread_id} not found")
+            return None
+
+        res: ThreadsType = thread_response.data[0]
         print(f"LOG: THREAD DATA: {res}")
 
         # Usa o user_id passado ou o created_by da thread
@@ -64,13 +84,12 @@ async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadsRespon
         answers: list[PostTypeResponse] = await get_posts_by_thread_id(thread_id, request_user_id)
         print(f"LOG: ANSWERS DATA: {answers}")
 
-        if res:
-            # Adiciona o campo statistics (número de posts)
-            res["posts"] = len(answers)
+        # Adiciona o campo statistics (número de posts)
+        res["posts"] = len(answers)
 
-            data: ThreadsResponse = ThreadsResponse(thread=res, posts=answers)
-            print(f"LOG: THREAD RESPONSE: {data}")
-            return data
+        data: ThreadsResponse = ThreadsResponse(thread=res, posts=answers)
+        print(f"LOG: THREAD RESPONSE: {data}")
+        return data
 
     except Exception as e:
         print(f"Erro ao pegar thread {thread_id}: {e}")
