@@ -18,9 +18,9 @@ export interface ThreadResponse {
   count: number
 }
 
-export const req_create_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<ThreadResponse> => {
+export const req_create_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<void> => {
   try {
-    const res = await api.post<ThreadResponse>(
+    const res = await api.post(
       "/api/threads",
       {
         title,
@@ -30,7 +30,10 @@ export const req_create_threads = async (title: string,content: string,course_id
       }
     )
 
-    return res.data
+    if(res.data.success) {
+      console.log("Successfully created thread")
+    }
+
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message ||

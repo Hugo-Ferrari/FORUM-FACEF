@@ -14,6 +14,9 @@ import {useAuthStore} from "@/store/auth_store";
 function AddThreads() {
   const [title, setTitle] = useState("")
   const [content, setContent] = useState("")
+  const [loading, setLoading] = useState(false)
+  const [open, setOpen] = useState<boolean>(false)
+
 
   const course_id = useAuthStore(s => s.course_id)
 
@@ -26,15 +29,22 @@ function AddThreads() {
   }
 
   const handleAddThreads = () => {
+    setLoading(true)
     const { createThread } = useThreadStore.getState()
-    createThread(title, content, course_id, false)
+    createThread(title, content, course_id, false).then(() => {
+      setOpen(false)
+      setLoading(false)
+    })
   }
 
   return (
     <div className="flex flex-col items-start w-150 py-6 gap-4">
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
-          <button className="bg-blue-600 text-white dark:text-black px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16 ">
+          <button
+              onClick={() => {setOpen(true)}}
+              className="bg-blue-600 text-white dark:text-black px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16 "
+          >
             Adicionar Dúvida
           </button>
         </PopoverTrigger>
@@ -58,9 +68,10 @@ function AddThreads() {
           <div className="flex justify-end">
             <button
                 onClick={handleAddThreads}
+                disabled={loading}
               className="bg-blue-600 text-white dark:text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
             >
-              Enviar
+              {loading ? "Enviando..." : "Enviar"}
             </button>
           </div>
         </PopoverContent>

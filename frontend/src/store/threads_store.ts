@@ -33,7 +33,7 @@ interface ThreadStore {
 
 export const useThreadStore = create<ThreadStore>()(
     persist(
-        (set => ({
+        ((set, get) => ({
               threads: [],
               count: 0,
 
@@ -42,7 +42,7 @@ export const useThreadStore = create<ThreadStore>()(
                   const data: ThreadResponse = await req_get_thread_by_course_id(course_id)
 
                   set({
-                    threads: data.threads,
+                    threads: data.threads.reverse(),
                     count: data.count
                   })
                 } catch (err: any) {
@@ -52,17 +52,14 @@ export const useThreadStore = create<ThreadStore>()(
 
               createThread: async (title, content, course_id, is_anonymous) => {
                 try {
-                  const resThreads = await req_create_threads(
+                  await req_create_threads(
                       title,
                       content,
                       course_id,
                       is_anonymous
                   )
-                     const newThread = resThreads.threads[0]
 
-                  set((state) => ({
-                    threads: [newThread, ...state.threads]
-                  }))
+                    await get().fetchThreadsByCourse(course_id)
 
                 } catch (err: any) {
                   console.error("Erro ao criar thread:", err)
