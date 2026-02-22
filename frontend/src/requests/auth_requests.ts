@@ -22,8 +22,7 @@ export const req_login = async (code: number) => {
 
         try {
             console.log("LOG: Pegando info do usuario")
-            // Passando o token no header Authorization
-            const user = await api.get("/auth/user", { 
+            const user = await api.get("/auth/user", {
                 headers: {
                     'Authorization': `Bearer ${res.data.access_token}`
                 }

@@ -1,32 +1,25 @@
 import axios from "axios"
 import { getCookie } from "cookies-next"
+import {Thread} from "@/store/threads_store";
 
+const token = getCookie("token")
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
-const api = axios.create({baseURL: API_BASE})
-
+const api = axios.create({
+  baseURL: API_BASE,
+  withCredentials: true,
+  headers: {
+    Authorization: `Bearer ${token}`
+  }
+})
 
 export interface ThreadResponse {
-  id: string
-  title: string
-  content: string
-  course_id: string
-  is_anonymous: boolean
-  created_by: string
-  created_at: string
-  updated_at: string | null
-  year: number
-  posts: number
+  threads: Thread[],
+  count: number
 }
 
-export const req_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<ThreadResponse> => {
+export const req_create_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<ThreadResponse> => {
   try {
-    const token = getCookie("token")
-
-    if (!token) {
-      throw new Error("Usuário não autenticado")
-    }
-
     const res = await api.post<ThreadResponse>(
       "/api/threads",
       {
@@ -34,11 +27,6 @@ export const req_threads = async (title: string,content: string,course_id: strin
         content,
         course_id,
         is_anonymous,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`
-        }
       }
     )
 
@@ -51,9 +39,9 @@ export const req_threads = async (title: string,content: string,course_id: strin
   }
 }
 
-export const getThreadsByCourse = async (course_id: string): Promise<ThreadResponse[]> => {
+export const req_get_thread_by_course_id = async (course_id: string): Promise<ThreadResponse> => {
   try {
-    const res = await api.get<ThreadResponse[]>(
+    const res = await api.get<ThreadResponse>(
       `/api/threads/course/${course_id}`
     )
 
@@ -65,17 +53,34 @@ export const getThreadsByCourse = async (course_id: string): Promise<ThreadRespo
     )
   }
 }
-export const getThreadById = async (thread_id: string): Promise<ThreadResponse> => {
+export const req_get_thread_by_id = async (thread_id: string): Promise<ThreadResponse> => {
   try {
-    const res = await api.get<ThreadResponse>(
-      `/api/threads/${thread_id}`
-    )
+    const res = await api.get<ThreadResponse>(`/api/threads/${thread_id}`)
 
     return res.data
   } catch (error: any) {
     throw new Error(
       error.response?.data?.message ||
         "Erro ao buscar thread"
+    )
+  }
+}
+
+export const req_create_post = async (thread_id: string, content: string): Promise<any> => {
+  try {
+    const res = await api.post(
+      "/api/threads/posts",
+      {
+        thread_id,
+        content,
+      }
+    )
+
+    return res.data
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.message ||
+        "Erro ao criar resposta"
     )
   }
 }

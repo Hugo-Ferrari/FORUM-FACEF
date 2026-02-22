@@ -1,11 +1,12 @@
 "use client"
 
-import React, { useEffect, useState } from "react"
+import React, { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import Usuario from "../user/Usuario"
 import ButtonRes from "./ButtonRes"
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
 import { useThreadStore } from "@/store/threads_store"
+import {useAuthStore} from "@/store/auth_store";
 
 interface DuvidasListProps {
   type: "modal" | "page"
@@ -15,14 +16,29 @@ function DuvidasList({ type }: DuvidasListProps) {
   const [openThreadId, setOpenThreadId] = useState<string | null>(null)
   const [responseText, setResponseText] = useState("")
 
-  const threads = useThreadStore((s) => s.threads)
-  const fetchThreads = useThreadStore((s) => s.fetchThreads)
-  const createResponse = useThreadStore((s) => s.createResponse)
-  const loading = useThreadStore((s) => s.loading)
+  const threads = useThreadStore(s => s.threads || [])
 
-  useEffect(() => {
-    fetchThreads("id-do-curso")
-  }, [fetchThreads])
+  console.log(threads)
+
+  const {createResponse} = useThreadStore.getState()
+  const course_id = useAuthStore(s => s.course_id)
+
+  if (!course_id) {
+    return (
+        <div className='bg-background min-h-screen w-full overflow-x-hidden flex items-center justify-center'>
+          <p>Loading course data...</p>
+        </div>
+    )
+  }
+
+  const handleSendResponse = async (threadId: string) => {
+    if (!responseText.trim()) return
+
+    await createResponse(threadId, responseText)
+
+    setResponseText("")
+    handleCloseModal()
+  }
 
   const handleOpenModal = (threadId: string) => {
     setOpenThreadId(threadId)
@@ -34,23 +50,13 @@ function DuvidasList({ type }: DuvidasListProps) {
     setResponseText("")
   }
 
-  const handleSendResponse = async (threadId: string) => {
-    if (!responseText.trim()) return
-
-    await createResponse(threadId, responseText)
-
-    setResponseText("")
-  }
-
   return (
     <div className="mt-3 w-full ml-2 bg-background p-3">
       <h2 className="text-xl font-semibold mb-3 text-black dark:text-foreground">
         Dúvidas
       </h2>
 
-      {loading ? (
-        <p className="text-gray-600 ml-3">Carregando...</p>
-      ) : threads.length === 0 ? (
+      {threads.length === 0 ? (
         <p className="text-gray-600 ml-3">
           Nenhuma dúvida adicionada ainda.
         </p>

@@ -1,7 +1,7 @@
 import React from 'react'
-import DuvUsuario from '@/components/duvidas/CaixaDuvida'
 import Materia from '@/components/materia'
 import ChatCurso from "@/components/chat/ChatCurso";
+import CourseThreads from "@/components/threads/CourseThreads";
 
 function page() {
   return (
@@ -9,7 +9,7 @@ function page() {
       <div className='flex'>
           <ChatCurso />
         <div className='flex flex-col w-115 mt-10 mr-15 bg-background text-black dark:text-white'>
-          <DuvUsuario />
+            <CourseThreads />
           <Materia />
         </div>
       </div>

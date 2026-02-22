@@ -1,6 +1,7 @@
 import { persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand"
 import {req_login, req_logout} from "@/requests/auth_requests";
+import {redirect} from "next/navigation";
 
 
 interface AuthState {
@@ -12,6 +13,7 @@ interface AuthState {
     dark_mode: boolean;
     course: string;
     course_year: number;
+    course_id: string;
 }
 
 interface AuthActions {
@@ -30,6 +32,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
             dark_mode: false,
             course: "",
             course_year: 0,
+            course_id: "",
 
             login: async (code: number) => {
                 console.log("LOG: Iniciando login (store)", code)
@@ -44,14 +47,15 @@ export const useAuthStore = create<AuthState & AuthActions>()(
                             links: user.links,
                             dark_mode: user.dark_mode,
                             course: user.course,
-                            course_year: user.course_year
+                            course_year: user.course_year,
+                            course_id: user.course_id
                         })
                     } else {
                         console.log("Falha na autenticação - dados do usuário não recebidos")
                     }
                 } catch (error) {
                     console.log("Error no login:", error)
-                    throw error  // Propaga o erro para o componente
+                    throw error
                 }
             },
 
@@ -69,6 +73,7 @@ export const useAuthStore = create<AuthState & AuthActions>()(
                       course_year: 0
                   })
                 }
+                redirect("/login")
             },
         }), {
             name: "auth-storage",

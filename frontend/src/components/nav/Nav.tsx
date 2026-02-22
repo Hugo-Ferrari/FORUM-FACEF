@@ -10,12 +10,12 @@ function Nav() {
   const [openMenu, setOpenMenu] = useState(false)
   const [isDark, setIsDark] = useState(false)
 
-  const {name} = useAuthStore.getState()
-  const {code} = useAuthStore.getState()
-  const {course} = useAuthStore.getState()
+  const name = useAuthStore(state => state.name)
+  const code = useAuthStore(state => state.code)
+  const course = useAuthStore(state => state.course)
 
 
-  
+  const { logout } = useAuthStore.getState()
 
   useEffect(() => {
     try {
@@ -157,10 +157,7 @@ function Nav() {
                     </Link>
                   </div>
                   <button
-                    onClick={() => {
-                      localStorage.removeItem('token')
-                      window.location.href = '/'
-                    }}
+                    onClick={logout}
                     className="w-full flex items-center gap-2 px-4 py-3 text-sm text-red-600 hover:bg-red-50 border-t transition-colors font-medium"
                   >
                     <LogOutIcon className="h-4 w-4" />

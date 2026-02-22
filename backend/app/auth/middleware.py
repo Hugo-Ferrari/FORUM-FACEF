@@ -16,6 +16,8 @@ class JWTAuthMiddleware(BaseHTTPMiddleware):
             auth_header = request.headers.get("Authorization", "")
             token = auth_header.replace("Bearer ", "").strip()
 
+            if not token:
+                raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token JWT ausente")
 
             try:
                 jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])

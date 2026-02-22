@@ -23,6 +23,8 @@ async def create_new_thread(
     authorization: str = Header(...)
 ):
     token = authorization.replace("Bearer ", "").strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="Token JWT ausente")
     user_id = await check_token(token)
 
     if not user_id:
@@ -64,6 +66,9 @@ async def get_thread(
     authorization: str = Header(...)
 ):
     token = authorization.replace("Bearer ", "").strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="Token JWT ausente")
+
     user_id = await check_token(token)
 
     if not user_id:
@@ -89,6 +94,9 @@ async def update_thread(
     authorization: str = Header(...)
 ):
     token = authorization.replace("Bearer ", "").strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="Token JWT ausente")
+
     user_id = await check_token(token)
 
     if not user_id:
@@ -118,6 +126,9 @@ async def delete_thread(
     authorization: str = Header(...)
 ):
     token = authorization.replace("Bearer ", "").strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="Token JWT ausente")
+
     user_id = await check_token(token)
 
     if not user_id:
