@@ -35,7 +35,9 @@ async function isTokenValid(token: string): Promise<boolean> {
             // Clean old cache entries (prevent memory leak)
             if (tokenCache.size > 100) {
                 const oldestKey = tokenCache.keys().next().value;
-                tokenCache.delete(oldestKey);
+                if (oldestKey) {
+                    tokenCache.delete(oldestKey);
+                }
             }
 
             return valid;
@@ -67,15 +69,13 @@ const proxy = async (req: NextRequest) => {
         return NextResponse.next();
     }
 
-    const isAuthRoute = pathname.startsWith("/auth");
-    const isHomePage = pathname === "/";
-    const isPublicRoute = isAuthRoute || isHomePage;
-    const isProtected: boolean = !isPublicRoute;
+    const isLoginRoute = pathname === "/login" || pathname.startsWith("/login/");
+    const isProtected: boolean = !isLoginRoute;
 
     if (isProtected) {
         // Check if token exists
         if (!token) {
-            const url = new URL("/auth/login", req.url);
+            const url = new URL("/login", req.url);
             url.searchParams.set("reason", "auth_required");
             return NextResponse.redirect(url);
         }
