@@ -7,6 +7,7 @@ import ButtonRes from "./ButtonRes"
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
 import { useThreadStore } from "@/store/threads_store"
 import {useAuthStore} from "@/store/auth_store";
+import { title } from "process"
 
 interface DuvidasListProps {
   type: "modal" | "page"
@@ -79,6 +80,7 @@ function DuvidasList({ type }: DuvidasListProps) {
                   </Badge>
                 </div>
 
+                  <p className="flex font-semibold text-lg capitalize">{thread.title}</p>
                 <p className="max-w-full break-words whitespace-pre-wrap">
                   {thread.content}
                 </p>
