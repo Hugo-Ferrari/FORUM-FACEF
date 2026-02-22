@@ -2,8 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import React from "react";
-import NavLateral from "@/components/nav/NavLateral";
-import Nav from "@/components/nav/Nav";
+import ConditionalLayout from "@/components/ConditionalLayout";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -25,32 +24,14 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-    const location = typeof window !== "undefined" ? window.location.pathname : "";
-    const isLoginPage = location === "/login";
-
   return (
     <html lang="pt-BR">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-      {!isLoginPage && (
-          <>
-            <NavLateral />
-            <Nav />
-          </>
-      )}
-
-        {/* main wrapper: use CSS variable set by NavLateral to push content when sidebar expands */}
-        <div
-          style={{
-            paddingLeft: 'var(--sidebar-width, 5rem)',
-            transition: 'padding-left 300ms ease-in-out',
-          }}
-          className="pt-20 min-h-screen bg-background transition-colors duration-300"
-        >
+        <ConditionalLayout>
           {children}
-        </div>
-
+        </ConditionalLayout>
       </body>
     </html>
   );

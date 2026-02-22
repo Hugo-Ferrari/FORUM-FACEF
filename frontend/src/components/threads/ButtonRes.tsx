@@ -9,7 +9,6 @@ interface PropsButton {
   icon1: LucideIcon
   icon2: LucideIcon
   respostasIcon: LucideIcon
-  doubtsList?: { curso: string; texto: string }[]
 }
 
 function ButtonRes({
@@ -18,7 +17,6 @@ function ButtonRes({
   icon1: Icon1,
   icon2: Icon2,
   respostasIcon: RespostasIcon,
-  doubtsList = [],
 }: PropsButton) {
 
   const [open, setOpen] = useState<boolean>(false)
