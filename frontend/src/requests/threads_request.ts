@@ -1,6 +1,7 @@
 import axios from "axios"
 import { getCookie } from "cookies-next"
 import {Thread} from "@/store/threads_store";
+import { threadId } from "worker_threads";
 
 const token = getCookie("token")
 
@@ -65,25 +66,6 @@ export const req_get_thread_by_id = async (thread_id: string): Promise<ThreadRes
     throw new Error(
       error.response?.data?.message ||
         "Erro ao buscar thread"
-    )
-  }
-}
-
-export const req_create_post = async (thread_id: string, content: string): Promise<any> => {
-  try {
-    const res = await api.post(
-      "/api/threads/posts",
-      {
-        thread_id,
-        content,
-      }
-    )
-
-    return res.data
-  } catch (error: any) {
-    throw new Error(
-      error.response?.data?.message ||
-        "Erro ao criar resposta"
     )
   }
 }

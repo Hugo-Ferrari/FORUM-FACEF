@@ -1,9 +1,9 @@
 import {
     req_get_thread_by_course_id,
     req_create_threads,
-    req_create_post,
     ThreadResponse
 } from "@/requests/threads_request"
+import { req_create_post } from "@/requests/posts_requests";
 
 import { persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand"
