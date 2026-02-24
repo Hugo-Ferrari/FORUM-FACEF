@@ -1,3 +1,7 @@
+from fastapi import Header
+
+from ...auth.user_querys import check_token
+
 """
 Serviços de acesso ao banco de dados para o sistema de chat
 

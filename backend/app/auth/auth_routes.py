@@ -20,7 +20,6 @@ async def login(data: AuthRegisterModel):
         user_data = await get_user_req(data)
         print(f"LOG: USER DATA: {user_data}")
 
-
         # user_data pode ser None ou uma lista de dicts
         if not user_data or not isinstance(user_data, list) or len(user_data) == 0:
             raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Credenciais inválidas")
@@ -36,9 +35,12 @@ async def login(data: AuthRegisterModel):
         token = jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
         print(f"LOG: TOKEN GENERATED: {token}")
         return {"access_token": token, "token_type": "bearer"}
+    except HTTPException:
+        # Re-levanta HTTPException para manter status code correto
+        raise
     except Exception as e:
         print(f"ERROR: got a error when do a login {e}")
-        return {"message": "Erro ao fazer login"}
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Erro interno do servidor")
 
 
 
@@ -88,7 +90,8 @@ async def get_auth(authorization: str = Header(...)):
 
     try:
         decoded = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        data = AuthRegisterModel(code=decoded["facef_code"], password="")
+        # Corrigido: usa "code" em vez de "facef_code"
+        data = AuthRegisterModel(code=decoded["code"], password="")
         user_data = await get_user_req(data)
 
         if not user_data or not isinstance(user_data, list) or len(user_data) == 0:

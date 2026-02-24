@@ -154,4 +154,3 @@ async def handle_room_message(sio: socketio.AsyncServer, sid: str, data: dict):
     }, room=room_id)
 
     print(f"ROOM MESSAGE: ✅ Broadcast enviado com room_id={original_room_id}")
-

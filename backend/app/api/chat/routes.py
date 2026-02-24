@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Header
+
+from ...auth.user_querys import check_token
 from ...database.supabase_client import supabase
 
 router = APIRouter()
@@ -6,8 +8,11 @@ router = APIRouter()
 # NOTE: This is a minimal example — adjust authentication and error handling to your app
 
 @router.get('/')
-async def list_chats(user_id: str):
+async def list_chats(authorization: str = Header(...)):
     """Retorna lista de chats que o usuário participa"""
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
     try:
         # Busca o usuário
         user_data = supabase.table('users').select('course_id').eq('facef_code', int(user_id)).execute().data[0]

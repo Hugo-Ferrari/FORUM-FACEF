@@ -42,11 +42,12 @@ async def check_token(token: str) -> str | None:
         user_id = res["sub"]
 
         try:
-            res = await get_user_by_id(user_id)
-            if not res:
+            user_res = await get_user_by_id(user_id)
+            if not user_res:
                 return None
 
-            return res["id"]
+            # Retorna facef_code para manter consistência com o resto do sistema
+            return str(user_res["facef_code"])
         except Exception as e:
             print(e)
             return None

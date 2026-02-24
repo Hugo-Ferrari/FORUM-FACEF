@@ -1,10 +1,12 @@
 """
 Serviços de controle de acesso e permissões para rooms
 """
-from backend.app.auth.user_querys import get_user_by_id
+from backend.app.auth.user_querys import get_user_by_id, check_token
+from fastapi import Header
 
 
-async def get_user_private_rooms(user_id: str):
+async def get_user_private_rooms(authorization: str = Header(...)):
+    """Retorna lista de chats que o usuário participa"""
     """
     Busca quais rooms privadas o usuário tem acesso baseado no course_id
 
@@ -14,6 +16,9 @@ async def get_user_private_rooms(user_id: str):
     Returns:
         Lista com o ID da room privada do curso do usuário (ex: ['room_es'])
     """
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
     try:
         user = await get_user_by_id(user_id)
         if not user:
@@ -33,7 +38,7 @@ async def get_user_private_rooms(user_id: str):
         return []
 
 
-async def check_room_access(user_id: str, room_id: str):
+async def check_room_access(authorization: str = Header(...), room_id: str):
     """
     Verifica se o usuário tem acesso a uma room específica
 
@@ -48,7 +53,11 @@ async def check_room_access(user_id: str, room_id: str):
 
     Returns:
         True se o usuário tem acesso, False caso contrário
+        :param authorization:
     """
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
     # Chat geral é acessível a todos os usuários autenticados
     if room_id == GENERAL_ROOM:
         return True
