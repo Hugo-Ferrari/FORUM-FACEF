@@ -5,7 +5,6 @@ from ...database.supabase_client import supabase
 
 router = APIRouter()
 
-# NOTE: This is a minimal example — adjust authentication and error handling to your app
 
 @router.get('/')
 async def list_chats(authorization: str = Header(...)):
@@ -15,7 +14,7 @@ async def list_chats(authorization: str = Header(...)):
 
     try:
         # Busca o usuário
-        user_data = supabase.table('users').select('course_id').eq('facef_code', int(user_id)).execute().data[0]
+        user_data = supabase.table('users').select('course_id').eq('id', user_id).execute().data[0]
         course_id = user_data['course_id']
         print(f"LIST User course_id: {course_id}")
 

@@ -1,10 +1,56 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "FORUM-FACEF API",
-    "version": "0.1.0"
+    "title": "FORUM FACEF API",
+    "version": "1.0.0",
+    "description": "API do sistema de fórum da FACEF"
   },
   "paths": {
+    "/": {
+      "get": {
+        "tags": ["Root"],
+        "summary": "Endpoint raiz da API",
+        "responses": {
+          "200": {
+            "description": "Informações básicas da API",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "version": {"type": "string"},
+                    "docs": {"type": "string"},
+                    "websocket": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/": {
+      "get": {
+        "tags": ["Root"],
+        "summary": "Endpoint raiz da API",
+        "responses": {
+          "200": {
+            "description": "Confirmação de que a API está rodando",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/auth/login": {
       "post": {
         "tags": ["Auth"],
@@ -51,21 +97,95 @@
         }
       }
     },
-    "/auth/": {
+    "/auth/token": {
       "get": {
         "tags": ["Auth"],
-        "summary": "Validar token e obter dados do usuário",
+        "summary": "Validar token JWT",
         "security": [{"BearerAuth": []}],
         "responses": {
           "200": {
-            "description": "Token válido e dados do usuário",
+            "description": "Token válido",
             "content": {
               "application/json": {
-                "schema": {"$ref": "#/components/schemas/UserData"}
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "validated": {"type": "boolean"}
+                  }
+                }
               }
             }
           },
-          "401": {"description": "Token inválido ou expirado"}
+          "401": {"description": "Token inválido ou expirado"},
+          "404": {"description": "Usuário não encontrado"}
+        }
+      }
+    },
+    "/api/chat/": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "Listar chats do usuário",
+        "description": "Retorna lista de chats que o usuário participa baseado no seu curso",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de chats",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "chats": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/ChatInfo"}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {"description": "Token inválido"},
+          "500": {"description": "Erro interno"}
+        }
+      }
+    },
+    "/api/chat/{chat_id}/messages": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "Obter mensagens do chat",
+        "description": "Retorna mensagens do chat ordenadas por timestamp ascendente",
+        "parameters": [
+          {"name": "chat_id", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Mensagens do chat",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "messages": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/ChatMessage"}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {"description": "Erro interno"}
+        }
+      }
+    },
+    "/api/ws": {
+      "get": {
+        "tags": ["Chat"],
+        "summary": "WebSocket para chat em tempo real",
+        "description": "Endpoint WebSocket para comunicação em tempo real do sistema de chat. Suporta eventos de conexão, envio de mensagens, entrada/saída de salas.\n\nEventos suportados:\n- `init`: Inicializar sessão\n- `join_room`: Entrar em sala\n- `leave_room`: Sair da sala\n- `room_message`: Enviar mensagem\n\nEventos recebidos:\n- `welcome`: Confirmação de conexão\n- `available_rooms`: Salas disponíveis\n- `room_history`: Histórico de mensagens\n- `room_response`: Nova mensagem recebida",
+        "responses": {
+          "101": {"description": "Switching Protocols - Conexão WebSocket estabelecida"},
+          "401": {"description": "Não autorizado - Token inválido"}
         }
       }
     },
@@ -73,32 +193,102 @@
       "post": {
         "tags": ["Threads"],
         "summary": "Criar thread",
+        "description": "Cria uma nova thread no fórum. O course_id e year são automaticamente preenchidos com base no usuário autenticado.",
         "security": [{"BearerAuth": []}],
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {"$ref": "#/components/schemas/ThreadCreate"}
+              "schema": {"$ref": "#/components/schemas/ThreadCreateRequest"}
             }
           },
           "required": true
         },
         "responses": {
-          "201": {"description": "Thread criada com sucesso"},
-          "401": {"description": "Token JWT inválido"}
+          "201": {
+            "description": "Thread criada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "success": {"type": "boolean"},
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "title": {"type": "string"},
+                        "is_anonymous": {"type": "boolean"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {"description": "Token JWT inválido"},
+          "500": {"description": "Erro interno ao criar thread"}
+        }
+      }
+    },
+    "/api/threads/course/": {
+      "get": {
+        "tags": ["Threads"],
+        "summary": "Listar threads do meu curso",
+        "description": "Retorna todas as threads do curso do usuário autenticado. Busca automaticamente o course_id baseado no usuário logado.",
+        "security": [{"BearerAuth": []}],
+        "responses": {
+          "200": {
+            "description": "Lista de threads do curso do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "threads": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/ThreadsType"}
+                    },
+                    "count": {"type": "integer", "description": "Número total de threads"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {"description": "Token JWT inválido"},
+          "404": {"description": "Usuário não possui curso associado"},
+          "500": {"description": "Erro ao buscar threads do curso"}
         }
       }
     },
     "/api/threads/course/{course_id}": {
       "get": {
         "tags": ["Threads"],
-        "summary": "Listar threads por curso",
+        "summary": "Listar threads por curso específico",
+        "description": "Retorna todas as threads de um curso específico pelo course_id fornecido",
         "security": [{"BearerAuth": []}],
         "parameters": [
-          {"name": "course_id", "in": "path", "required": true, "schema": {"type": "string"}}
+          {"name": "course_id", "in": "path", "required": true, "schema": {"type": "string"}, "description": "ID do curso"}
         ],
         "responses": {
-          "200": {"description": "Lista de threads"},
-          "401": {"description": "Token JWT inválido"}
+          "200": {
+            "description": "Lista de threads do curso especificado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "threads": {
+                      "type": "array",
+                      "items": {"$ref": "#/components/schemas/ThreadsType"}
+                    },
+                    "count": {"type": "integer", "description": "Número total de threads"}
+                  }
+                }
+              }
+            }
+          },
+          "401": {"description": "Token JWT inválido"},
+          "500": {"description": "Erro ao buscar threads do curso"}
         }
       }
     },
@@ -106,14 +296,89 @@
       "get": {
         "tags": ["Threads"],
         "summary": "Buscar thread por ID",
+        "description": "Busca uma thread específica por ID, retorna a thread com todos os posts associados",
         "security": [{"BearerAuth": []}],
         "parameters": [
           {"name": "thread_id", "in": "path", "required": true, "schema": {"type": "string"}}
         ],
         "responses": {
-          "200": {"description": "Thread retornada"},
+          "200": {
+            "description": "Thread retornada",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/ThreadsResponse"}
+              }
+            }
+          },
           "404": {"description": "Thread não encontrada"},
-          "401": {"description": "Token JWT inválido"}
+          "401": {"description": "Token JWT inválido"},
+          "500": {"description": "Erro interno ao buscar thread"}
+        }
+      },
+      "patch": {
+        "tags": ["Threads"],
+        "summary": "Atualizar thread",
+        "description": "Atualiza uma thread existente. Apenas o criador da thread pode editá-la.",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "thread_id", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {"$ref": "#/components/schemas/ThreadCreateRequest"}
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Thread atualizada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "success": {"type": "boolean"}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Erro ao atualizar thread"},
+          "401": {"description": "Token JWT inválido"},
+          "404": {"description": "Thread não encontrada"},
+          "500": {"description": "Erro interno ao atualizar thread"}
+        }
+      },
+      "delete": {
+        "tags": ["Threads"],
+        "summary": "Deletar thread",
+        "description": "Deleta uma thread existente. Apenas o criador da thread pode deletá-la.",
+        "security": [{"BearerAuth": []}],
+        "parameters": [
+          {"name": "thread_id", "in": "path", "required": true, "schema": {"type": "string"}}
+        ],
+        "responses": {
+          "200": {
+            "description": "Thread deletada com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "success": {"type": "boolean"}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Erro ao deletar thread"},
+          "401": {"description": "Token JWT inválido"},
+          "404": {"description": "Thread não encontrada"},
+          "500": {"description": "Erro interno ao deletar thread"}
         }
       }
     },
@@ -121,32 +386,34 @@
       "post": {
         "tags": ["Posts"],
         "summary": "Criar post",
+        "description": "Cria uma nova resposta em uma thread existente",
         "security": [{"BearerAuth": []}],
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {"$ref": "#/components/schemas/PostCreate"}
+              "schema": {"$ref": "#/components/schemas/PostCreateRequest"}
             }
           },
           "required": true
         },
         "responses": {
-          "201": {"description": "Post criado com sucesso"},
-          "401": {"description": "Token JWT inválido"}
-        }
-      }
-    },
-    "/api/threads/posts/thread/{thread_id}": {
-      "get": {
-        "tags": ["Posts"],
-        "summary": "Listar posts de uma thread",
-        "security": [{"BearerAuth": []}],
-        "parameters": [
-          {"name": "thread_id", "in": "path", "required": true, "schema": {"type": "string"}}
-        ],
-        "responses": {
-          "200": {"description": "Lista de posts"},
-          "401": {"description": "Token JWT inválido"}
+          "201": {
+            "description": "Post criado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string", "example": "Post criado com sucesso!"},
+                    "success": {"type": "boolean", "example": true}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Erro ao criar post"},
+          "401": {"description": "Token JWT inválido"},
+          "500": {"description": "Erro interno ao criar post"}
         }
       }
     },
@@ -154,19 +421,27 @@
       "get": {
         "tags": ["Posts"],
         "summary": "Buscar post por ID",
-        "security": [{"BearerAuth": []}],
+        "description": "Retorna um post específico pelo ID",
         "parameters": [
           {"name": "post_id", "in": "path", "required": true, "schema": {"type": "string"}}
         ],
         "responses": {
-          "200": {"description": "Post retornado"},
+          "200": {
+            "description": "Post retornado",
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/PostTypeResponse"}
+              }
+            }
+          },
           "404": {"description": "Post não encontrado"},
-          "401": {"description": "Token JWT inválido"}
+          "500": {"description": "Erro ao buscar post"}
         }
       },
       "patch": {
         "tags": ["Posts"],
         "summary": "Atualizar post",
+        "description": "Atualiza um post existente. Apenas o criador do post pode editá-lo.",
         "security": [{"BearerAuth": []}],
         "parameters": [
           {"name": "post_id", "in": "path", "required": true, "schema": {"type": "string"}}
@@ -174,26 +449,61 @@
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {"$ref": "#/components/schemas/PostUpdate"}
+              "schema": {"$ref": "#/components/schemas/PostUpdateRequest"}
             }
           },
           "required": true
         },
         "responses": {
-          "200": {"description": "Post atualizado"},
-          "401": {"description": "Token JWT inválido"}
+          "200": {
+            "description": "Post atualizado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "success": {"type": "boolean"}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Erro ao atualizar post"},
+          "401": {"description": "Token JWT inválido"},
+          "403": {"description": "Sem permissão para editar este post"},
+          "404": {"description": "Post não encontrado"},
+          "500": {"description": "Erro interno ao atualizar post"}
         }
       },
       "delete": {
         "tags": ["Posts"],
         "summary": "Deletar post",
+        "description": "Deleta um post existente. Apenas o criador do post pode deletá-lo.",
         "security": [{"BearerAuth": []}],
         "parameters": [
           {"name": "post_id", "in": "path", "required": true, "schema": {"type": "string"}}
         ],
         "responses": {
-          "200": {"description": "Post deletado"},
-          "401": {"description": "Token JWT inválido"}
+          "200": {
+            "description": "Post deletado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "success": {"type": "boolean"}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Erro ao deletar post"},
+          "401": {"description": "Token JWT inválido"},
+          "403": {"description": "Sem permissão para deletar este post"},
+          "404": {"description": "Post não encontrado"},
+          "500": {"description": "Erro interno ao deletar post"}
         }
       }
     },
@@ -201,43 +511,34 @@
       "post": {
         "tags": ["Post Votes"],
         "summary": "Votar em post",
+        "description": "Cria ou atualiza um voto em um post. Se o usuário já votou, o voto será atualizado.",
         "security": [{"BearerAuth": []}],
         "requestBody": {
           "content": {
             "application/json": {
-              "schema": {"$ref": "#/components/schemas/PostVoteCreate"}
+              "schema": {"$ref": "#/components/schemas/PostsVotesCreateRequest"}
             }
           },
           "required": true
         },
         "responses": {
-          "201": {"description": "Voto registrado"},
-          "401": {"description": "Token JWT inválido"}
-        }
-      }
-    },
-    "/api/threads/votes/post/{post_id}": {
-      "get": {
-        "tags": ["Post Votes"],
-        "summary": "Votos de um post",
-        "security": [{"BearerAuth": []}],
-        "parameters": [
-          {"name": "post_id", "in": "path", "required": true, "schema": {"type": "string"}}
-        ],
-        "responses": {
-          "200": {"description": "Lista de votos"},
-          "401": {"description": "Token JWT inválido"}
-        }
-      }
-    },
-    "/api/threads/votes/user/me": {
-      "get": {
-        "tags": ["Post Votes"],
-        "summary": "Meus votos",
-        "security": [{"BearerAuth": []}],
-        "responses": {
-          "200": {"description": "Lista de votos do usuário"},
-          "401": {"description": "Token JWT inválido"}
+          "201": {
+            "description": "Voto registrado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string", "example": "Voto registrado com sucesso!"},
+                    "success": {"type": "boolean", "example": true}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Erro ao registrar voto"},
+          "401": {"description": "Token JWT inválido"},
+          "500": {"description": "Erro interno ao registrar voto"}
         }
       }
     },
@@ -245,13 +546,29 @@
       "delete": {
         "tags": ["Post Votes"],
         "summary": "Remover voto",
+        "description": "Remove o voto do usuário em um post específico",
         "security": [{"BearerAuth": []}],
         "parameters": [
           {"name": "post_id", "in": "path", "required": true, "schema": {"type": "string"}}
         ],
         "responses": {
-          "200": {"description": "Voto removido"},
-          "401": {"description": "Token JWT inválido"}
+          "200": {
+            "description": "Voto removido com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {"type": "string"},
+                    "success": {"type": "boolean"}
+                  }
+                }
+              }
+            }
+          },
+          "400": {"description": "Erro ao remover voto"},
+          "401": {"description": "Token JWT inválido"},
+          "500": {"description": "Erro interno ao remover voto"}
         }
       }
     }
@@ -266,17 +583,44 @@
       }
     },
     "schemas": {
-      "ThreadCreate": {
+      "ThreadsType": {
         "type": "object",
         "properties": {
-          "title": {"type": "string"},
-          "content": {"type": "string"},
-          "course_id": {"type": "string"},
-          "is_anonymous": {"type": "boolean"}
+          "id": {"type": "string", "nullable": true},
+          "title": {"type": "string", "minLength": 1, "maxLength": 200},
+          "content": {"type": "string", "minLength": 1},
+          "created_by": {"type": "string", "nullable": true},
+          "is_anonymous": {"type": "boolean", "default": false},
+          "course_id": {"type": "string", "nullable": true},
+          "year": {"type": "integer", "nullable": true},
+          "created_at": {"type": "string", "nullable": true},
+          "updated_at": {"type": "string", "nullable": true},
+          "ai_suggested_answer": {"type": "string", "nullable": true},
+          "posts": {"type": "integer", "default": 0, "description": "Número de posts/respostas na thread"}
         },
-        "required": ["title", "content", "course_id"]
+        "required": ["title", "content"]
       },
-      "PostCreate": {
+      "ThreadCreateRequest": {
+        "type": "object",
+        "properties": {
+          "title": {"type": "string", "minLength": 1, "maxLength": 200, "description": "Título da thread"},
+          "content": {"type": "string", "minLength": 1, "description": "Conteúdo da thread"},
+          "is_anonymous": {"type": "boolean", "default": false, "description": "Se a thread é anônima"}
+        },
+        "required": ["title", "content"]
+      },
+      "ThreadsResponse": {
+        "type": "object",
+        "properties": {
+          "thread": {"$ref": "#/components/schemas/ThreadsType"},
+          "posts": {
+            "type": "array",
+            "items": {"$ref": "#/components/schemas/PostTypeResponse"}
+          }
+        },
+        "required": ["thread", "posts"]
+      },
+      "PostCreateRequest": {
         "type": "object",
         "properties": {
           "thread_id": {"type": "string"},
@@ -284,20 +628,65 @@
         },
         "required": ["thread_id", "content"]
       },
-      "PostUpdate": {
+      "PostUpdateRequest": {
         "type": "object",
         "properties": {
-          "content": {"type": "string"}
+          "content": {"type": "string", "minLength": 1, "description": "Novo conteúdo do post"}
         },
         "required": ["content"]
       },
-      "PostVoteCreate": {
+      "PostTypeResponse": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "thread_id": {"type": "string"},
+          "content": {"type": "string"},
+          "created_by": {"type": "string", "nullable": true},
+          "created_at": {"type": "string", "nullable": true},
+          "updated_at": {"type": "string", "nullable": true},
+          "vote": {"$ref": "#/components/schemas/PostsVotesType", "nullable": true},
+          "relevancy": {"type": "integer", "default": 0}
+        },
+        "required": ["id", "thread_id", "content"]
+      },
+      "PostsVotesCreateRequest": {
         "type": "object",
         "properties": {
           "post_id": {"type": "string"},
           "vote_type": {"type": "string", "enum": ["upvote", "downvote"]}
         },
         "required": ["post_id", "vote_type"]
+      },
+      "PostsVotesType": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string", "nullable": true},
+          "post_id": {"type": "string"},
+          "user_id": {"type": "string", "nullable": true},
+          "vote_type": {"type": "string", "enum": ["upvote", "downvote"]},
+          "created_at": {"type": "string", "nullable": true}
+        },
+        "required": ["post_id", "vote_type"]
+      },
+      "ChatInfo": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "name": {"type": "string"},
+          "is_general": {"type": "boolean"}
+        },
+        "required": ["id", "name", "is_general"]
+      },
+      "ChatMessage": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "string"},
+          "chat_id": {"type": "string"},
+          "user_id": {"type": "string"},
+          "content": {"type": "string"},
+          "created_at": {"type": "string"}
+        },
+        "required": ["id", "chat_id", "user_id", "content", "created_at"]
       },
       "AuthLogin": {
         "type": "object",
@@ -318,11 +707,27 @@
       "UserData": {
         "type": "object",
         "properties": {
-          "id": {"type": "string"},
-          "facef_code": {"type": "integer"},
           "name": {"type": "string"},
-          "email": {"type": "string", "format": "email"}
-        }
+          "code": {"type": "integer"},
+          "description": {"type": "string", "nullable": true},
+          "skills": {
+            "type": "array",
+            "items": {"type": "string"},
+            "nullable": true,
+            "description": "Lista de habilidades do usuário"
+          },
+          "links": {
+            "type": "array",
+            "items": {"type": "string"},
+            "nullable": true,
+            "description": "Lista de links do usuário"
+          },
+          "dark_mode": {"type": "boolean", "nullable": true},
+          "course_year": {"type": "integer", "nullable": true},
+          "course_id": {"type": "string", "nullable": true},
+          "course": {"type": "string", "nullable": true, "description": "Nome do curso"}
+        },
+        "required": ["name", "code"]
       }
     }
   }

@@ -38,7 +38,7 @@ async def get_user_private_rooms(authorization: str = Header(...)):
         return []
 
 
-async def check_room_access(authorization: str = Header(...), room_id: str):
+async def check_room_access(room_id: str, authorization: str = Header(...)):
     """
     Verifica se o usuário tem acesso a uma room específica
 
@@ -53,6 +53,7 @@ async def check_room_access(authorization: str = Header(...), room_id: str):
 
     Returns:
         True se o usuário tem acesso, False caso contrário
+        :param room_id:
         :param authorization:
     """
     token = authorization.replace("Bearer ", "").strip()

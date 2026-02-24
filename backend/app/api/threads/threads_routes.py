@@ -1,4 +1,6 @@
 from fastapi import APIRouter, HTTPException, Header
+from ...database.supabase_client import supabase
+
 
 from .querys.thread_querys import (
     create_thread,
@@ -76,15 +78,54 @@ async def create_new_thread(
         raise HTTPException(status_code=500, detail=f"Erro interno do servidor: {str(e)}")
 
 
+@router.get("/course", tags=["Threads"])
+async def get_my_course_threads(
+    authorization: str = Header(..., description="JWT token no formato 'Bearer <token>'")
+):
+    """
+    Retorna todas as threads do curso do usuário autenticado.
+
+    Busca automaticamente o course_id do usuário logado e retorna as threads correspondentes.
+    Requer autenticação válida.
+    """
+    # Validação e extração do token
+    if not authorization.startswith("Bearer "):
+        raise HTTPException(status_code=401, detail="Formato de token inválido. Use 'Bearer <token>'")
+
+    token = authorization.replace("Bearer ", "").strip()
+    if not token:
+        raise HTTPException(status_code=401, detail="Token JWT ausente")
+
+    user_id = await check_token(token)
+
+    if not user_id:
+        raise HTTPException(status_code=401, detail="Token inválido ou expirado")
+
+    # Busca o course_id do usuário
+    user_course_result = supabase.table("users").select("course_id").eq("id", user_id).execute()
+    if not user_course_result.data or not user_course_result.data[0].get("course_id"):
+        raise HTTPException(status_code=404, detail="Usuário não possui curso associado")
+
+    course_id = user_course_result.data[0]["course_id"]
+
+    print(f"LOG: GET THREADS BY COURSE {course_id} BY USER {user_id}")
+    try:
+        threads = await get_threads_by_course(course_id)
+        return {"threads": threads, "count": len(threads)}
+    except Exception as e:
+        print(f"ERROR: {e}")
+        raise HTTPException(status_code=500, detail=f"Erro ao buscar threads do curso: {str(e)}")
+
+
 @router.get("/course/{course_id}", tags=["Threads"])
-async def get_course_threads(
+async def get_threads_by_specific_course(
     course_id: str,
     authorization: str = Header(..., description="JWT token no formato 'Bearer <token>'")
 ):
     """
-    Retorna todas as threads de um curso específico.
+    Retorna todas as threads de um curso específico pelo course_id.
 
-    - **course_id**: ID do curso
+    - **course_id**: ID do curso específico
 
     Requer autenticação válida.
     """
@@ -97,10 +138,11 @@ async def get_course_threads(
         raise HTTPException(status_code=401, detail="Token JWT ausente")
 
     user_id = await check_token(token)
+
     if not user_id:
         raise HTTPException(status_code=401, detail="Token inválido ou expirado")
 
-    print(f"LOG: GET THREADS BY COURSE {course_id} BY USER {user_id}")
+    print(f"LOG: GET THREADS BY SPECIFIC COURSE {course_id} BY USER {user_id}")
     try:
         threads = await get_threads_by_course(course_id)
         return {"threads": threads, "count": len(threads)}

@@ -57,22 +57,29 @@ async def handle_init(sio: socketio.AsyncServer, sid: str, data: dict):
     await sio.save_session(sid, {'user_id': user_id})
 
     # Buscar rooms do usuário (geral + do curso)
+    print(f'INIT: Buscando rooms do usuário {user_id}...')
     rooms = await get_user_chats(user_id)
     room_general_id = rooms.get('room_general_id')
     room_course_id = rooms.get('room_course_id')
 
+    print(f'INIT: Rooms encontradas - Geral: {room_general_id}, Curso: {room_course_id}')
+
     # Entrar nas rooms disponíveis e enviar histórico
     if room_general_id:
+        print(f'INIT: Entrando na room geral {room_general_id}')
         await sio.enter_room(sid, room_general_id)
         messages = await fetch_chat_messages(room_general_id)
+        print(f'INIT: Enviando {len(messages)} mensagens da room geral')
         await sio.emit('room_history', {
             'room_id': room_general_id,
             'messages': messages
         }, to=sid)
 
     if room_course_id:
+        print(f'INIT: Entrando na room do curso {room_course_id}')
         await sio.enter_room(sid, room_course_id)
         messages = await fetch_chat_messages(room_course_id)
+        print(f'INIT: Enviando {len(messages)} mensagens da room do curso')
         await sio.emit('room_history', {
             'room_id': room_course_id,
             'messages': messages

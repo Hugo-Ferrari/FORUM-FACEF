@@ -40,17 +40,8 @@ async def check_token(token: str) -> str | None:
         print(f"LOG: DECODED TOKEN {res}")
 
         user_id = res["sub"]
-
-        try:
-            user_res = await get_user_by_id(user_id)
-            if not user_res:
-                return None
-
-            # Retorna facef_code para manter consistência com o resto do sistema
-            return str(user_res["facef_code"])
-        except Exception as e:
-            print(e)
-            return None
+        if user_id:
+            return  str(user_id)
 
     except Exception as e:
         print(f"Error decoding token: {e}")
