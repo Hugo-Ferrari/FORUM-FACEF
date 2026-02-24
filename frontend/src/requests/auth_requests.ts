@@ -15,7 +15,7 @@ export const req_login = async (code: number) => {
         })
         console.log("LOG: Login feito", res.data)
 
-        if(res.data.access_token){  // Corrigido: access_token em vez de token
+        if(res.data.access_token){
             console.log("LOG: Token recebido")
             setCookie("token", res.data.access_token)
         }

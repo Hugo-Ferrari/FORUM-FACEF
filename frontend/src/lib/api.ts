@@ -1,5 +1,6 @@
 import axios from "axios";
 import Router from "next/router";
+import { getCookie, deleteCookie } from "cookies-next/client";
 
 const baseURL = process.env.NEXT_PUBLIC_API_URL || "";
 
@@ -9,14 +10,13 @@ const api = axios.create({
   withCredentials: false,
 });
 
-// injeta token / user-id
+// injeta token do cookie
 api.interceptors.request.use((config) => {
   if (typeof window !== "undefined") {
-    const token = localStorage.getItem("token");
+    const token = getCookie("token");
     if (token) {
       config.headers = config.headers || {};
       config.headers["Authorization"] = `Bearer ${token}`;
-      config.headers["user-id"] = token; // remova ou ajuste se backend espera outro valor
     }
   }
   return config;
@@ -29,7 +29,7 @@ api.interceptors.response.use(
     const status = error?.response?.status;
     if (status === 401) {
       if (typeof window !== "undefined") {
-        localStorage.removeItem("token");
+        deleteCookie("token"); // Remove do cookie em vez do localStorage
         Router.push("/login");
       }
     }

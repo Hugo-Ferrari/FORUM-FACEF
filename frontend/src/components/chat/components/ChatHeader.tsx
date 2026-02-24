@@ -1,13 +1,12 @@
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
-import { Input } from '@/components/ui/input'
 import { ItemTitle } from '@/components/ui/item'
+import { User } from 'lucide-react'
 
 type ChatHeaderProps = {
     title: string
     isConnected: boolean
     userName: string
-    onUserNameChange: (name: string) => void
 }
 
 /**
@@ -16,19 +15,16 @@ type ChatHeaderProps = {
  * Responsabilidades:
  * - Exibir título do chat
  * - Mostrar status de conexão (badge verde/vermelho)
- * - Permitir edição do nome do usuário
- * - Responsivo (esconde input de nome em telas pequenas)
+ * - Exibir nome do usuário logado (apenas visualização)
  *
  * @param title - Título do chat
  * @param isConnected - Status da conexão
- * @param userName - Nome atual do usuário
- * @param onUserNameChange - Callback quando o nome muda
+ * @param userName - Nome atual do usuário logado
  */
 export function ChatHeader({
     title,
     isConnected,
-    userName,
-    onUserNameChange
+    userName
 }: ChatHeaderProps) {
     return (
         <div className="flex items-center justify-between gap-4">
@@ -42,15 +38,10 @@ export function ChatHeader({
                 </Badge>
             </div>
 
-            {/* Input de Nome do Usuário */}
-            <div className="hidden sm:flex items-center gap-2">
-                <label className="text-xs text-muted-foreground">Nome</label>
-                <Input
-                    value={userName}
-                    onChange={e => onUserNameChange(e.target.value)}
-                    aria-label="Nome de exibição"
-                    className="w-40"
-                />
+            {/* Informação do Usuário */}
+            <div className="hidden sm:flex items-center gap-2 text-muted-foreground">
+                <User className="w-4 h-4" />
+                <span className="text-sm font-medium">{userName}</span>
             </div>
         </div>
     )

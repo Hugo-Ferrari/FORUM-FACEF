@@ -16,7 +16,7 @@ async function isTokenValid(token: string): Promise<boolean> {
 
     try {
         const response = await fetch(`${API_BASE}/auth/token`, {
-            method: "POST",
+            method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`,
                 "Content-Type": "application/json",
@@ -62,29 +62,24 @@ const proxy = async (req: NextRequest) => {
         return NextResponse.next();
     }
 
-    // Only treat navigation requests (HTML) for redirects — do not redirect assets or API calls
-    const accept = req.headers.get('accept') || '';
-    const isHtmlRequest = req.method === 'GET' && accept.includes('text/html');
-    if (!isHtmlRequest) {
-        return NextResponse.next();
-    }
-
     const isLoginRoute = pathname === "/login" || pathname.startsWith("/login/");
     const isProtected: boolean = !isLoginRoute;
 
     if (isProtected) {
         // Check if token exists
         if (!token) {
+            console.log(`PROXY: No token found for ${pathname}, redirecting to login`);
             const url = new URL("/login", req.url);
             url.searchParams.set("reason", "auth_required");
             return NextResponse.redirect(url);
         }
 
-        // Validate token with backend
+        // Validate token with backend for protected routes
         const tokenIsValid = await isTokenValid(token);
 
         if (!tokenIsValid) {
             // Token is invalid or expired - clear cookie and redirect to login
+            console.log(`PROXY: Invalid token for ${pathname}, redirecting to login`);
             const url = new URL("/login", req.url);
             url.searchParams.set("reason", "token_expired");
 
@@ -94,7 +89,17 @@ const proxy = async (req: NextRequest) => {
         }
 
         // Token is valid, proceed
+        console.log(`PROXY: Valid token for ${pathname}, proceeding`);
         return NextResponse.next();
+    }
+
+    // Login route - if already has valid token, redirect to home
+    if (isLoginRoute && token) {
+        const tokenIsValid = await isTokenValid(token);
+        if (tokenIsValid) {
+            console.log(`PROXY: Already authenticated user accessing login, redirecting to home`);
+            return NextResponse.redirect(new URL("/", req.url));
+        }
     }
 
     return NextResponse.next();

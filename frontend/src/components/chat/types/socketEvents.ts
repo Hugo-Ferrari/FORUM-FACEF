@@ -29,10 +29,11 @@ export type Message = {
 
 /**
  * Dados de salas disponíveis para o usuário
+ * IMPORTANTE: Backend envia room_general_id e room_course_id (UUIDs reais)
  */
 export type AvailableRooms = {
-    chats: string[]         // IDs dos chats normais
-    private_rooms: string[] // IDs das rooms privadas (room_es, room_cd)
+    room_general_id?: string    // UUID da sala geral (todos têm acesso)
+    room_course_id?: string     // UUID da sala do curso (apenas alunos do curso)
 }
 
 /**
@@ -352,8 +353,10 @@ export function isAvailableRooms(obj: unknown): obj is AvailableRooms {
     return (
         typeof obj === 'object' &&
         obj !== null &&
-        Array.isArray((obj as AvailableRooms).chats) &&
-        Array.isArray((obj as AvailableRooms).private_rooms)
+        (typeof (obj as AvailableRooms).room_general_id === 'string' ||
+         typeof (obj as AvailableRooms).room_general_id === 'undefined') &&
+        (typeof (obj as AvailableRooms).room_course_id === 'string' ||
+         typeof (obj as AvailableRooms).room_course_id === 'undefined')
     )
 }
 

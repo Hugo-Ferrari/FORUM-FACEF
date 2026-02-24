@@ -70,7 +70,8 @@ export const useAuthStore = create<AuthState & AuthActions>()(
                       links: [],
                       dark_mode: false,
                       course: "",
-                      course_year: 0
+                      course_year: 0,
+                      course_id: ""
                   })
                 }
                 redirect("/login")

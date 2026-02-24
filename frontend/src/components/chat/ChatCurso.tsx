@@ -9,6 +9,9 @@ import { Message } from "./types/socketEvents"
 // Configuração de Rooms
 import { ROOMS } from "./config/roomsConfig"
 
+// Store de autenticação
+import { useAuthStore } from "@/store/auth_store"
+
 // Hooks customizados
 import { useChatSocket } from "./hooks/useChatSocket"
 import { useMessages } from "./hooks/useMessages"
@@ -27,14 +30,30 @@ import { generateMessageId } from "./utils/messageId"
  * Componente principal do Chat do Curso
  *
  * Conecta à room privada baseada no curso do usuário
- * Padrão: room_es (Engenharia de Software)
+ * Usa automaticamente os dados do usuário logado
  */
 function ChatCurso() {
     // ============================================
     // CONFIGURAÇÃO INICIAL
     // ============================================
-    const USER_ID = "26379" // ID fixo para testes
+    const userCode = useAuthStore(s => s.code)
+    const USER_ID = String(userCode || 0) // Converte para string, com fallback para "0"
     const ROOM_ID = ROOMS.ENGENHARIA_SOFTWARE.id // Room privada do curso
+
+    // Verificação se o usuário está logado
+    if (!userCode || userCode === 0) {
+        return (
+            <div className="max-w-7xl w-full px-4 md:px-12 flex gap-4">
+                <Item className="rounded-lg flex-1">
+                    <ItemHeader>
+                        <div className="text-center text-muted-foreground">
+                             Faça login para acessar o chat do curso
+                        </div>
+                    </ItemHeader>
+                </Item>
+            </div>
+        )
+    }
 
     // ============================================
     // ESTADO
@@ -49,8 +68,8 @@ function ChatCurso() {
     // Gerenciar mensagens
     const { messages, setMessageHistory, addMessage } = useMessages()
 
-    // Gerenciar nome do usuário
-    const { userName, updateUserName } = useUserName("Usuário")
+    // Gerenciar nome do usuário (agora obtém automaticamente da autenticação)
+    const { userName } = useUserName("Usuário")
 
     // Auto-scroll quando mensagens mudam
     const scrollRef = useAutoScroll([messages])
@@ -118,7 +137,6 @@ function ChatCurso() {
                                 title={ROOMS.ENGENHARIA_SOFTWARE.name}
                                 isConnected={isConnected}
                                 userName={userName}
-                                onUserNameChange={updateUserName}
                             />
                         </div>
                     </div>

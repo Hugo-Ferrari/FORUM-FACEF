@@ -21,6 +21,7 @@ import { ChatInput } from "./components/ChatInput"
 
 // Utilitários
 import { generateMessageId } from "./utils/messageId"
+import {useAuthStore} from "@/store/auth_store";
 
 
 /**
@@ -41,8 +42,24 @@ function ChatGeral() {
     // ============================================
     // CONFIGURAÇÃO INICIAL
     // ============================================
-    const USER_ID = "26379" // ID fixo para testes
+    const userCode = useAuthStore(s => s.code)
+    const USER_ID = String(userCode || 0) // Converte para string, com fallback para "0"
     const ROOM_ID = ROOMS.GENERAL.id // Usando room geral do config ('room_geral')
+
+    // Verificação se o usuário está logado
+    if (!userCode || userCode === 0) {
+        return (
+            <div className="max-w-7xl w-full px-4 md:px-12 flex gap-4">
+                <Item className="rounded-lg flex-1">
+                    <ItemHeader>
+                        <div className="text-center text-muted-foreground">
+                            Faça login para acessar o chat
+                        </div>
+                    </ItemHeader>
+                </Item>
+            </div>
+        )
+    }
 
     // ============================================
     // ESTADO
@@ -57,8 +74,8 @@ function ChatGeral() {
     // Gerenciar mensagens
     const { messages, setMessageHistory, addMessage } = useMessages()
 
-    // Gerenciar nome do usuário
-    const { userName, updateUserName } = useUserName("Usuário")
+    // Gerenciar nome do usuário (agora obtém automaticamente da autenticação)
+    const { userName } = useUserName("Usuário")
 
     // Auto-scroll quando mensagens mudam
     const scrollRef = useAutoScroll([messages])
@@ -112,7 +129,7 @@ function ChatGeral() {
         const message: Message = {
             id: generateMessageId(),
             text,
-            sender: USER_ID,
+            sender: USER_ID, // Agora é string
             sender_name: userName,
             created_at: new Date().toISOString(),
             chat_id: ROOM_ID  // Aqui usa chat_id porque o backend espera esse campo
@@ -139,7 +156,6 @@ function ChatGeral() {
                         title={ROOMS.GENERAL.name}  // Usando nome da configuração
                         isConnected={isConnected}
                         userName={userName}
-                        onUserNameChange={updateUserName}
                     />
                 </ItemHeader>
 

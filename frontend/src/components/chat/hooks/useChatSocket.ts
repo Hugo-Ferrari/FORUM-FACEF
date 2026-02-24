@@ -54,7 +54,6 @@ export function useChatSocket({
         if (typeof window === "undefined" || !userId) return
 
         // Criar conexão Socket.IO
-        // IMPORTANTE: Backend usa caminho /api/ws não /socket.io
         const newSocket = io("http://127.0.0.1:8000", {
             path: "/api/ws",
             withCredentials: true,
@@ -101,12 +100,21 @@ export function useChatSocket({
         })
 
         // Handler: Salas disponíveis (após init)
-        // NOTA: Backend envia "available_rooms" com campo "rooms" (não "chats")
-        newSocket.on('available_rooms', (data: { rooms: string[] }) => {
+        // NOTA: Backend envia "available_rooms" com campos "room_general_id" e "room_course_id"
+        newSocket.on('available_rooms', (data: { room_general_id?: string; room_course_id?: string }) => {
             console.log("📋 Rooms disponíveis:", data)
 
             // Auto-entrar na room usando JOIN_ROOM
-            const joinPayload = createJoinRoomPayload(roomId)
+            // Se roomId for "room_general", usa room_general_id
+            // Se roomId for "room_course", usa room_course_id
+            let targetRoomId = roomId
+            if (roomId === 'room_general' && data.room_general_id) {
+                targetRoomId = data.room_general_id
+            } else if (roomId === 'room_course' && data.room_course_id) {
+                targetRoomId = data.room_course_id
+            }
+
+            const joinPayload = createJoinRoomPayload(targetRoomId)
             newSocket.emit(SOCKET_EVENTS.OUTGOING.JOIN_ROOM, joinPayload)
         })
 
