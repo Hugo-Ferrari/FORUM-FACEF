@@ -22,7 +22,15 @@ class ThreadCreateRequest(BaseModel):
     content: str = Field(..., min_length=1, description="Conteúdo da thread")
     is_anonymous: bool = Field(default=False, description="Se a thread é anônima")
 
-
 class ThreadsResponse(BaseModel):
-    thread: ThreadsType
+    id: str
+    title: str
+    content: str
+    created_by: str
+    year: int
+    created_at: str
+    posts: Optional[int] = 0
+
+class ThreadResponse(BaseModel):
+    thread: ThreadsResponse
     posts: list[PostTypeResponse]

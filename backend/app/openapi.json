@@ -230,7 +230,7 @@
         }
       }
     },
-    "/api/threads/course/": {
+    "/api/threads/course": {
       "get": {
         "tags": ["Threads"],
         "summary": "Listar threads do meu curso",
@@ -246,7 +246,7 @@
                   "properties": {
                     "threads": {
                       "type": "array",
-                      "items": {"$ref": "#/components/schemas/ThreadsType"}
+                      "items": {"$ref": "#/components/schemas/ThreadsResponse"}
                     },
                     "count": {"type": "integer", "description": "Número total de threads"}
                   }
@@ -279,7 +279,7 @@
                   "properties": {
                     "threads": {
                       "type": "array",
-                      "items": {"$ref": "#/components/schemas/ThreadsType"}
+                      "items": {"$ref": "#/components/schemas/ThreadsResponse"}
                     },
                     "count": {"type": "integer", "description": "Número total de threads"}
                   }
@@ -306,7 +306,7 @@
             "description": "Thread retornada",
             "content": {
               "application/json": {
-                "schema": {"$ref": "#/components/schemas/ThreadsResponse"}
+                "schema": {"$ref": "#/components/schemas/ThreadResponse"}
               }
             }
           },
@@ -612,7 +612,20 @@
       "ThreadsResponse": {
         "type": "object",
         "properties": {
-          "thread": {"$ref": "#/components/schemas/ThreadsType"},
+          "id": {"type": "string"},
+          "title": {"type": "string"},
+          "content": {"type": "string"},
+          "created_by": {"type": "string", "description": "Nome do usuário ou 'Anônimo' se for anônimo"},
+          "year": {"type": "integer"},
+          "created_at": {"type": "string"},
+          "posts": {"type": "integer", "description": "Número de posts/respostas na thread"}
+        },
+        "required": ["id", "title", "content", "created_by", "year", "created_at", "posts"]
+      },
+      "ThreadResponse": {
+        "type": "object",
+        "properties": {
+          "thread": {"$ref": "#/components/schemas/ThreadsResponse"},
           "posts": {
             "type": "array",
             "items": {"$ref": "#/components/schemas/PostTypeResponse"}

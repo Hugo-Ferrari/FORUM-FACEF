@@ -1,7 +1,7 @@
 from .posts_querys import get_posts_by_thread_id
 from ....database.supabase_client import supabase
 from ....models.post_type import PostTypeResponse
-from ....models.threads_type import ThreadsType, ThreadsResponse
+from ....models.threads_type import ThreadsType, ThreadsResponse, ThreadResponse
 
 
 async def create_thread(data: ThreadsType, user_id: str) -> bool:
@@ -48,16 +48,39 @@ async def create_thread(data: ThreadsType, user_id: str) -> bool:
         print(f"LOG: ERROR CREATING THREAD: {e}")
         return False
 
-
-async def get_threads_by_course(course_id: str) -> list[ThreadsType]:
+async def get_threads_by_course(course_id: str) -> list[ThreadsResponse]:
     print(f"LOG: GET THREADS BY COURSE {course_id}")
     try:
-        data: list[ThreadsType] = supabase.table('threads').select('*').eq('course_id', course_id).execute().data
-        if data:
-            for thread in data:
-                print(thread)
-                count = supabase.table('posts').select('*').eq('thread_id', thread["id"]).execute().data
-                thread["posts"] = len(count)
+        res_data: list[ThreadsType] = supabase.table('threads').select('*').eq('course_id', course_id).execute().data
+        data = []
+
+        if res_data:
+            for thread in res_data:
+                # Verifica se a thread é anônima
+                if thread.get("is_anonymous", False):
+                    thread["created_by"] = "Anônimo"
+
+                else:
+                    # Busca o nome do usuário que criou a thread
+                    created_by_response = supabase.table("users").select("name").eq("id", thread["created_by"]).execute()
+                    if created_by_response.data:
+                        thread["created_by"] = created_by_response.data[0]["name"]
+                    else:
+                        thread["created_by"] = "Usuário Desconhecido"
+
+                # Conta os posts da thread
+                count_response = supabase.table('posts').select('*').eq('thread_id', thread["id"]).execute()
+                thread["posts"] = len(count_response.data) if count_response.data else 0
+
+                data.append(ThreadsResponse(
+                    id=thread["id"],
+                    title=thread["title"],
+                    content=thread["content"],
+                    created_by=thread["created_by"],
+                    year=thread["year"],
+                    created_at=thread["created_at"],
+                    posts=thread["posts"]
+                ))
 
             return data
         return []
@@ -65,8 +88,7 @@ async def get_threads_by_course(course_id: str) -> list[ThreadsType]:
         print(f"Erro ao pegar threads do curso {course_id}: {e}")
         return []
 
-
-async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadsResponse | None:
+async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadResponse | None:
     print(f"LOG: GET THREAD BY ID {thread_id}")
     try:
         thread_response = supabase.table('threads').select('*').eq('id', thread_id).execute()
@@ -76,25 +98,41 @@ async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadsRespon
             return None
 
         res: ThreadsType = thread_response.data[0]
+
+        # Guarda o ID original do criador para usar nas queries
+        original_created_by_id = res["created_by"]
+
+        # Verifica se a thread é anônima
+        if res.get("is_anonymous", False):
+            res["created_by"] = "Anônimo"
+        else:
+            # Busca o nome do usuário que criou a thread
+            created_by_response = supabase.table("users").select("name").eq("id", original_created_by_id).execute()
+            if created_by_response.data:
+                res["created_by"] = created_by_response.data[0]["name"]
+            else:
+                res["created_by"] = "Usuário Desconecido"
+
         print(f"LOG: THREAD DATA: {res}")
 
-        # Usa o user_id passado ou o created_by da thread
-        request_user_id = user_id if user_id else res["created_by"]
+        # Usa o user_id passado ou o ID original do criador da thread
+        request_user_id = user_id if user_id else original_created_by_id
 
         answers: list[PostTypeResponse] = await get_posts_by_thread_id(thread_id, request_user_id)
         print(f"LOG: ANSWERS DATA: {answers}")
 
-        # Adiciona o campo statistics (número de posts)
         res["posts"] = len(answers)
 
-        data: ThreadsResponse = ThreadsResponse(thread=res, posts=answers)
+        thread: ThreadsResponse = ThreadsResponse(id=res["id"], title=res["title"], content=res["content"],
+                        created_by=res["created_by"], year=res["year"], created_at=res["created_at"], posts=res["posts"])
+
+        data: ThreadResponse = ThreadResponse(thread=thread, posts=answers)
         print(f"LOG: THREAD RESPONSE: {data}")
         return data
 
     except Exception as e:
         print(f"Erro ao pegar thread {thread_id}: {e}")
         return None
-
 
 async def edit_thread_by_id(data: dict, thread_id: str) -> bool:
     print(f"LOG: Editando thread {thread_id}")
