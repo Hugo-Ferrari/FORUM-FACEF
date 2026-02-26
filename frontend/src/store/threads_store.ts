@@ -12,11 +12,9 @@ export interface Thread {
   id: string
   title: string
   content: string
-  course_id: string
   is_anonymous: boolean
   created_by: string
   created_at: string
-  updated_at: string | null
   year: number
   posts: number
 }

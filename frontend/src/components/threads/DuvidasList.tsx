@@ -7,7 +7,6 @@ import ButtonRes from "./ButtonRes"
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
 import { useThreadStore } from "@/store/threads_store"
 import {useAuthStore} from "@/store/auth_store";
-import { title } from "process"
 
 interface DuvidasListProps {
   type: "modal" | "page"
@@ -23,6 +22,7 @@ function DuvidasList({ type }: DuvidasListProps) {
 
   const {createResponse} = useThreadStore.getState()
   const course_id = useAuthStore(s => s.course_id)
+  const course = useAuthStore(s => s.course)
 
   if (!course_id) {
     return (
@@ -70,15 +70,7 @@ function DuvidasList({ type }: DuvidasListProps) {
                 className="p-3 bg-muted dark:bg-muted rounded-md shadow-sm hover:bg-muted/70 dark:hover:bg-muted/50 cursor-pointer"
                 onClick={() => handleOpenModal(thread.id)}
               >
-                <Usuario />
-
-                <div className="flex items-center mb-2">
-                  <Badge variant="secondary">
-                    <strong className="text-blue-600">
-                      {thread.course_id}
-                    </strong>
-                  </Badge>
-                </div>
+                <Usuario name={thread.created_by} course={course} course_year={thread.year} />
 
                   <p className="flex font-semibold text-lg capitalize">{thread.title}</p>
                 <p className="max-w-full break-words whitespace-pre-wrap">
@@ -101,7 +93,7 @@ function DuvidasList({ type }: DuvidasListProps) {
                       <div className="mb-2">
                         <Badge variant="secondary">
                           <strong className="text-blue-600">
-                            {thread.course_id}
+                            {thread.title}
                           </strong>
                         </Badge>
 

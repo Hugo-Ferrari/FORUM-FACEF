@@ -1,10 +1,7 @@
-import { useAuthStore } from "@/store/auth_store";
 import { CircleUserRound } from "lucide-react";
 
-function Usuario() {
-    const {name} = useAuthStore.getState()
-    const {course} = useAuthStore.getState()
-    const {course_year} = useAuthStore.getState()
+function Usuario({name, course, course_year}: {name: string, course: string, course_year: number}) {
+
     return (
         <div className="flex items-center gap-3 ">
             <CircleUserRound className="w-10 h-10 text-gray-400 dark:text-gray-500" />
