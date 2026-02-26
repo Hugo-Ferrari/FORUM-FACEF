@@ -87,7 +87,22 @@ export function ChatMessagesList({ messages, currentUserId }: ChatMessagesListPr
     return (
         <>
             {messages.map(message => {
-                const isOwnMessage = message.sender === currentUserId
+                // Converte ambos para string para garantir comparação correta
+                const messageSender = String(message.sender)
+                const userId = String(currentUserId)
+                const isOwnMessage = messageSender === userId
+
+                // Debug logs para verificar a comparação
+                console.log(`🔍 DEBUG MESSAGE:`, {
+                    messageId: message.id,
+                    messageSender: messageSender,
+                    messageSenderType: typeof message.sender,
+                    currentUserId: userId,
+                    currentUserIdType: typeof currentUserId,
+                    isOwnMessage: isOwnMessage,
+                    comparison: `${messageSender} === ${userId} = ${messageSender === userId}`
+                })
+
                 const displayTime = new Date(message.created_at).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit"

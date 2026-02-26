@@ -121,19 +121,22 @@ export function useChatSocket({
         // Handler: Histórico da room
         // NOTA: Backend envia "room_history" não "chat_history"
         newSocket.on(SOCKET_EVENTS.INCOMING.ROOM_HISTORY, (data: IncomingEvents.RoomHistory) => {
-            console.log(`📜 Histórico da ${data.room_id}:`, data.messages.length, "mensagens")
-            if (data.room_id === roomId) {
-                onMessagesReceived(data.messages)
-            }
+            console.log(`📜 Histórico recebido da room ${data.room_id}:`, data.messages.length, "mensagens")
+            console.log(`📜 Room atual do frontend: ${roomId}`)
+            console.log(`📜 Mensagens:`, data.messages)
+
+            // Aceita histórico de qualquer room, pois o backend mapeia IDs amigáveis para UUIDs
+            onMessagesReceived(data.messages)
         })
 
         // Handler: Nova mensagem na room
         // NOTA: Backend envia "room_response" não "chat_response"
         newSocket.on(SOCKET_EVENTS.INCOMING.ROOM_RESPONSE, (data: IncomingEvents.RoomResponse) => {
-            console.log("💬 Nova mensagem:", data)
-            if (data.room_id === roomId) {
-                onNewMessage(data.message)
-            }
+            console.log("💬 Nova mensagem recebida:", data)
+            console.log(`💬 Room da mensagem: ${data.room_id}, Room atual: ${roomId}`)
+
+            // Aceita mensagem de qualquer room relacionada ao usuário atual
+            onNewMessage(data.message)
         })
 
         // Handler: Erros

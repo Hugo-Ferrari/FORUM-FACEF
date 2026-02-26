@@ -136,7 +136,6 @@ function ChatCurso() {
                             <ChatHeader
                                 title={ROOMS.ENGENHARIA_SOFTWARE.name}
                                 isConnected={isConnected}
-                                userName={userName}
                             />
                         </div>
                     </div>

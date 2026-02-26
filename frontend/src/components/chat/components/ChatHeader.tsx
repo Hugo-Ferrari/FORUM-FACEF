@@ -1,12 +1,10 @@
 import React from 'react'
 import { Badge } from '@/components/ui/badge'
 import { ItemTitle } from '@/components/ui/item'
-import { User } from 'lucide-react'
 
 type ChatHeaderProps = {
     title: string
     isConnected: boolean
-    userName: string
 }
 
 /**
@@ -19,12 +17,10 @@ type ChatHeaderProps = {
  *
  * @param title - Título do chat
  * @param isConnected - Status da conexão
- * @param userName - Nome atual do usuário logado
  */
 export function ChatHeader({
     title,
     isConnected,
-    userName
 }: ChatHeaderProps) {
     return (
         <div className="flex items-center justify-between gap-4">
@@ -36,12 +32,6 @@ export function ChatHeader({
                 <Badge className={`${isConnected ? 'bg-green-500' : 'bg-red-500'} text-white dark:text-black`}>
                     {isConnected ? 'Conectado' : 'Desconectado'}
                 </Badge>
-            </div>
-
-            {/* Informação do Usuário */}
-            <div className="hidden sm:flex items-center gap-2 text-muted-foreground">
-                <User className="w-4 h-4" />
-                <span className="text-sm font-medium">{userName}</span>
             </div>
         </div>
     )

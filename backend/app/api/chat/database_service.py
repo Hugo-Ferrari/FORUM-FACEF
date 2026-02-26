@@ -87,10 +87,10 @@ async def fetch_chat_messages(chat_id: str):
                 user_data = msg.get('users')
 
                 if user_data:
-                    sender = user_data.get('facef_code')
+                    sender = str(user_data.get('facef_code'))  # Converte para string
                     sender_name = user_data.get('name', 'Usuário')
                 else:
-                    sender = msg.get('sender_id')
+                    sender = str(msg.get('sender_id'))  # Converte para string
                     sender_name = 'Usuário'
 
                 frontend_msg = {

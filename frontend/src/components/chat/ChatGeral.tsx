@@ -155,7 +155,6 @@ function ChatGeral() {
                     <ChatHeader
                         title={ROOMS.GENERAL.name}  // Usando nome da configuração
                         isConnected={isConnected}
-                        userName={userName}
                     />
                 </ItemHeader>
 
