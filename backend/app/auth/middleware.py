@@ -11,7 +11,12 @@ ALGORITHM = "HS256"
 
 class JWTAuthMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
-        # Só protege rotas que começam com /api
+        # Permite requisições OPTIONS sem autenticação (necessário para CORS preflight)
+        if request.method == "OPTIONS":
+            response = await call_next(request)
+            return response
+
+        # Só protege rotas que começam com /api (exceto OPTIONS)
         if request.url.path.startswith("/api"):
             auth_header = request.headers.get("Authorization", "")
             token = auth_header.replace("Bearer ", "").strip()

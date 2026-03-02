@@ -51,7 +51,14 @@ async def create_thread(data: ThreadsType, user_id: str) -> bool:
 async def get_threads_by_course(course_id: str) -> list[ThreadsResponse]:
     print(f"LOG: GET THREADS BY COURSE {course_id}")
     try:
-        res_data: list[ThreadsType] = supabase.table('threads').select('*').eq('course_id', course_id).execute().data
+        # Usar JOIN para buscar threads com informações do usuário de uma vez
+        res_data = supabase.table('threads')\
+            .select('*, users!created_by(name)')\
+            .eq('course_id', course_id)\
+            .execute().data
+
+        print(f"LOG: Raw response data: {res_data}")
+
         data = []
 
         if res_data:
@@ -59,18 +66,31 @@ async def get_threads_by_course(course_id: str) -> list[ThreadsResponse]:
                 # Verifica se a thread é anônima
                 if thread.get("is_anonymous", False):
                     thread["created_by"] = "Anônimo"
-
                 else:
-                    # Busca o nome do usuário que criou a thread
-                    created_by_response = supabase.table("users").select("name").eq("id", thread["created_by"]).execute()
-                    if created_by_response.data:
-                        thread["created_by"] = created_by_response.data[0]["name"]
+                    # Com JOIN, os dados do usuário vêm no campo "users"
+                    user_data = thread.get("users")
+                    if user_data and isinstance(user_data, dict) and "name" in user_data:
+                        thread["created_by"] = str(user_data["name"])
                     else:
                         thread["created_by"] = "Usuário Desconhecido"
 
                 # Conta os posts da thread
                 count_response = supabase.table('posts').select('*').eq('thread_id', thread["id"]).execute()
                 thread["posts"] = len(count_response.data) if count_response.data else 0
+
+                # Validação extra - garantir que created_by seja sempre uma string
+                if isinstance(thread["created_by"], dict):
+                    print(f"LOG: WARNING - created_by is still a dict: {thread['created_by']}")
+                    if "name" in thread["created_by"]:
+                        thread["created_by"] = str(thread["created_by"]["name"])
+                    else:
+                        thread["created_by"] = "Usuário Desconhecido"
+                    print(f"LOG: WARNING - fixed created_by to: {thread['created_by']}")
+                elif not isinstance(thread["created_by"], str):
+                    print(f"LOG: WARNING - created_by is not string: {thread['created_by']} (type: {type(thread['created_by'])})")
+                    thread["created_by"] = str(thread["created_by"])
+
+                print(f"LOG: FINAL - thread['created_by']: {thread['created_by']} (type: {type(thread['created_by'])})")
 
                 data.append(ThreadsResponse(
                     id=thread["id"],
@@ -107,11 +127,18 @@ async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadRespons
             res["created_by"] = "Anônimo"
         else:
             # Busca o nome do usuário que criou a thread
+            print(f"LOG: DEBUG - res['created_by'] before query: {original_created_by_id} (type: {type(original_created_by_id)})")
             created_by_response = supabase.table("users").select("name").eq("id", original_created_by_id).execute()
-            if created_by_response.data:
-                res["created_by"] = created_by_response.data[0]["name"]
+            print(f"LOG: DEBUG - created_by_response: {created_by_response.data}")
+            if created_by_response.data and len(created_by_response.data) > 0:
+                # Garantir que estamos pegando apenas o nome (string)
+                user_name = created_by_response.data[0].get("name", "Usuário Desconhecido")
+                print(f"LOG: DEBUG - user_name extracted: {user_name} (type: {type(user_name)})")
+                res["created_by"] = str(user_name)  # Garantir que é string
             else:
-                res["created_by"] = "Usuário Desconecido"
+                res["created_by"] = "Usuário Desconhecido"
+
+            print(f"LOG: DEBUG - res['created_by'] after processing: {res['created_by']} (type: {type(res['created_by'])})")
 
         print(f"LOG: THREAD DATA: {res}")
 
