@@ -4,7 +4,8 @@ from ...api.threads.querys.posts_querys import (
     create_post,
     get_post_by_id,
     edit_post_by_id,
-    delete_post_by_id
+    delete_post_by_id,
+    get_posts_by_thread_id
 )
 from ...auth.user_querys import check_token
 from ...models.post_type import PostCreateRequest, PostUpdateRequest
@@ -56,6 +57,30 @@ async def get_post(post_id: str):
         print(f"ERROR: {e}")
         raise HTTPException(status_code=500, detail=f"Erro ao buscar post: {str(e)}")
 
+
+@router.get("/thread/{thread_id}")
+async def list_posts_for_thread(
+    thread_id: str,
+    authorization: str = Header(...)
+):
+    """
+    Retorna todos os posts de uma única thread.
+
+    - **thread_id**: ID da thread
+    """
+    token = authorization.replace("Bearer ", "").strip()
+    user_id = await check_token(token)
+
+    if not user_id:
+        raise HTTPException(status_code=500, detail="Erro ao validar token: usuário não encontrado")
+
+    print(f"LOG: GET POSTS FOR THREAD {thread_id} BY USER {user_id}")
+    try:
+        posts = await get_posts_by_thread_id(thread_id, user_id)
+        return posts
+    except Exception as e:
+        print(f"ERROR fetching thread posts: {e}")
+        raise HTTPException(status_code=500, detail=f"Erro ao listar posts da thread: {str(e)}")
 
 @router.patch("/{post_id}")
 async def update_post(
