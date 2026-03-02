@@ -3,11 +3,11 @@
 import React, { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import Usuario from "../user/Usuario"
+import Link from "next/link"
 import ButtonRes from "./ButtonRes"
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
 import { useThreadStore } from "@/store/threads_store"
 import {useAuthStore} from "@/store/auth_store";
-import {usePostStore} from "@/store/posts_store";
 
 interface DuvidasListProps {
   type: "modal" | "page"
@@ -21,7 +21,7 @@ function DuvidasList({ type }: DuvidasListProps) {
 
   console.log(threads)
 
-  const {createPost} = usePostStore.getState()
+  const {createResponse} = useThreadStore.getState()
   const course_id = useAuthStore(s => s.course_id)
   const course = useAuthStore(s => s.course)
 
@@ -36,7 +36,7 @@ function DuvidasList({ type }: DuvidasListProps) {
   const handleSendResponse = async (threadId: string) => {
     if (!responseText.trim()) return
 
-    await createPost(threadId, responseText)
+    await createResponse(threadId, responseText)
 
     setResponseText("")
     handleCloseModal()
@@ -73,7 +73,13 @@ function DuvidasList({ type }: DuvidasListProps) {
               >
                 <Usuario name={thread.created_by} course={course} course_year={thread.year} />
 
-                  <p className="flex font-semibold text-lg capitalize">{thread.title}</p>
+                  {type === "page" ? (
+                    <Link href={`/respostas/${thread.id}`} className="flex font-semibold text-lg capitalize text-blue-600">
+                      {thread.title}
+                    </Link>
+                  ) : (
+                    <p className="flex font-semibold text-lg capitalize">{thread.title}</p>
+                  )}
                 <p className="max-w-full break-words whitespace-pre-wrap">
                   {thread.content}
                 </p>
@@ -104,6 +110,7 @@ function DuvidasList({ type }: DuvidasListProps) {
                       </div>
 
                       <hr className="my-3" />
+                    <Link href={`/respostas/${thread.id}`}>
 
                       <h4 className="text-md font-semibold mb-2">
                         Respostas
@@ -112,6 +119,8 @@ function DuvidasList({ type }: DuvidasListProps) {
                       <p className="text-gray-500 mb-2">
                         Total de respostas: {thread.posts}
                       </p>
+                    
+                    </Link>
 
                       <textarea
                         value={responseText}

@@ -1,8 +1,10 @@
 import {
     req_get_thread_by_course_id,
     req_create_threads,
-    ThreadResponse
+    ThreadResponse,
+    req_get_thread_by_id
 } from "@/requests/threads_request"
+import { req_create_post } from "@/requests/posts_requests";
 
 import { persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand"
@@ -21,9 +23,13 @@ export interface Thread {
 interface ThreadStore {
   threads: Thread[]
   count: number
+  currentThread: Thread | null
 
   fetchThreadsByCourse: (course_id: string) => Promise<void>
+  fetchThreadById: (thread_id: string) => Promise<void>
   createThread: (title: string,content: string,course_id: string,is_anonymous: boolean) => Promise<void>
+
+  createResponse: (thread_id: string, content: string) => Promise<void>
 }
 
 export const useThreadStore = create<ThreadStore>()(
@@ -31,17 +37,29 @@ export const useThreadStore = create<ThreadStore>()(
         ((set, get) => ({
               threads: [],
               count: 0,
+              currentThread: null,
 
               fetchThreadsByCourse: async (course_id) => {
                 try {
                   const data: ThreadResponse = await req_get_thread_by_course_id(course_id)
 
                   set({
-                    threads: data.threads.reverse(),
-                    count: data.count
+                    threads: [data.thread].reverse(),
+                    count: data.posts.length
                   })
                 } catch (err: any) {
                   console.error("Erro ao buscar threads:", err)
+                }
+              },
+
+              fetchThreadById: async (thread_id) => {
+                try {
+                  const res: ThreadResponse = await req_get_thread_by_id(thread_id)
+                  if (res.thread) {
+                    set({ currentThread: res.thread })
+                  }
+                } catch (err: any) {
+                  console.error("Erro ao buscar thread:", err)
                 }
               },
 
@@ -58,6 +76,24 @@ export const useThreadStore = create<ThreadStore>()(
 
                 } catch (err: any) {
                   console.error("Erro ao criar thread:", err)
+                }
+              },
+
+              createResponse: async (thread_id, content) => {
+                try {
+                  await req_create_post(thread_id, content)
+
+                  // Incrementa o contador de posts na thread
+                  set((state) => ({
+                    threads: state.threads.map((thread) =>
+                        thread.id === thread_id
+                            ? { ...thread, posts: thread.posts + 1 }
+                            : thread
+                    )
+                  }))
+
+                } catch (err: any) {
+                  console.error("Erro ao criar resposta:", err)
                 }
               },
             })
