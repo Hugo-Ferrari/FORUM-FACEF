@@ -3,7 +3,6 @@ import {
     req_create_threads,
     ThreadResponse
 } from "@/requests/threads_request"
-import { req_create_post } from "@/requests/posts_requests";
 
 import { persist, createJSONStorage } from "zustand/middleware";
 import { create } from "zustand"
@@ -25,8 +24,6 @@ interface ThreadStore {
 
   fetchThreadsByCourse: (course_id: string) => Promise<void>
   createThread: (title: string,content: string,course_id: string,is_anonymous: boolean) => Promise<void>
-
-  createResponse: (thread_id: string, content: string) => Promise<void>
 }
 
 export const useThreadStore = create<ThreadStore>()(
@@ -61,24 +58,6 @@ export const useThreadStore = create<ThreadStore>()(
 
                 } catch (err: any) {
                   console.error("Erro ao criar thread:", err)
-                }
-              },
-
-              createResponse: async (thread_id, content) => {
-                try {
-                  await req_create_post(thread_id, content)
-
-                  // Incrementa o contador de posts na thread
-                  set((state) => ({
-                    threads: state.threads.map((thread) =>
-                        thread.id === thread_id
-                            ? { ...thread, posts: thread.posts + 1 }
-                            : thread
-                    )
-                  }))
-
-                } catch (err: any) {
-                  console.error("Erro ao criar resposta:", err)
                 }
               },
             })

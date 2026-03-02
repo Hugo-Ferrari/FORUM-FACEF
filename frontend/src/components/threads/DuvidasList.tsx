@@ -7,6 +7,7 @@ import ButtonRes from "./ButtonRes"
 import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
 import { useThreadStore } from "@/store/threads_store"
 import {useAuthStore} from "@/store/auth_store";
+import {usePostStore} from "@/store/posts_store";
 
 interface DuvidasListProps {
   type: "modal" | "page"
@@ -20,7 +21,7 @@ function DuvidasList({ type }: DuvidasListProps) {
 
   console.log(threads)
 
-  const {createResponse} = useThreadStore.getState()
+  const {createPost} = usePostStore.getState()
   const course_id = useAuthStore(s => s.course_id)
   const course = useAuthStore(s => s.course)
 
@@ -35,7 +36,7 @@ function DuvidasList({ type }: DuvidasListProps) {
   const handleSendResponse = async (threadId: string) => {
     if (!responseText.trim()) return
 
-    await createResponse(threadId, responseText)
+    await createPost(threadId, responseText)
 
     setResponseText("")
     handleCloseModal()

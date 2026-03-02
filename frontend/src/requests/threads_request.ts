@@ -1,26 +1,34 @@
 import axios from "axios"
 import { getCookie } from "cookies-next"
 import {Thread} from "@/store/threads_store";
-import { threadId } from "worker_threads";
-
-const token = getCookie("token")
-
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
-const api = axios.create({
-  baseURL: API_BASE,
-  withCredentials: true,
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-})
 
 export interface ThreadResponse {
   threads: Thread[],
   count: number
 }
 
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+// Função para criar um cliente com token dinamico
+const createApiClient = () => {
+  const token = getCookie("token")
+  const headers: any = {
+    'Content-Type': 'application/json',
+  }
+
+  if (token) {
+    headers.Authorization = `Bearer ${token}`
+  }
+
+  return axios.create({
+    baseURL: API_BASE,
+    withCredentials: true,
+    headers
+  })
+}
+
 export const req_create_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<void> => {
   try {
+    const api = createApiClient()
     const res = await api.post(
       "/api/threads",
       {
@@ -45,6 +53,7 @@ export const req_create_threads = async (title: string,content: string,course_id
 
 export const req_get_thread_by_course_id = async (course_id: string): Promise<ThreadResponse> => {
   try {
+    const api = createApiClient()
     const res = await api.get<ThreadResponse>(
       `/api/threads/course/${course_id}`
     )
@@ -59,6 +68,7 @@ export const req_get_thread_by_course_id = async (course_id: string): Promise<Th
 }
 export const req_get_thread_by_id = async (thread_id: string): Promise<ThreadResponse> => {
   try {
+    const api = createApiClient()
     const res = await api.get<ThreadResponse>(`/api/threads/${thread_id}`)
 
     return res.data
