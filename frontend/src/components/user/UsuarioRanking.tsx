@@ -1,5 +1,6 @@
 import React from 'react'
 import Usuario from './Usuario'
+import { useAuthStore } from '@/store/auth_store';
 
 interface TypeUser {
   colocacao: "primeiro" | "segundo" | "terceiro";
@@ -18,6 +19,10 @@ function UsuarioRanking({ colocacao, pontos }: TypeUser) {
     segundo: "bg-gray-400",
     terceiro: "bg-[#CD7F32]"
   }
+
+  const name = useAuthStore(states => states.name)
+  const course = useAuthStore(states => states.course)
+  const course_year = useAuthStore(states => states.course_year)
   
   return (
     <div className="max-h-[32vh] overflow-y-auto pr-2 bg-background">
@@ -28,7 +33,7 @@ function UsuarioRanking({ colocacao, pontos }: TypeUser) {
             {colocacaotitulo[colocacao]}
           </div>
 
-          <Usuario />
+          <Usuario name={name} course={course}course_year={course_year} />
 
           <strong className="text-blue-600 text-lg ml-60">{pontos}</strong>
 

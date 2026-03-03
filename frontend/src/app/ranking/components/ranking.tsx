@@ -1,4 +1,5 @@
-import ButtonRanking from "@/app/components/ranking/ButtonRanking";
+import ButtonRanking from "./ButtonRanking";
+
 
 function Ranking() {
     return (
