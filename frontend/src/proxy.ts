@@ -57,7 +57,8 @@ const proxy = async (req: NextRequest) => {
     const token = req.cookies.get("token")?.value;
 
     // Paths that should always be allowed (assets, api, next internals, public files)
-    const ignoredPrefixes = ["/_next", "/static", "/assets", "/public", "/api", "/favicon.ico", "/robots.txt", "/manifest.json"];
+    
+    const ignoredPrefixes = ["/_next", "/static", "/assets", "/public", "/img", "/api", "/favicon.ico", "/robots.txt", "/manifest.json"];
     if (ignoredPrefixes.some(prefix => pathname.startsWith(prefix))) {
         return NextResponse.next();
     }

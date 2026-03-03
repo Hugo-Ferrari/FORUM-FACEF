@@ -5,8 +5,9 @@ import Usuario from "@/components/user/Usuario"
 import { useThreadStore, Thread } from "@/store/threads_store"
 import { usePostStore } from "@/store/posts_store"
 import { useAuthStore } from "@/store/auth_store"
-
 import PostItem from "../components/PostItem"
+
+
 
 interface Props {
   params: { threadId: string }
@@ -17,7 +18,6 @@ export default function RespostasPage({ params }: Props) {
   const { currentThread, fetchThreadById } = useThreadStore()
 
   const name = useAuthStore(state => state.name)
-  const course_year = useAuthStore(state => state.course_year)
   const course = useAuthStore(state => state.course)
 
   const sortedPosts = [...posts].sort((a, b) => b.relevancy - a.relevancy) 

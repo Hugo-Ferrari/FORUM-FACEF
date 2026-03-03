@@ -65,6 +65,7 @@ function Nav() {
         {/* logo */}
         <Link href="#" className="flex items-center">
           <div className="relative h-12 w-44 md:w-52">
+            {/* using root-relative path to public folder */}
             <Image src="/img/Uni-FACEF.png" alt="Uni-FACEF" className="object-contain" fill />
           </div>
         </Link>

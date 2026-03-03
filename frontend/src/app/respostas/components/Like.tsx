@@ -17,7 +17,6 @@ function Like({ postId, relevancy, currentVote }: LikeProps) {
   const [localVote, setLocalVote] = useState<number | null>(currentVote)
   const [error, setError] = useState<string | null>(null)
 
- 
 
   const handleUpvote = async () => {
     try {
@@ -62,9 +61,7 @@ function Like({ postId, relevancy, currentVote }: LikeProps) {
         <button
           className={`flex items-center gap-1 transition-colors ${
             localVote === 1
-            ? 'text-green-500 hover:text-green-600'
-              : 'hover:text-green-500 text-gray-600'
-          } disabled:opacity-50`}
+            ? 'text-green-500 hover:text-green-600': 'hover:text-green-500 text-gray-600'} disabled:opacity-50`}
           onClick={handleUpvote}
           disabled={loading}
           title="Votar positivamente"
