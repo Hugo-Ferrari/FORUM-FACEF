@@ -26,7 +26,7 @@ export default function RespostasPage({ params }: Props) {
 
     fetchThreadById(params.threadId)
     fetchPostsByThread(params.threadId)
-  }, [params.threadId, fetchThreadById, fetchPostsByThread])
+  }, [fetchThreadById, fetchPostsByThread])
 
   console.log("currentThread", currentThread)
   console.log("posts", posts)

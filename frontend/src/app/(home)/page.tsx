@@ -8,6 +8,7 @@ import {useAuthStore} from "@/store/auth_store";
 import {useThreadStore} from "@/store/threads_store";
 import { usePostStore } from "@/store/posts_store";
 import { threadId } from "worker_threads";
+import ThreadsIa from "@/components/ia/threadsIa";
 
 export default function Home() {
     const course_id = useAuthStore(s => s.course_id)
@@ -44,8 +45,8 @@ export default function Home() {
               </div>
               <div className='mt-10 w-full flex'>
                   <CourseThreads />
-                  <div className="ml-15 mt-15">
-                    <AllEvents />
+                  <div className="ml-15 mt-5">
+                    <ThreadsIa/>
                   </div>
               </div>
           </div>

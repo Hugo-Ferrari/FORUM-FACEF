@@ -24,7 +24,7 @@ export interface Post {
 export const req_create_post = async (thread_id: string, content: string): Promise<Post> => {
   try {
     const res = await api.post<Post>(
-      "/api/threads/posts",
+      "/api/threads/posts/",
       {
         thread_id,
         content,
