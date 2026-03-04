@@ -4,53 +4,29 @@ import React, { useState } from "react"
 import { Badge } from "@/components/ui/badge"
 import Usuario from "../user/Usuario"
 import Link from "next/link"
-import ButtonRes from "./ButtonRes"
-import { ArrowDown, ArrowUp, MessageCircle } from "lucide-react"
+import { MessageCircle, X } from "lucide-react"
 import { useThreadStore } from "@/store/threads_store"
-import {useAuthStore} from "@/store/auth_store";
+import { useAuthStore } from "@/store/auth_store"
 
 interface DuvidasListProps {
-  type: "modal" | "page"
+  type: "page"
 }
 
 function DuvidasList({ type }: DuvidasListProps) {
-  const [openThreadId, setOpenThreadId] = useState<string | null>(null)
-  const [responseText, setResponseText] = useState("")
-
+  const [selectedThread, setSelectedThread] = useState<string | null>(null)
   const threads = useThreadStore(s => s.threads || [])
-
-  console.log(threads)
-
-  const {createResponse} = useThreadStore.getState()
-  const course_id = useAuthStore(s => s.course_id)
   const course = useAuthStore(s => s.course)
+  const course_id = useAuthStore(s => s.course_id)
 
   if (!course_id) {
     return (
-        <div className='bg-background min-h-screen w-full overflow-x-hidden flex items-center justify-center'>
-          <p>Loading course data...</p>
-        </div>
+      <div className="bg-background min-h-screen w-full overflow-x-hidden flex items-center justify-center">
+        <p>Carregando dados do curso...</p>
+      </div>
     )
   }
 
-  const handleSendResponse = async (threadId: string) => {
-    if (!responseText.trim()) return
-
-    await createResponse(threadId, responseText)
-
-    setResponseText("")
-    handleCloseModal()
-  }
-
-  const handleOpenModal = (threadId: string) => {
-    setOpenThreadId(threadId)
-    setResponseText("")
-  }
-
-  const handleCloseModal = () => {
-    setOpenThreadId(null)
-    setResponseText("")
-  }
+  const selectedThreadData = threads.find(t => t.id === selectedThread)
 
   return (
     <div className="mt-3 w-full ml-2 bg-background p-3">
@@ -68,101 +44,75 @@ function DuvidasList({ type }: DuvidasListProps) {
             {threads.map((thread) => (
               <li
                 key={thread.id}
-                className="p-3 bg-muted dark:bg-muted rounded-md shadow-sm hover:bg-muted/70 dark:hover:bg-muted/50 cursor-pointer"
-                onClick={() => handleOpenModal(thread.id)}
+                className="p-3 bg-muted dark:bg-muted rounded-md shadow-sm hover:bg-muted/70 dark:hover:bg-muted/50 cursor-pointer transition"
+                onClick={() => setSelectedThread(thread.id)}
               >
                 <Usuario name={thread.created_by} course={course} course_year={thread.year} />
 
-                  {type === "page" ? (
-                    <Link href={`/respostas/${thread.id}`} className="flex font-semibold text-lg capitalize text-blue-600">
-                      {thread.title}
-                    </Link>
-                  ) : (
-                    <p className="flex font-semibold text-lg capitalize">{thread.title}</p>
-                  )}
-                <p className="max-w-full break-words whitespace-pre-wrap">
+                {type === "page" ? (
+                  <Link href={`/respostas/${thread.id}`} className="font-semibold text-lg capitalize text-blue-600 hover:underline block">
+                    {thread.title}
+                  </Link>
+                ) : (
+                  <p className="font-semibold text-lg capitalize">{thread.title}</p>
+                )}
+                
+                <p className="text-sm text-gray-600 dark:text-gray-400 mt-1 line-clamp-2">
                   {thread.content}
                 </p>
 
-                {openThreadId === thread.id && (
-                  <div
-                    className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center"
-                    onClick={handleCloseModal}
-                  >
-                    <div
-                      className="bg-white dark:bg-card p-4 rounded-lg shadow-lg max-w-md w-full"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      <h3 className="text-lg font-semibold mb-2">
-                        Dúvida
-                      </h3>
-
-                      <div className="mb-2">
-                        <Badge variant="secondary">
-                          <strong className="text-blue-600">
-                            {thread.title}
-                          </strong>
-                        </Badge>
-
-                        <p className="mt-2 text-black dark:text-white">
-                          {thread.content}
-                        </p>
-                      </div>
-
-                      <hr className="my-3" />
-                    <Link href={`/respostas/${thread.id}`}>
-
-                      <h4 className="text-md font-semibold mb-2">
-                        Respostas
-                      </h4>
-
-                      <p className="text-gray-500 mb-2">
-                        Total de respostas: {thread.posts}
-                      </p>
-                    
-                    </Link>
-
-                      <textarea
-                        value={responseText}
-                        onChange={(e) =>
-                          setResponseText(e.target.value)
-                        }
-                        placeholder="Digite sua resposta"
-                        className="w-full border border-border rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-card text-black dark:text-white"
-                        rows={3}
-                      />
-
-                      <div className="flex justify-end gap-2">
-                        <button
-                          onClick={handleCloseModal}
-                          className="px-4 py-2 bg-gray-400 text-white rounded hover:bg-gray-500"
-                        >
-                          Fechar
-                        </button>
-
-                        <button
-                          onClick={() => handleSendResponse(thread.id)}
-                          className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
-                        >
-                          Enviar resposta
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {type === "page" && (
-                  <ButtonRes
-                    icon1={ArrowUp}
-                    icon2={ArrowDown}
-                    numberVot={1120}
-                    numberRes={thread.posts}
-                    respostasIcon={MessageCircle}
-                  />
-                )}
+                <div className="flex items-center gap-2 mt-2 text-sm text-gray-500">
+                  <MessageCircle size={16} />
+                  <span>{thread.posts} resposta{thread.posts !== 1 ? "s" : ""}</span>
+                </div>
               </li>
             ))}
           </ul>
+        </div>
+      )}
+
+      {selectedThread && selectedThreadData && (
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center p-4">
+          <div
+            className="bg-white dark:bg-card p-6 rounded-lg shadow-lg max-w-md w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="flex justify-between items-start mb-4">
+              <h3 className="text-lg font-semibold">Dúvida</h3>
+              <button
+                onClick={() => setSelectedThread(null)}
+                className="text-gray-500 hover:text-gray-700 dark:hover:text-gray-300"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <Badge variant="secondary" className="mb-3">
+              <strong className="text-blue-600">
+                {selectedThreadData.title}
+              </strong>
+            </Badge>
+
+            <p className="text-black dark:text-white mb-4">
+              {selectedThreadData.content}
+            </p>
+
+            <hr className="my-4" />
+
+            <div className="mb-4">
+              <h4 className="text-md font-semibold mb-2">Respostas</h4>
+              <p className="text-gray-500 mb-4">
+                Total: {selectedThreadData.posts} resposta{selectedThreadData.posts !== 1 ? "s" : ""}
+              </p>
+            </div>
+
+            <Link
+              href={`/respostas/${selectedThreadData.id}`}
+              className="w-full inline-block px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition text-center"
+            >
+              Ver respostas
+            </Link>
+          </div>
         </div>
       )}
     </div>

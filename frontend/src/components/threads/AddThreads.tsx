@@ -77,7 +77,7 @@ function AddThreads() {
         </PopoverContent>
       </Popover>
 
-      <DuvidasList  type={"modal"} />
+      <DuvidasList  type={"page"} />
     </div>
   )
 }
