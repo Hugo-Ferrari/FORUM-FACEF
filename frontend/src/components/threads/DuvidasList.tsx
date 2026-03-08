@@ -14,9 +14,11 @@ interface DuvidasListProps {
 
 function DuvidasList({ type }: DuvidasListProps) {
   const [selectedThread, setSelectedThread] = useState<string | null>(null)
-  const threads = useThreadStore(s => s.threads || [])
+  const thread = useThreadStore(s => s.threads)
   const course = useAuthStore(s => s.course)
   const course_id = useAuthStore(s => s.course_id)
+
+  
 
   if (!course_id) {
     return (
@@ -26,7 +28,7 @@ function DuvidasList({ type }: DuvidasListProps) {
     )
   }
 
-  const selectedThreadData = threads.find(t => t.id === selectedThread)
+  const selectedThreadData = thread.find(t => t?.id === selectedThread)
 
   return (
     <div className="mt-3 w-full ml-2 bg-background p-3">
@@ -34,20 +36,20 @@ function DuvidasList({ type }: DuvidasListProps) {
         Dúvidas
       </h2>
 
-      {threads.length === 0 ? (
+      {thread.length === 0 ? (
         <p className="text-gray-600 ml-3">
           Nenhuma dúvida adicionada ainda.
         </p>
       ) : (
         <div className="max-h-[32vh] overflow-y-auto pr-2 bg-background">
           <ul className="space-y-2">
-            {threads.map((thread) => (
+            {thread.map(thread=> (
               <li
                 key={thread.id}
                 className="p-3 bg-muted dark:bg-muted rounded-md shadow-sm hover:bg-muted/70 dark:hover:bg-muted/50 cursor-pointer transition"
                 onClick={() => setSelectedThread(thread.id)}
               >
-                <Usuario name={thread.created_by} course={course} course_year={thread.year} />
+                <Usuario name={thread.created_by} course={course} course_year={thread.year ? Number(thread.year) : 1} />
 
                 {type === "page" ? (
                   <Link href={`/respostas/${thread.id}`} className="font-semibold text-lg capitalize text-blue-600 hover:underline block">

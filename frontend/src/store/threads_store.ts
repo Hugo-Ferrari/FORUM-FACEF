@@ -42,7 +42,10 @@ export const useThreadStore = create<ThreadStore>()(
               fetchThreadsByCourse: async (course_id) => {
                 try {
                   const data: ThreadResponse = await req_get_thread_by_course_id(course_id)
-
+                  if(!data.thread){
+                    set({threads :[], count :0})
+                    return
+                  }
                   set({
                     threads: [data.thread].reverse(),
                     count: data.posts.length

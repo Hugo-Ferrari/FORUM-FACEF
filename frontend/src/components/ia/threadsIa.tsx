@@ -21,7 +21,7 @@ function ThreadsIa() {
     setTimeout(() => {
       const respostaIa: Mensagem = {
         autor: "Ia",
-        texto: "Resposta simulada"
+        texto: "Resposta automatica"
       }
       setMensagens(prev => [...prev, respostaIa])
     }, 1000)
