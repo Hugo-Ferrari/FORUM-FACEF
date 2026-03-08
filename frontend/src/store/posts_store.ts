@@ -10,12 +10,12 @@ import {
   req_update_post,
 } from "@/requests/posts_requests"
 import { req_remove_vote, req_vote_post } from "@/requests/vote_post_request"
+import {useThreadStore} from "@/store/threads_store";
 
 interface PostState {
   posts: Post[]
   loading: boolean
   error: string | null
-  
   fetchPostsByThread: (thread_id: string) => Promise<void>
   createPost: (thread_id: string, content: string) => Promise<void>
   searchPostById: (post_id: string) => Promise<Post>
@@ -31,117 +31,76 @@ export const usePostStore = create<PostState>()(
 
       fetchPostsByThread: async (thread_id) => {
         try {
-          set({ loading: true, error: null })
-
           const posts = await req_get_posts_by_thread(thread_id)
-
-          set({ posts, loading: false })
+          set({ posts })
         } catch (err: any) {
-          set({ error: err.message, loading: false })
+          console.error("Erro ao buscar posts:", err)
         }
       },
 
       createPost: async (thread_id, content) => {
         try {
-          set({ loading: true, error: null })
+          await req_create_post(thread_id, content)
+          await get().fetchPostsByThread(thread_id)
+          await useThreadStore.getState().fetchThreadById(thread_id)
 
-          const newPost = await req_create_post(thread_id, content)
-
-          set((state) => ({
-            posts: [...state.posts, newPost],
-            loading: false,
-          }))
         } catch (err: any) {
-          set({
-            error: err.message,
-            loading: false,
-          })
+          console.error("Erro ao criar post:", err)
+          throw err
         }
       },
 
       searchPostById: async (post_id) => {
         try {
-          set({ loading: true, error: null })
-
-          const post = await req_search_post_id(post_id)
-
-          set({ loading: false })
-
-          return post
+          return await req_search_post_id(post_id)
         } catch (err: any) {
-          set({
-            error: err.message,
-            loading: false,
-          })
           throw err
         }
       },
 
       updatePost: async (post_id, data) => {
         try {
-          set({ loading: true, error: null })
-
           const updated = await req_update_post(post_id, data)
-
           set((state) => ({
             posts: state.posts.map((p) =>
               p.id === post_id ? updated : p
             ),
-            loading: false,
           }))
         } catch (err: any) {
-          set({
-            error: err.message,
-            loading: false,
-          })
+          console.error("Erro ao atualizar post:", err)
+          throw err
         }
       },
 
       votePost: async (post_id, vote_type) => {
         try {
-          set({ loading: true, error: null })
-
           await req_vote_post({ post_id, vote_type })
-
           const voteChange = vote_type === 'upvote' ? 1 : -1
-
           set((state) => ({
             posts: state.posts.map((p) =>
               p.id === post_id
                 ? { ...p, relevancy: p.relevancy + voteChange, vote: vote_type === 'upvote' ? 1 : -1 }
                 : p
             ),
-            loading: false,
           }))
         } catch (err: any) {
-          set({
-            error: err.message,
-            loading: false,
-          })
+          console.error("Erro ao votar no post:", err)
           throw err
         }
       },
 
       removeVote: async (post_id) => {
         try {
-          set({ loading: true, error: null })
-
           await req_remove_vote(post_id)
 
-          
           set((state) => ({
             posts: state.posts.map((p) =>
               p.id === post_id
                 ? { ...p, relevancy: p.relevancy - (p.vote === 1 ? 1 : -1), vote: null }
                 : p
             ),
-            loading: false,
           }))
         } catch (err: any) {
-          set({
-            error: err.message,
-            loading: false,
-          })
           throw err
         }
       },

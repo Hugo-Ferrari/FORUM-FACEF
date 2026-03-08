@@ -17,7 +17,6 @@ function PostItem({ post }: PostItemProps) {
     locale: ptBR,
   })
 
-  const name = useAuthStore(state => state.name)
   const course = useAuthStore(state => state.course)
   const course_year = useAuthStore(state => state.course_year)
   
@@ -25,7 +24,7 @@ function PostItem({ post }: PostItemProps) {
     <div className="border rounded-lg p-4 bg-white shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-3">
         <div className="flex items-center gap-3">
-          <Usuario name={name} course={course} course_year={course_year} />
+          <Usuario name={post.created_by} course={course} course_year={course_year} />
           <span className="text-sm text-gray-500 ">{timeAgo}</span>
         </div>
       </div>

@@ -2,7 +2,7 @@ import {
     req_get_thread_by_course_id,
     req_create_threads,
     ThreadResponse,
-    req_get_thread_by_id
+    req_get_thread_by_id, ThreadsListResponse
 } from "@/requests/threads_request"
 import { req_create_post } from "@/requests/posts_requests";
 
@@ -41,19 +41,17 @@ export const useThreadStore = create<ThreadStore>()(
 
               fetchThreadsByCourse: async (course_id) => {
                 try {
-                  const data: ThreadResponse = await req_get_thread_by_course_id(course_id)
-                  if(!data.thread){
-                    set({threads :[], count :0})
-                    return
-                  }
+                  const data: ThreadsListResponse = await req_get_thread_by_course_id(course_id)
+                    console.log(data)
+
                   set({
-                    threads: [data.thread].reverse(),
-                    count: data.posts.length
+                    threads: data.threads,
+                    count: data.count
                   })
                 } catch (err: any) {
-                  console.error("Erro ao buscar threads:", err)
                 }
               },
+
 
               fetchThreadById: async (thread_id) => {
                 try {

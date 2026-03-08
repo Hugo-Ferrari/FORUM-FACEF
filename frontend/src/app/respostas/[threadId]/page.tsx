@@ -2,24 +2,39 @@
 
 import React, { useEffect, useState } from "react"
 import Usuario from "@/components/user/Usuario"
-import { useThreadStore, Thread } from "@/store/threads_store"
+import { useThreadStore } from "@/store/threads_store"
 import { usePostStore } from "@/store/posts_store"
 import { useAuthStore } from "@/store/auth_store"
 import PostItem from "../components/PostItem"
 import { req_create_post } from "@/requests/posts_requests"
+import { usePathname } from "next/navigation";
 
 
-interface Props {
-  params: { threadId: string }
-}
 
-export default function RespostasPage({ params }: Props) {
-  const { posts, fetchPostsByThread } = usePostStore()
-  const { currentThread, fetchThreadById } = useThreadStore()
+
+export default function RespostasPage() {
+  const slug = usePathname().split("/").pop() || ""
+
+  console.log(slug)
+  const {fetchPostsByThread } = usePostStore()
+  const posts = usePostStore(state => state.posts)
+
+  const {fetchThreadById } = useThreadStore()
+    const currentThread = useThreadStore(state => state.currentThread)
+
   const [responseText, setResponseText] = useState("")
   const name = useAuthStore(state => state.name)
   const course = useAuthStore(state => state.course)
 
+  useEffect(() => {
+    if (slug) {
+      const loadData = async () => {
+        await fetchThreadById(slug)
+        await fetchPostsByThread(slug)
+      }
+      loadData()
+    }
+  }, [slug]);
 
 
   const handleSendResponse = async () => {

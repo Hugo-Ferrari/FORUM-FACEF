@@ -2,18 +2,13 @@
 
 import Block from "@/components/DisplayBlock";
 import React, {useEffect} from "react";
-import AllEvents from "../calendario/components/allEvents";
 import CourseThreads from "@/components/threads/CourseThreads";
 import {useAuthStore} from "@/store/auth_store";
 import {useThreadStore} from "@/store/threads_store";
-import { usePostStore } from "@/store/posts_store";
-import { threadId } from "worker_threads";
 import ThreadsIa from "@/components/ia/threadsIa";
 
 export default function Home() {
     const course_id = useAuthStore(s => s.course_id)
-    
-
    
     useEffect(() => {
         if (course_id)  {

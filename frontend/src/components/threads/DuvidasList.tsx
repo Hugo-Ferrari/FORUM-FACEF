@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from "react"
+import React, {useEffect, useState} from "react"
 import { Badge } from "@/components/ui/badge"
 import Usuario from "../user/Usuario"
 import Link from "next/link"
@@ -18,7 +18,11 @@ function DuvidasList({ type }: DuvidasListProps) {
   const course = useAuthStore(s => s.course)
   const course_id = useAuthStore(s => s.course_id)
 
-  
+  useEffect(() => {
+    if (course_id) {
+      useThreadStore.getState().fetchThreadsByCourse(course_id)
+    }
+  }, [course_id])
 
   if (!course_id) {
     return (

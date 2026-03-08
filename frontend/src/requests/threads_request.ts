@@ -1,7 +1,6 @@
 import axios from "axios"
 import { getCookie } from "cookies-next"
 import {Thread} from "@/store/threads_store";
-import { threadId } from "worker_threads";
 
 const token = getCookie("token")
 
@@ -16,7 +15,12 @@ const api = axios.create({
 
 export interface ThreadResponse {
   thread: Thread,
-  posts: any[] 
+  count: number
+}
+
+export interface ThreadsListResponse {
+  threads: Thread[],
+  count: number
 }
 
 export const req_create_threads = async (title: string,content: string,course_id: string,is_anonymous: boolean): Promise<void> => {
@@ -43,9 +47,9 @@ export const req_create_threads = async (title: string,content: string,course_id
   }
 }
 
-export const req_get_thread_by_course_id = async (course_id: string): Promise<ThreadResponse> => {
+export const req_get_thread_by_course_id = async (course_id: string): Promise<ThreadsListResponse> => {
   try {
-    const res = await api.get<ThreadResponse>(
+    const res = await api.get<ThreadsListResponse>(
       `/api/threads/course/${course_id}`
     )
 
