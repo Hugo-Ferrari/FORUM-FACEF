@@ -2,6 +2,7 @@ from .posts_querys import get_posts_by_thread_id
 from ....database.supabase_client import supabase
 from ....models.post_type import PostTypeResponse
 from ....models.threads_type import ThreadsType, ThreadsResponse, ThreadResponse
+from ....utils.return_name import return_name
 
 
 async def create_thread(data: ThreadsType, user_id: str) -> bool:
@@ -125,18 +126,12 @@ async def get_thread_by_id(thread_id: str, user_id: str = None) -> ThreadRespons
         # Verifica se a thread é anônima
         if res.get("is_anonymous", False):
             res["created_by"] = "Anônimo"
+
         else:
             # Busca o nome do usuário que criou a thread
             print(f"LOG: DEBUG - res['created_by'] before query: {original_created_by_id} (type: {type(original_created_by_id)})")
-            created_by_response = supabase.table("users").select("name").eq("id", original_created_by_id).execute()
-            print(f"LOG: DEBUG - created_by_response: {created_by_response.data}")
-            if created_by_response.data and len(created_by_response.data) > 0:
-                # Garantir que estamos pegando apenas o nome (string)
-                user_name = created_by_response.data[0].get("name", "Usuário Desconhecido")
-                print(f"LOG: DEBUG - user_name extracted: {user_name} (type: {type(user_name)})")
-                res["created_by"] = str(user_name)  # Garantir que é string
-            else:
-                res["created_by"] = "Usuário Desconhecido"
+            name = await return_name(original_created_by_id)
+            res["created_by"] = name if name else "Usuário Desconecido"
 
             print(f"LOG: DEBUG - res['created_by'] after processing: {res['created_by']} (type: {type(res['created_by'])})")
 

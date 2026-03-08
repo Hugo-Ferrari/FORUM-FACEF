@@ -1,6 +1,7 @@
 from .posts_vote_query import get_post_votes, get_user_post_id_vote
 from ....database.supabase_client import supabase
 from ....models.post_type import PostCreateRequest, PostTypeResponse
+from ....utils.return_name import return_name
 
 
 async def create_post(data: PostCreateRequest, user_id: str) -> bool:
@@ -31,6 +32,14 @@ async def get_post_by_id(post_id: str) -> PostTypeResponse | None:
 
         post_data = result.data[0]
         print(f"LOG: POST DATA: {post_data}")
+
+        if post_data['created_by'] is None:
+            print("LOG: POST CREATED_BY IS NULL")
+            post_data['created_by'] = 'Usuario desconhecido'
+        else:
+            name = await return_name(post_data['created_by'])
+            post_data['created_by'] = name if name else 'Usuario desconhecido'
+
 
         # Busca os votos do post
         try:
@@ -77,6 +86,8 @@ async def get_posts_by_thread_id(thread_id: str, user_id: str) -> list[PostTypeR
             # Cria estatísticas do post
 
             print(f"LOG: GET VOTES FOR POST {post_data['id']}")
+            post_data['created_by'] = await return_name(post_data['created_by'])
+            
 
             try:
                 votes_result = await get_post_votes(post_data['id'])

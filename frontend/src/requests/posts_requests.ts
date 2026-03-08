@@ -1,16 +1,19 @@
 import axios from "axios"
 import { getCookie } from "cookies-next"
 
-const token = getCookie("token")
-
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
-const api = axios.create({
-  baseURL: API_BASE,
-  withCredentials: true,
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-})
+
+const createApiClient = () => {
+  const token = getCookie("token")
+  return axios.create({
+    baseURL: API_BASE,
+    withCredentials: true,
+    headers: {
+      Authorization: token ? `Bearer ${token}` : undefined
+    }
+  })
+}
+
 export interface Post {
   id: string
   thread_id: string
@@ -23,6 +26,7 @@ export interface Post {
 }
 export const req_create_post = async (thread_id: string, content: string): Promise<Post> => {
   try {
+    const api = createApiClient()
     const res = await api.post<Post>(
       "/api/threads/posts/",
       {
@@ -46,6 +50,7 @@ export interface UpdatePost{
 }
 export const req_search_post_id = async(post_id: string): Promise<Post> =>{
     try{
+        const api = createApiClient()
         const res = await api.get<Post>(`/api/threads/posts/${post_id}`)
 
         return res.data
@@ -60,6 +65,7 @@ export const req_search_post_id = async(post_id: string): Promise<Post> =>{
 
 export const req_update_post = async(post_id: string, data: UpdatePost ): Promise<Post> =>{ 
     try{
+        const api = createApiClient()
         const res = await api.patch<Post>(`/api/threads/posts/${post_id}`,data)
 
         return res.data
@@ -74,6 +80,7 @@ export const req_update_post = async(post_id: string, data: UpdatePost ): Promis
 
 export const req_get_posts_by_thread = async(thread_id: string): Promise<Post[]> => {
   try {
+    const api = createApiClient()
     const res = await api.get<Post[]>(`/api/threads/posts/thread/${thread_id}`)
 
     return res.data
