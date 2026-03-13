@@ -1,14 +1,18 @@
 import {  CircleUserRound } from "lucide-react"
 import { Badge } from "../ui/badge"
-
-export default function UserHall(){
+interface UserHallProps{
+    name: string,
+    pontos: number,
+    email: string,
+}
+export function UserHall({name, pontos, email}: UserHallProps){
     return(
         <div className=" bg-gray-300 flex flex-col max-w-50">
             <CircleUserRound/>
             <h1>
-                nome
+                {name}
             </h1>
-            <p>email</p>
+            <p>{email}</p>
 
         
         <Badge variant={"secondary"}>
@@ -16,7 +20,7 @@ export default function UserHall(){
         </Badge>
         
         <p>
-            9999
+            {pontos}
         </p>
         <p>Pontos totais </p>
         </div>

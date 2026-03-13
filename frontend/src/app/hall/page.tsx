@@ -1,5 +1,7 @@
 import { Badge } from '@/components/ui/badge'
-import UserHall from '@/components/user/UserHall'
+import { UserHall } from '@/components/user/UserHall'
+
+
 import { Star } from 'lucide-react'
 import { Playwrite_CA } from 'next/font/google'
 import React from 'react'
@@ -28,7 +30,10 @@ function page() {
       </header>
       <div>
         <section>
-          <UserHall></UserHall>
+            <UserHall name={"hugo"} email= {"batata@123"} pontos ={999}></UserHall>
+            <UserHall name={"hugo"} email= {"batata@123"} pontos ={999}></UserHall>
+            <UserHall name={"hugo"} email= {"batata@123"} pontos ={999}></UserHall>
+            <UserHall name={"hugo"} email= {"batata@123"} pontos ={999}></UserHall>
 
         </section>
       </div>
