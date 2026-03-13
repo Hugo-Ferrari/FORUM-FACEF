@@ -18,6 +18,7 @@ function DuvidasList({ type }: DuvidasListProps) {
   const course = useAuthStore(s => s.course)
   const course_id = useAuthStore(s => s.course_id)
 
+
   useEffect(() => {
     if (course_id) {
       useThreadStore.getState().fetchThreadsByCourse(course_id)
