@@ -1,8 +1,8 @@
 import {
-    req_get_thread_by_course_id,
-    req_create_threads,
-    ThreadResponse,
-    req_get_thread_by_id, ThreadsListResponse
+  req_get_thread_by_course_id,
+  req_create_threads,
+  ThreadResponse,
+  req_get_thread_by_id, ThreadsListResponse
 } from "@/requests/threads_request"
 import { req_create_post } from "@/requests/posts_requests";
 
@@ -27,87 +27,86 @@ interface ThreadStore {
 
   fetchThreadsByCourse: (course_id: string) => Promise<void>
   fetchThreadById: (thread_id: string) => Promise<void>
-  createThread: (title: string,content: string,course_id: string,is_anonymous: boolean) => Promise<void>
+  createThread: (title: string, content: string, course_id: string, is_anonymous: boolean) => Promise<void>
 
   createResponse: (thread_id: string, content: string) => Promise<void>
 }
 
 export const useThreadStore = create<ThreadStore>()(
-    persist(
-        ((set, get) => ({
-              threads: [],
-              count: 0,
-              currentThread: null,
+  persist(
+    ((set, get) => ({
+      threads: [],
+      count: 0,
+      currentThread: null,
 
-              fetchThreadsByCourse: async (course_id) => {
-                try {
-                  const data: ThreadsListResponse = await req_get_thread_by_course_id(course_id)
-                    console.log(data)
-
-                  set({
-                    threads: data.threads,
-                    count: data.count
-                  })
-                } catch (err: any) {
-                }
-              },
-
-
-              fetchThreadById: async (thread_id) => {
-                try {
-                  const res: ThreadResponse = await req_get_thread_by_id(thread_id)
-                  if (res.thread) {
-                    set({ currentThread: res.thread })
-                  }
-                } catch (err: any) {
-                  console.error("Erro ao buscar thread:", err)
-                }
-              },
-
-              createThread: async (title, content, course_id, is_anonymous) => {
-                try {
-                  await req_create_threads(
-                      title,
-                      content,
-                      course_id,
-                      is_anonymous
-                  )
-
-                    await get().fetchThreadsByCourse(course_id)
-
-                } catch (err: any) {
-                  console.error("Erro ao criar thread:", err)
-                }
-              },
-
-              createResponse: async (thread_id, content) => {
-                try {
-                  await req_create_post(thread_id, content)
-
-                  // Incrementa o contador de posts na thread
-                  set((state) => ({
-                    threads: state.threads.map((thread) =>
-                        thread.id === thread_id
-                            ? { ...thread, posts: thread.posts + 1 }
-                            : thread
-                    )
-                  }))
-
-                } catch (err: any) {
-                  console.error("Erro ao criar resposta:", err)
-                }
-              },
-            })
-        ), {
-          name: "thread-storage",
-          storage: createJSONStorage(() =>
-              typeof window !== "undefined" && typeof window.localStorage !== "undefined"
-                  ? window.localStorage
-                  : {
-                    getItem: () => null,
-                    setItem: () => {},
-                    removeItem: () => {},
-                  }),
+      fetchThreadsByCourse: async (course_id) => {
+        try {
+          const data = await req_get_thread_by_course_id(course_id)
+          set({
+            threads: data.threads || [], 
+            count: data.count || 0
+          })
+        } catch (err: any) {
+          console.error("ERRO NA API DE THREADS:", err.message) 
         }
-    )
+      },
+
+
+      fetchThreadById: async (thread_id) => {
+        try {
+          const res: ThreadResponse = await req_get_thread_by_id(thread_id)
+          if (res.thread) {
+            set({ currentThread: res.thread })
+          }
+        } catch (err: any) {
+          console.error("Erro ao buscar thread:", err)
+        }
+      },
+
+      createThread: async (title, content, course_id, is_anonymous) => {
+        try {
+          await req_create_threads(
+            title,
+            content,
+            course_id,
+            is_anonymous
+          )
+
+          await get().fetchThreadsByCourse(course_id)
+
+        } catch (err: any) {
+          console.error("Erro ao criar thread:", err)
+        }
+      },
+
+      createResponse: async (thread_id, content) => {
+        try {
+          await req_create_post(thread_id, content)
+
+          // coloca um contador de posts na thread
+          set((state) => ({
+            threads: state.threads.map((thread) =>
+              thread.id === thread_id
+                ? { ...thread, posts: thread.posts + 1 }
+                : thread
+            )
+          }))
+
+        } catch (err: any) {
+          console.error("Erro ao criar resposta:", err)
+        }
+      },
+    })
+    ), {
+    name: "thread-storage",
+    storage: createJSONStorage(() =>
+      typeof window !== "undefined" && typeof window.localStorage !== "undefined"
+        ? window.localStorage
+        : {
+          getItem: () => null,
+          setItem: () => { },
+          removeItem: () => { },
+        }),
+  }
+  )
 )

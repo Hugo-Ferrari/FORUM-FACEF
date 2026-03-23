@@ -24,7 +24,7 @@ type NavItem = {
 
 const navItems: NavItem[] = [
   { href: "/", label: "Início", Icon: House },
-  { href: "/curso", label: "Curso", Icon: Book },
+  /*{ href: "/curso", label: "Curso", Icon: Book },*/
   { href: "/chat", label: "Chat Geral", Icon: MessageSquareText },
   { href: "/ranking", label: "Ranking", Icon: Trophy },
   { href: "/hall", label: "Hall da Fama", Icon: CircleStar },

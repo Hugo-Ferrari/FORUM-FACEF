@@ -1,86 +1,107 @@
-import { LucideIcon } from 'lucide-react'
+"use client"
+
+import { LucideIcon, ThumbsUp, ThumbsDown, MessageSquare, X } from 'lucide-react'
 import React, { useState } from 'react'
-import { Badge } from '../ui/badge'
+import {  AnimatePresence } from 'framer-motion'
 import DuvidasList from './DuvidasList'
 
 interface PropsButton {
   numberVot: number
   numberRes: number
-  icon1: LucideIcon
-  icon2: LucideIcon
-  respostasIcon: LucideIcon
 }
 
 function ButtonRes({
   numberVot,
   numberRes,
-  icon1: Icon1,
-  icon2: Icon2,
-  respostasIcon: RespostasIcon,
 }: PropsButton) {
-
   const [open, setOpen] = useState<boolean>(false)
   const [votes, setVotes] = useState<number>(numberVot)
+  const [userVote, setUserVote] = useState<'up' | 'down' | null>(null)
 
-  const formattedRes = numberRes.toLocaleString('pt-BR')
+  const handleUpvote = (e: React.MouseEvent) => {
+    e.stopPropagation()
+    if (userVote === 'up') {
+      setVotes(v => v - 1)
+      setUserVote(null)
+    } else {
+      setVotes(v => v + (userVote === 'down' ? 2 : 1))
+      setUserVote('up')
+    }
+  }
 
   return (
-    <div className="flex gap-2">
+    <div className="flex items-center gap-3">
+      
+      <div className="flex items-center gap-1 bg-muted/50 rounded-lg p-1 border border-border">
+        <button
+          onClick={handleUpvote}
+          className={`p-1.5 rounded-md transition-colors ${
+            userVote === 'up' ? 'text-primary bg-primary/10' : 'text-muted-foreground hover:bg-muted'
+          }`}
+        >
+          <ThumbsUp size={16} className={userVote === 'up' ? 'fill-current' : ''} />
+        </button>
+        
+        <span className="text-xs font-bold px-1 min-w-[20px] text-center">
+          {votes}
+        </span>
 
-      {/* 🔹 SE NÃO ESTIVER ABERTO → MOSTRA BOTÃO DE COMENTÁRIOS */}
-      {!open && (
-        <Badge variant="secondary">
-          <button
-            className="flex items-center gap-1 hover:text-blue-500"
-            onClick={() => setOpen(true)}
-          >
-            <RespostasIcon size={16} />
-            <span>{formattedRes}</span>
-          </button>
-        </Badge>
-      )}
+        <button
+          onClick={(e) => {
+            e.stopPropagation()
+            setUserVote(userVote === 'down' ? null : 'down')
+          }}
+          className={`p-1.5 rounded-md transition-colors ${
+            userVote === 'down' ? 'text-red-500 bg-red-500/10' : 'text-muted-foreground hover:bg-muted'
+          }`}
+        >
+          <ThumbsDown size={16} className={userVote === 'down' ? 'fill-current' : ''} />
+        </button>
+      </div>
 
-      {/* 🔹 SE ESTIVER ABERTO → MOSTRA LIKE E DISLIKE */}
-      {open && (
-        <>
-          <Badge variant="secondary">
-            <button
-              className="flex items-center gap-1 hover:text-green-500"
-              onClick={() => setVotes(v => v + 1)}
-            >
-              <Icon1 size={16} />
-              <span>{votes}</span>
-            </button>
-          </Badge>
+      
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-2 px-3 py-2 rounded-lg bg-muted/50 border border-border hover:border-primary/40 hover:bg-muted transition-all text-muted-foreground hover:text-primary"
+      >
+        <MessageSquare size={16} />
+        <span className="text-xs font-bold">{numberRes}</span>
+      </button>
 
-          <Badge variant="secondary">
-            <button
-              className="flex items-center gap-1 hover:text-red-500"
-              onClick={() => setVotes(v => v - 1)}
-            >
-              <Icon2 size={16} />
-            </button>
-          </Badge>
-        </>
-      )}
-
-      {/* 🔹 MODAL */}
-      {open && (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-          <div className="bg-white p-4 rounded-lg shadow-lg max-w-md w-full">
-            <button
-              className="text-red-500 mb-2"
-              onClick={() => setOpen(false)}
-            >
-              Fechar
-            </button>
-
-            <DuvidasList
-              type="modal"
+      
+      <AnimatePresence>
+        {open && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+            
+            <div onClick={() => setOpen(false)}
+              className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             />
+
+            
+            <div className="bg-card border border-border w-full max-w-2xl max-h-[85vh] rounded-3xl shadow-2xl overflow-hidden relative z-10"
+            >
+              
+              <div className="flex items-center justify-between p-6 border-b border-border bg-muted/30">
+                <div className="flex items-center gap-2">
+                  <MessageSquare className="text-primary w-5 h-5" />
+                  <h2 className="font-bold text-lg">Respostas e Discussão</h2>
+                </div>
+                <button
+                  className="p-2 hover:bg-muted rounded-full transition-colors text-muted-foreground hover:text-foreground"
+                  onClick={() => setOpen(false)}
+                >
+                  <X size={20} />
+                </button>
+              </div>
+
+              
+              <div className="p-6 overflow-y-auto max-h-[calc(85vh-80px)]">
+                <DuvidasList type="modal" />
+              </div>
+            </div>
           </div>
-        </div>
-      )}
+        )}
+      </AnimatePresence>
     </div>
   )
 }

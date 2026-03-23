@@ -46,7 +46,7 @@ export const ROOM_ENGENHARIA_SOFTWARE: Room = {
     name: 'Engenharia de Software',
     type: 'private',
     description: 'Sala privada para alunos de Engenharia de Software',
-    icon: '💻'
+    icon: '💻' // queria colocar icones do lucide mas vou quebrar o codigo quase todo
 }
 
 export const ROOM_CIENCIA_DADOS: Room = {

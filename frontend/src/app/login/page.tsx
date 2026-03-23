@@ -17,6 +17,7 @@ import Link from 'next/link'
 import Image from 'next/image'
 import { Mail, ArrowRight, Hourglass } from 'lucide-react'
 import { useAuthStore } from "@/store/auth_store"
+import { Button } from '@/components/ui/button'
 
 export default function Login() {
   const router = useRouter()
@@ -161,7 +162,7 @@ export default function Login() {
                 </div>
               </div>
 
-              <button
+              <Button
                 type="submit"
                 disabled={loading}
                 className="w-full bg-blue-600 hover:bg-[#0d3d7a] text-white dark:text-black font-semibold py-2.5 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-60 disabled:cursor-not-allowed shadow-md"
@@ -177,7 +178,7 @@ export default function Login() {
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}
-              </button>
+              </Button>
             </form>
 
             <div className="relative my-6">

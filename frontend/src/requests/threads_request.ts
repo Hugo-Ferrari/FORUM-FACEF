@@ -5,12 +5,19 @@ import {Thread} from "@/store/threads_store";
 const token = getCookie("token")
 
 const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000"
+
 const api = axios.create({
   baseURL: API_BASE,
   withCredentials: true,
-  headers: {
-    Authorization: `Bearer ${token}`
+})
+
+
+api.interceptors.request.use((config) => {
+  const token = getCookie("token")
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`
   }
+  return config
 })
 
 export interface ThreadResponse {

@@ -1,10 +1,10 @@
 'use client'
 
 import { usePostStore } from '@/store/posts_store'
-import { Badge } from '@/components/ui/badge'
-import { ThumbsUp, ThumbsDown } from 'lucide-react'
+import { ThumbsUp, ThumbsDown, AlertCircle } from 'lucide-react'
 import React, { useState } from 'react'
-
+import { motion, AnimatePresence } from 'framer-motion'
+import { Button } from '@/components/ui/button'
 
 interface LikeProps {
   postId: string
@@ -17,16 +17,13 @@ function Like({ postId, relevancy, currentVote }: LikeProps) {
   const [localVote, setLocalVote] = useState<number | null>(currentVote)
   const [error, setError] = useState<string | null>(null)
 
-
   const handleUpvote = async () => {
     try {
       setError(null)
-      if (localVote ===1 ) {
-        
+      if (localVote === 1) {
         await removeVote(postId)
         setLocalVote(null)
       } else {
-        
         await votePost(postId, 'upvote')
         setLocalVote(1)
       }
@@ -34,15 +31,14 @@ function Like({ postId, relevancy, currentVote }: LikeProps) {
       setError(err.message)
     }
   }
+
   const handleDownvote = async () => {
     try {
       setError(null)
       if (localVote === -1) {
-        
         await removeVote(postId)
         setLocalVote(null)
       } else {
-        
         await votePost(postId, 'downvote')
         setLocalVote(-1)
       }
@@ -52,40 +48,64 @@ function Like({ postId, relevancy, currentVote }: LikeProps) {
   }
 
   return (
-    <div className="flex gap-2 items-center">
-      {error && (
-        <span className="text-red-500 text-sm">{error}</span>
-      )}
-      
-      <Badge variant="secondary" className="flex items-center gap-2">
-        <button
-          className={`flex items-center gap-1 transition-colors ${
-            localVote === 1
-            ? 'text-green-500 hover:text-green-600': 'hover:text-green-500 text-gray-600'} disabled:opacity-50`}
+    <div className="flex flex-col gap-2">
+      <div className="flex items-center bg-slate-100/80 dark:bg-slate-800/50 p-1 rounded-xl w-fit border border-slate-200/50 dark:border-slate-700/50 backdrop-blur-sm">
+          
+        <Button
           onClick={handleUpvote}
           disabled={loading}
-          title="Votar positivamente"
+          className={`group flex items-center justify-center p-2 rounded-lg transition-all ${
+            localVote === 1
+              ? 'bg-white dark:bg-slate-700 shadow-sm text-emerald-500'
+              : 'text-slate-400 hover:text-emerald-500 hover:bg-emerald-50 dark:hover:bg-emerald-500/10'
+          }`}
+          title="Útil"
         >
-          <ThumbsUp size={16} />
-        </button>
+          <ThumbsUp 
+            size={18} 
+            className={`transition-transform group-active:scale-125 ${localVote === 1 ? 'fill-current' : ''}`} 
+          />
+        </Button>
 
-        <span className="text-sm font-semibold min-w-[24px] text-center">
-          {relevancy}
-        </span>
+        
+        <div className="px-3 min-w-[40px] text-center">
+          <span className={`text-sm font-bold tabular-nums ${
+            localVote === 1 ? 'text-emerald-600 dark:text-emerald-400' : 
+            localVote === -1 ? 'text-rose-600 dark:text-rose-400' : 
+            'text-slate-600 dark:text-slate-300'
+          }`}>
+            {relevancy}
+          </span>
+        </div>
 
-        <button
-          className={`flex items-center gap-1 transition-colors ${
-            localVote === -1
-              ? 'text-red-500 hover:text-red-600'
-              : 'hover:text-red-500 text-gray-600'
-          } disabled:opacity-50`}
+        
+        <Button
           onClick={handleDownvote}
           disabled={loading}
-          title="Votar negativamente"
+          className={`group flex items-center justify-center p-2 rounded-lg transition-all ${
+            localVote === -1
+              ? 'bg-white dark:bg-slate-700 shadow-sm text-rose-500'
+              : 'text-slate-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-500/10'
+          }`}
+          title="Não foi útil"
         >
-          <ThumbsDown size={16} />
-        </button>
-      </Badge>
+          <ThumbsDown 
+            size={18} 
+            className={`transition-transform group-active:scale-125 ${localVote === -1 ? 'fill-current' : ''}`} 
+          />
+        </Button>
+      </div>
+
+      
+      <AnimatePresence>
+        {error && (
+          <div className="flex items-center gap-1.5 text-rose-500 text-[10px] font-bold uppercase tracking-wider ml-1"
+          >
+            <AlertCircle size={12} />
+            {error}
+          </div>
+        )}
+      </AnimatePresence>
     </div>
   )
 }

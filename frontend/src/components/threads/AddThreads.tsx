@@ -6,10 +6,10 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover"
-import DuvidasList from "./DuvidasList"
-import {useThreadStore} from "@/store/threads_store";
-import {useAuthStore} from "@/store/auth_store";
+import { Plus, Send, Sparkles, X } from "lucide-react"
 
+import { useThreadStore } from "@/store/threads_store"
+import { useAuthStore } from "@/store/auth_store"
 
 function AddThreads() {
   const [title, setTitle] = useState("")
@@ -17,68 +17,89 @@ function AddThreads() {
   const [loading, setLoading] = useState(false)
   const [open, setOpen] = useState<boolean>(false)
 
-
   const course_id = useAuthStore(s => s.course_id)
 
-  if (!course_id) {
-    return (
-        <div className='bg-background min-h-screen w-full overflow-x-hidden flex items-center justify-center'>
-          <p>Loading course data...</p>
-        </div>
-    )
-  }
+  if (!course_id) return null
 
   const handleAddThreads = () => {
+    if (!title.trim()) return
     setLoading(true)
     const { createThread } = useThreadStore.getState()
     createThread(title, content, course_id, false).then(() => {
       setOpen(false)
       setLoading(false)
+      setTitle("")
+      setContent("")
     })
   }
 
   return (
-    <div className="flex flex-col items-start w-150 py-6 gap-4">
-      <Popover open={open} onOpenChange={setOpen}>
-        <PopoverTrigger asChild>
-          <button
-              onClick={() => {setOpen(true)}}
-              className="bg-blue-600 text-white dark:text-black px-4 py-2 rounded-md hover:bg-blue-700 transition self-center ml-25 -mt-16 "
-          >
-            Adicionar Dúvida
-          </button>
-        </PopoverTrigger>
+    <Popover open={open} onOpenChange={setOpen}>
+      <PopoverTrigger asChild>
+        <button 
+          className="bg-blue-600 inline-flex items-center gap-2  hover:bg-blue-600/90 text-white font-bold px-6 py-3 rounded-xl transition-all shadow-lg shadow-primary/20"
+        >
+          <Plus className="w-4 h-4 " /> Nova Dúvida
+        </button>
+      </PopoverTrigger>
 
-        <PopoverContent className="w-80 p-4">
-          <h2 className="text-lg font-semibold mb-2 text-foreground dark:text-foreground">Nova Dúvida</h2>
-          <input
+      <PopoverContent 
+        className="w-[380px] md:w-[450px] p-0 border-none shadow-2xl rounded-2xl overflow-hidden" 
+        align="end"
+      >
+       
+        <div className="bg-blue-400 p-4 flex items-center justify-between text-white">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 fill-current" />
+            <span className="font-bold text-xs uppercase tracking-widest">Criar nova thread</span>
+          </div>
+          <button 
+            onClick={() => setOpen(false)}
+            className="hover:rotate-90 transition-transform p-1"
+          >
+            <X className="w-4 h-4" />
+          </button>
+        </div>
+
+        <div className="p-5 bg-card space-y-4">
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Título da Dúvida</label>
+            <input
               value={title}
               onChange={(e) => setTitle(e.target.value)}
-            placeholder="Titulo para Duvida"
-            className=" w-full border border-border dark:border-border rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-card text-black dark:text-white"
-          />
+              placeholder="Ex: Erro ao configurar o banco de dados..."
+              className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all"
+            />
+          </div>
 
-          <input
+          <div className="space-y-2">
+            <label className="text-[10px] font-black uppercase text-muted-foreground ml-1">Conteúdo</label>
+            <textarea
               value={content}
               onChange={(e) => setContent(e.target.value)}
-            placeholder="Descreva sua dúvida"
-            className=" w-full border border-border dark:border-border rounded-md px-3 py-2 mb-3 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-card text-black dark:text-white"
-          />
+              placeholder="Descreva sua dúvida com detalhes..."
+              rows={4}
+              className="w-full bg-muted/50 border border-border rounded-xl px-4 py-3 text-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all resize-none"
+            />
+          </div>
 
-          <div className="flex justify-end">
+          <div className="flex items-center justify-end pt-2">
             <button
-                onClick={handleAddThreads}
-                disabled={loading}
-              className="bg-blue-600 text-white dark:text-black px-4 py-2 rounded-md hover:bg-blue-700 transition"
+              onClick={handleAddThreads}
+              disabled={loading || !title.trim()}
+              className="flex items-center gap-2 bg-primary text-white px-6 py-2.5 rounded-xl font-bold text-sm hover:opacity-90 disabled:opacity-50 transition-all shadow-md shadow-primary/10"
             >
-              {loading ? "Enviando..." : "Enviar"}
+              {loading ? (
+                <div className="w-4 h-4 border-2 border-primary-foreground/30 border-t-primary-foreground rounded-full animate-spin" />
+              ) : (
+                <Send className="w-3.5 h-3.5" />
+              )}
+              {loading ? "Enviando..." : "Publicar Pergunta"}
             </button>
           </div>
-        </PopoverContent>
-      </Popover>
-
-      <DuvidasList  type={"page"} />
-    </div>
+        </div>
+      </PopoverContent>
+    </Popover>
   )
 }
 
